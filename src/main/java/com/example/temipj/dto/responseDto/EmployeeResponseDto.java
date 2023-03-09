@@ -13,7 +13,7 @@ public class EmployeeResponseDto {
 
     private Long id;
 
-    private String name; //직원 이름
+    private String empName; //직원 이름
 
     private String birth; //직원 생일
 

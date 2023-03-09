@@ -129,4 +129,3 @@ public class TokenProvider {
         return ResponseDto.success("success");
     }
 }
-

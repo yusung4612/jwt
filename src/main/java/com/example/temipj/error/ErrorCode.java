@@ -27,6 +27,11 @@ public enum ErrorCode {
     MEMBER_WRONG_UPDATE(400,"이름과 비밀번호를 정확하게 입력해주세요."),
     MEMBER_WRONG_DELETE(400,"본인 아이디만 탈퇴 가능합니다."),
 
+    //================================employee========================================
+    NOT_BLANK_NAME(400,"공백은 허용되지 않습니다."),
+    NOT_EXIST_EMPLOYEE(404,"해당 직원이 존재하지 않습니다."),
+    EMPLOYEE_UPDATE_WRONG_ACCESS(400,"잘못된 접근입니다."),
+
     //================================token========================================
     INVALID_TOKEN(404,"Token이 유효하지 않습니다."),
     REFRESH_TOKEN_EXPIRED(401, "토근이 만료되었습니다. 다시 로그인 해주세요."),

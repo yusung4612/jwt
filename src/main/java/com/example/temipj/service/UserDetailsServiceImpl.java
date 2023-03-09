@@ -31,7 +31,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     //유저의 id를 통해서 유저에 대한 인증 정보를 가져온다.
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Member> member = memberRepository.findByEmailId(username);
+        Optional<Member> member = memberRepository.findByMembername(username);
         return member
                 .map(UserDetailsImpl::new)
                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));

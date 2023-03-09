@@ -9,6 +9,7 @@ import org.hibernate.Hibernate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
+import java.util.List;
 import java.util.Objects;
 
 @Builder
@@ -34,11 +35,11 @@ public class Member extends Timestamped {
 //    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 //    private List<Employee> employee;
 
-    public Member(String emailId, String membername, String encodedPassword) {
-        this.emailId = emailId;
-        this.membername = membername;
-        this.password = encodedPassword;
-    }
+//    public Member(String emailId, String membername, String encodedPassword) {
+//        this.emailId = emailId;
+//        this.membername = membername;
+//        this.password = encodedPassword;
+//    }
 
     @Override
     public boolean equals(Object o) {

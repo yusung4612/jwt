@@ -1,5 +1,6 @@
 package com.example.temipj.domain;
 
+import com.example.temipj.dto.requestDto.EmployeeRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +19,7 @@ public class Employee {
     private Long id;
 
     @Column(nullable = false)
-    private String name; //직원이름
+    private String empName; //직원이름
 
     @Column(nullable = false)
     private String birth; //생일
@@ -38,8 +39,23 @@ public class Employee {
     @Column(nullable = false)
     private String department; //부서
 
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
+
+    public void update(EmployeeRequestDto requestDto) {
+        this.empName = requestDto.getEmpName();
+        this.birth = requestDto.getBirth();
+        this.extension_number = requestDto.getExtension_number();
+        this.mobile_number = requestDto.getMobile_number();
+        this.email = requestDto.getEmail();
+        this.division = requestDto.getDivision();
+        this.department = requestDto.getDepartment();
+    }
+
+    public boolean validateMember(Member member) {
+        return !this.member.equals(member);
+    }
+
 
 }

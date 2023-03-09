@@ -42,8 +42,8 @@ public class SecurityConfiguration {
     }
 
     private static final String[] AUTH_WHITELIST = {
-            "/v1/members/**","/v1/auth/**","/v1/member/emailcheck"
-//            "/api/members/**"
+            "/v1/members/**","/v1/auth/**","/v1/member/emailcheck",
+            "/api/members/**","/api/employees/**"
     };
 
     @Bean
@@ -72,6 +72,7 @@ public class SecurityConfiguration {
                                 "/configuration/security",
                                 "/swagger-ui.html",
                                 "/api/members/**",
+                                "/api/employees/**",
                                 "/api/**",
                                 "/webjars/**",
                                 "/v3/api-docs/**",
