@@ -66,7 +66,7 @@ public class EmployeeService {
     //전체 직원 조회
     @Transactional
     public ResponseDto<?> getEmployeeAll() {
-        return ResponseDto.success(employeeRepository.findAllByOrderByModifiedAtDesc());
+        return ResponseDto.success(employeeRepository.findAllByOrderByCreatedAtDesc());
     }
 
     //특정 직원 조회
@@ -82,53 +82,59 @@ public class EmployeeService {
     //직원 정보 수정
     public ResponseDto<?> updateEmp(Long id, EmployeeRequestDto requestDto, HttpServletRequest request) {
 
-//        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-//            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
-//        }
+        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
+        }
+
+        Employee employee = isPresentEmployee(id);
+        if (null == employee) {
+            return ResponseDto.fail(ErrorCode.NOT_EXIST_EMPLOYEE.name(), ErrorCode.NOT_EXIST_EMPLOYEE.getMessage());
+        }
+
         Member member = validateMember(request);
         if (null == member) {
             return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
         }
 
-        Employee employee = isPresentEmployee(id);
-        if (null == employee) {
-            return ResponseDto.fail(ErrorCode.NOT_EXIST_EMPLOYEE.name(), ErrorCode.NOT_EXIST_EMPLOYEE.getMessage());
-        }
 //        Member member = (Member) tokenProvider.getMemberFromAuthentication();
 //        if (employee.validateMember(member)) {
-        if (employee.validateMember(member)) {
-            return ResponseDto.fail(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.name(), ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.getMessage());
-        }
+//        if (employee.validateMember(member)) {
+//            return ResponseDto.fail(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.name(), ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.getMessage());
+//        }
         employee.update(requestDto);
-        return ResponseDto.success(
-                EmployeeResponseDto.builder()
-                        .id(employee.getId())
-                        .empName(employee.getEmpName())
-                        .birth(employee.getBirth())
-                        .extension_number(employee.getExtension_number())
-                        .mobile_number(employee.getMobile_number())
-                        .email(employee.getEmail())
-                        .division(employee.getDivision())
-                        .department(employee.getDepartment())
-                        .build());
+        return ResponseDto.success(employee);
+
+//        return ResponseDto.success(
+//                EmployeeResponseDto.builder()
+//                        .id(employee.getId())
+//                        .empName(employee.getEmpName())
+//                        .birth(employee.getBirth())
+//                        .extension_number(employee.getExtension_number())
+//                        .mobile_number(employee.getMobile_number())
+//                        .email(employee.getEmail())
+//                        .division(employee.getDivision())
+//                        .department(employee.getDepartment())
+//                        .build());
     }
 
     //직원 삭제
     public ResponseDto<?> deleteEmp(Long id, HttpServletRequest request) {
+
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
             return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
-
         }
+
         Employee employee = isPresentEmployee(id);
         if (null == employee) {
             return ResponseDto.fail(ErrorCode.NOT_EXIST_EMPLOYEE.name(), ErrorCode.NOT_EXIST_EMPLOYEE.getMessage());
         }
+
         Member member = (Member) tokenProvider.getMemberFromAuthentication();
         if (employee.validateMember(member)) {
             return ResponseDto.fail(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.name(), ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.getMessage());
         }
         employeeRepository.delete(employee);
-        return ResponseDto.success("직원이 삭제되었습니다.");
+        return ResponseDto.success("해당 직원이 삭제되었습니다.");
     }
 
 
