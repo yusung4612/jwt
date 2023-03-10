@@ -1,6 +1,7 @@
 package com.example.temipj.domain;
 
 import com.example.temipj.dto.requestDto.EmployeeRequestDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Employee {
+public class Employee extends Timestamped{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,7 +40,8 @@ public class Employee {
     @Column(nullable = false)
     private String department; //부서
 
-    @JoinColumn(name = "member_id", nullable = false)
+    @JsonIgnore
+    @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
