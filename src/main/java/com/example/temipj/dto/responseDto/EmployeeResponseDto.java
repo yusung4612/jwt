@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Builder
 @Getter
 @NoArgsConstructor
@@ -26,5 +28,9 @@ public class EmployeeResponseDto {
     private String division; // 팀 구분
 
     private String department; // 부서
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime modifiedAt;
 
 }
