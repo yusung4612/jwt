@@ -5,10 +5,9 @@ import com.example.temipj.dto.responseDto.ResponseDto;
 import com.example.temipj.service.EmployeeService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/employees")
 public class EmployeeController {
