@@ -41,6 +41,8 @@ public class JwtFilter extends OncePerRequestFilter { //OncePerRequestFilter 인
 
     //실제 필터링 로직은 doFilterInternal에 들어감
     //JWT 토큰의 인증 정보를 현재 쓰레드의 SecurityContext에 저장하는 역할을 수행
+    // 현재는 jwtFilter 통과 시 loadUserByUsername을 호출하여 디비를 거치지 않으므로 시큐리티 컨텍스트에는 엔티티 정보를 온전히 가지지 않는다
+    // 즉 loadUserByUsername을 호출하는 인증 API를 제외하고는 유저네임, 권한만 가지고 있으므로 유저 정보가 필요하다면 디비에서 꺼내와야함
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws io.jsonwebtoken.io.IOException, ServletException, java.io.IOException {
 
