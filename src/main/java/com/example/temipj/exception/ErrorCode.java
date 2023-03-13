@@ -1,4 +1,4 @@
-package com.example.temipj.error;
+package com.example.temipj.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -53,7 +53,7 @@ public class TokenProvider {
         String accessToken = Jwts.builder()
 
                 .setSubject(member.getMembername()) // payload "sub": "name"
-                .claim(AUTHORITIES_KEY, Authority.ROLE_USER.name()) // payload "auth": "ROLE_USER" //auth,role설정
+                .claim(AUTHORITIES_KEY, Authority.ROLE_MEMBER.name()) // payload "auth": "ROLE_USER" //auth,role설정
                 .setExpiration(accessTokenExpiresIn) //만료시간 토큰에 담기
                 .signWith(key, SignatureAlgorithm.HS256) //사용할 암호화 알고리즘과 signature에 들어갈 secret값 세팅
                 .compact();
@@ -126,6 +126,6 @@ public class TokenProvider {
         }
 
         refreshTokenRepository.delete(refreshToken);
-        return ResponseDto.success("success");
+        return ResponseDto.version("success");
     }
 }

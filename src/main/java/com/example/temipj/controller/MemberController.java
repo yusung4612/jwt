@@ -8,13 +8,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-
 import java.io.IOException;
 
 @RequiredArgsConstructor
@@ -41,4 +38,18 @@ public class MemberController {
     public ResponseDto<?> logout(HttpServletRequest request) {
         return memberService.logout(request);
     }
+
+    //토큰재발급
+    @PostMapping(value = "/reissue")
+    public ResponseDto<?> reissue(HttpServletRequest request, HttpServletResponse response) {
+        return memberService.reissue(request, response);
+    }
+
+    //회원 정보 수정
+
+    //회원탈퇴
+
+    //이메일 중복 확인
+
+    //이메일 인증
 }

@@ -13,11 +13,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Employee extends Timestamped{
+//public class Employee extends Timestamped{
+public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id ;
+
+    @Enumerated(EnumType.STRING)
+    private Category category;
 
     @Column(nullable = false)
     private String empName; //직원이름
@@ -26,19 +30,19 @@ public class Employee extends Timestamped{
     private String birth; //생일
 
     @Column(nullable = false)
+    private String division; //팀 구분
+
+    @Column(nullable = false)
     private String extension_number; //유선전화번호
 
     @Column(nullable = false, unique = true)
     private String mobile_number; //모바일번호
 
-    @Column(nullable = false, unique = true)
-    private String email; //이메일
+//    @Column(nullable = false, unique = true)
+//    private String email; //이메일
 
-    @Column(nullable = false)
-    private String division; //팀 구분
-
-    @Column(nullable = false)
-    private String department; //부서
+//    @Column(nullable = false)
+//    private String department; //부서
 
     @JsonIgnore
     @JoinColumn(nullable = false)
@@ -48,11 +52,11 @@ public class Employee extends Timestamped{
     public void update(EmployeeRequestDto requestDto) {
         this.empName = requestDto.getEmpName();
         this.birth = requestDto.getBirth();
+        this.division = requestDto.getDivision();
         this.extension_number = requestDto.getExtension_number();
         this.mobile_number = requestDto.getMobile_number();
-        this.email = requestDto.getEmail();
-        this.division = requestDto.getDivision();
-        this.department = requestDto.getDepartment();
+//        this.email = requestDto.getEmail();
+//        this.department = requestDto.getDepartment();
     }
 
     public boolean validateMember(Member member) {

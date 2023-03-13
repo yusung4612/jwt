@@ -6,17 +6,20 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class ResponseDto<T> {
-    private boolean success;
-    private T data;
-    private Error error;
 
-    public static <T> ResponseDto<T> success(T data) {
+//    private boolean success;
+//    private T data;
+    private Integer version;
+    private T member;
+//    private Error error;
 
-        return new ResponseDto<>(true, data, null);
+    public static <T> ResponseDto<T> version(T data) {
+//        return new ResponseDto<>(1, data, null);
+        return new ResponseDto<>(1, data);
     }
 
     public static <T> ResponseDto<T> fail(String code, String message) {
-        return new ResponseDto<>(false, null, new Error(code, message));
+        return new ResponseDto<>(2, null);
     }
 
     @Getter

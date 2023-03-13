@@ -6,7 +6,8 @@ import com.example.temipj.domain.Member;
 import com.example.temipj.dto.requestDto.EmployeeRequestDto;
 import com.example.temipj.dto.responseDto.EmployeeResponseDto;
 import com.example.temipj.dto.responseDto.ResponseDto;
-import com.example.temipj.error.ErrorCode;
+import com.example.temipj.exception.CustomException;
+import com.example.temipj.exception.ErrorCode;
 import com.example.temipj.jwt.TokenProvider;
 import com.example.temipj.repository.EmployeeRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -23,120 +25,122 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final TokenProvider tokenProvider;
 
+    //카테고리( 0: 직원 )
+//    private Category typeCategory = Category.members;
+
     //직원 등록
     @Transactional
     public ResponseDto<?> createEmp(EmployeeRequestDto requestDto, HttpServletRequest request) {
-
+        // 1. 토큰 유효성 확인
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
+//            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
-
+        // 2. tokenProvider Class의 SecurityContextHolder에 저장된 Member 정보 확인
         Member member = (Member) tokenProvider.getMemberFromAuthentication();
         if (null == member) {
-            return ResponseDto.fail(ErrorCode.MEMBER_NOT_FOUND.name(), ErrorCode.MEMBER_NOT_FOUND.getMessage());
+//            return ResponseDto.fail(ErrorCode.MEMBER_NOT_FOUND.name(), ErrorCode.MEMBER_NOT_FOUND.getMessage());
+            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
         }
-
+        // 3. 등록
         if (requestDto.getEmpName().isEmpty())
-            return ResponseDto.fail(ErrorCode.NOT_BLANK_NAME.name(), ErrorCode.NOT_BLANK_NAME.getMessage());
+//            return ResponseDto.fail(ErrorCode.NOT_BLANK_NAME.name(), ErrorCode.NOT_BLANK_NAME.getMessage());
+            throw new CustomException(ErrorCode.NOT_BLANK_NAME);
         Employee employee = Employee.builder()
                 .empName(requestDto.getEmpName())
                 .birth(requestDto.getBirth())
+                .division(requestDto.getDivision())
                 .extension_number(requestDto.getExtension_number())
                 .mobile_number(requestDto.getMobile_number())
-                .email(requestDto.getEmail())
-                .division(requestDto.getDivision())
-                .department(requestDto.getDepartment())
+//                .category(typeCategory)
+//                .email(requestDto.getEmail())
+//                .department(requestDto.getDepartment())
                 .member(member)
                 .build();
         employeeRepository.save(employee);
 
-        return ResponseDto.success(
-                EmployeeResponseDto.builder()
+        return ResponseDto.version(
+         EmployeeResponseDto.builder()
                         .id(employee.getId())
-                        .empName(employee.getEmpName())
-                        .birth(employee.getBirth())
-                        .extension_number(employee.getExtension_number())
-                        .mobile_number(employee.getMobile_number())
-                        .email(employee.getEmail())
-                        .division(employee.getDivision())
-                        .department(employee.getDepartment())
+                        .empName(requestDto.getEmpName())
+                        .birth(requestDto.getBirth())
+                        .division(requestDto.getDivision())
+                        .extension_number(requestDto.getExtension_number())
+                        .mobile_number(requestDto.getMobile_number())
+//                        .category(typeCategory)
+//                        .email(employee.getEmail())
+//                        .department(employee.getDepartment())
                         .build());
     }
 
     //전체 직원 조회
     @Transactional
     public ResponseDto<?> getEmployeeAll() {
-        return ResponseDto.success(employeeRepository.findAllByOrderByCreatedAtDesc());
+        return ResponseDto.version(employeeRepository.findAllByOrderByCreatedAtDesc());
     }
 
     //특정 직원 조회
     @Transactional
     public ResponseDto<?> getEmployee(Long id) {
+        //직원 유무 확인
         Employee employee = isPresentEmployee(id);
         if (null == employee) {
-            return ResponseDto.fail(ErrorCode.NOT_EXIST_EMPLOYEE.name(),ErrorCode.NOT_EXIST_EMPLOYEE.getMessage());
+//            return ResponseDto.fail(ErrorCode.NOT_EXIST_EMPLOYEE.name(),ErrorCode.NOT_EXIST_EMPLOYEE.getMessage());
+            throw new CustomException(ErrorCode.NOT_EXIST_EMPLOYEE);
         }
-        return ResponseDto.success(employee);
+        return ResponseDto.version(employee);
     }
 
     //직원 정보 수정
+    @Transactional
     public ResponseDto<?> updateEmp(Long id, EmployeeRequestDto requestDto, HttpServletRequest request) {
-
+        // 1. 토큰 유효성 확인
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
+//            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
 
+        // 2. 직원 유무 확인
         Employee employee = isPresentEmployee(id);
         if (null == employee) {
-            return ResponseDto.fail(ErrorCode.NOT_EXIST_EMPLOYEE.name(), ErrorCode.NOT_EXIST_EMPLOYEE.getMessage());
+//            return ResponseDto.fail(ErrorCode.NOT_EXIST_EMPLOYEE.name(), ErrorCode.NOT_EXIST_EMPLOYEE.getMessage());
+            throw new CustomException(ErrorCode.NOT_EXIST_EMPLOYEE);
         }
-
-        Member member = validateMember(request);
-        if (null == member) {
-            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
-        }
-
-//        Member member = (Member) tokenProvider.getMemberFromAuthentication();
-//        if (employee.validateMember(member)) {
-//        if (employee.validateMember(member)) {
+        // 3. tokenProvider Class의 SecurityContextHolder에 저장된 Member 정보 확인
+        Member member = (Member) tokenProvider.getMemberFromAuthentication();
+        if (employee.validateMember(member)) {
 //            return ResponseDto.fail(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.name(), ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.getMessage());
-//        }
+            throw new CustomException(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS);
+        }
+        // 4. 수정
         employee.update(requestDto);
-        return ResponseDto.success(employee);
-
-//        return ResponseDto.success(
-//                EmployeeResponseDto.builder()
-//                        .id(employee.getId())
-//                        .empName(employee.getEmpName())
-//                        .birth(employee.getBirth())
-//                        .extension_number(employee.getExtension_number())
-//                        .mobile_number(employee.getMobile_number())
-//                        .email(employee.getEmail())
-//                        .division(employee.getDivision())
-//                        .department(employee.getDepartment())
-//                        .build());
+        return ResponseDto.version(employee);
     }
 
     //직원 삭제
     public ResponseDto<?> deleteEmp(Long id, HttpServletRequest request) {
 
+        // 1. 토큰 유효성 확인
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
+//            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
-
+        // 2. 직원 유무 확인
         Employee employee = isPresentEmployee(id);
         if (null == employee) {
-            return ResponseDto.fail(ErrorCode.NOT_EXIST_EMPLOYEE.name(), ErrorCode.NOT_EXIST_EMPLOYEE.getMessage());
+//            return ResponseDto.fail(ErrorCode.NOT_EXIST_EMPLOYEE.name(), ErrorCode.NOT_EXIST_EMPLOYEE.getMessage());
+            throw new CustomException(ErrorCode.NOT_EXIST_EMPLOYEE);
         }
-
+        // 3. SecurityContextHolder에 저장된 Member 확인
         Member member = (Member) tokenProvider.getMemberFromAuthentication();
         if (employee.validateMember(member)) {
-            return ResponseDto.fail(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.name(), ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.getMessage());
+//            return ResponseDto.fail(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.name(), ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.getMessage());
+            throw new CustomException(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS);
         }
+        // 4. 삭제
         employeeRepository.delete(employee);
-        return ResponseDto.success("해당 직원이 삭제되었습니다.");
+        return ResponseDto.version("해당 직원이 삭제되었습니다.");
     }
-
 
     @Transactional
     public Employee isPresentEmployee(Long id) {

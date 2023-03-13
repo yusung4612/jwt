@@ -1,4 +1,4 @@
-package com.example.temipj.error;
+package com.example.temipj.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,6 @@ import java.util.NoSuchElementException;
 @RestControllerAdvice
 public class CustomExceptionHandler {
     //바인드 에러
-
     @ExceptionHandler({BindException.class})
     protected ResponseEntity<Object> handleServerException(BindException ex) {
         RestApiException error = new RestApiException(ErrorCode.BIND_Fails.name(), ErrorCode.BIND_Fails.getMessage());

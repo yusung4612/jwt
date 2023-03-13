@@ -7,7 +7,7 @@ import com.example.temipj.dto.requestDto.MemberRequestDto;
 import com.example.temipj.dto.requestDto.TokenDto;
 import com.example.temipj.dto.responseDto.MemberResponseDto;
 import com.example.temipj.dto.responseDto.ResponseDto;
-import com.example.temipj.error.ErrorCode;
+import com.example.temipj.exception.ErrorCode;
 import com.example.temipj.jwt.TokenProvider;
 import com.example.temipj.repository.MemberRepository;
 import com.example.temipj.repository.RefreshTokenRepository;
@@ -66,7 +66,7 @@ public class MemberService {
                 .build();
         memberRepository.save(member);
 
-        return ResponseDto.success(
+        return ResponseDto.version(
                 MemberResponseDto.builder()
                         .id(member.getId())
                         .membername(member.getMembername())
@@ -96,7 +96,7 @@ public class MemberService {
         TokenDto tokenDto = tokenProvider.generateTokenDto(member);
         tokenToHeaders(tokenDto, response);
 
-        return ResponseDto.success(
+        return ResponseDto.version(
                 MemberResponseDto.builder()
                         .id(member.getId())
                         .membername(member.getMembername())
@@ -108,6 +108,7 @@ public class MemberService {
     }
 
     //로그아웃
+    @Transactional
     public ResponseDto<?> logout(HttpServletRequest request) {
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
             return ResponseDto.fail(ErrorCode.INVALID_MEMBER.name(), ErrorCode.INVALID_MEMBER.getMessage());
@@ -154,7 +155,7 @@ public class MemberService {
 
         TokenDto tokenDto = tokenProvider.generateTokenDto(member);
         tokenToHeaders(tokenDto, response);
-        return ResponseDto.success(
+        return ResponseDto.version(
                 MemberResponseDto.builder()
                         .id(member.getId())
                         .membername(member.getMembername())

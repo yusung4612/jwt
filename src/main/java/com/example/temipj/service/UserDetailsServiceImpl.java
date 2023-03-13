@@ -25,8 +25,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     // UserDetails return 은 어디로 가나?
     // security Session => Authentication => UserDetails(UserDetailsImpl)
     // 이렇게 return 해주면
-    // security Session(내부 Authentication(내부 UserDetails)) 요롷게 쏘옥 들어간다.
-    // 이러면 로그인 완료
+    // security Session(내부 Authentication(내부 UserDetails)) 이렇게 들어간다.
+    // 이렇게 되면 로그인 완료
 
     //유저의 id를 통해서 유저에 대한 인증 정보를 가져온다.
     @Override
