@@ -4,6 +4,7 @@ package com.example.temipj.service;
 import com.example.temipj.domain.Employee;
 import com.example.temipj.domain.Member;
 import com.example.temipj.dto.requestDto.EmployeeRequestDto;
+import com.example.temipj.dto.responseDto.EmpResponseDto;
 import com.example.temipj.dto.responseDto.EmployeeResponseDto;
 import com.example.temipj.dto.responseDto.ResponseDto;
 import com.example.temipj.exception.CustomException;
@@ -12,12 +13,15 @@ import com.example.temipj.jwt.TokenProvider;
 import com.example.temipj.repository.EmployeeRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.SecretKey;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+@Builder
 @RequiredArgsConstructor
 @Service
 public class EmployeeService {
@@ -25,12 +29,9 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final TokenProvider tokenProvider;
 
-    //카테고리( 0: 직원 )
-//    private Category typeCategory = Category.members;
-
     //직원 등록
     @Transactional
-    public ResponseDto<?> createEmp(EmployeeRequestDto requestDto, HttpServletRequest request) {
+    public EmpResponseDto<EmployeeResponseDto> createEmp(EmployeeRequestDto requestDto, HttpServletRequest request) {
         // 1. 토큰 유효성 확인
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
 //            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
@@ -52,22 +53,20 @@ public class EmployeeService {
                 .division(requestDto.getDivision())
                 .extension_number(requestDto.getExtension_number())
                 .mobile_number(requestDto.getMobile_number())
-//                .category(typeCategory)
 //                .email(requestDto.getEmail())
 //                .department(requestDto.getDepartment())
                 .member(member)
                 .build();
         employeeRepository.save(employee);
 
-        return ResponseDto.version(
-         EmployeeResponseDto.builder()
-                        .id(employee.getId())
+        return EmpResponseDto.version(
+                EmployeeResponseDto.builder()
+//                        .id(employee.getId())
                         .empName(requestDto.getEmpName())
                         .birth(requestDto.getBirth())
                         .division(requestDto.getDivision())
                         .extension_number(requestDto.getExtension_number())
                         .mobile_number(requestDto.getMobile_number())
-//                        .category(typeCategory)
 //                        .email(employee.getEmail())
 //                        .department(employee.getDepartment())
                         .build());
@@ -75,25 +74,50 @@ public class EmployeeService {
 
     //전체 직원 조회
     @Transactional
-    public ResponseDto<?> getEmployeeAll() {
-        return ResponseDto.version(employeeRepository.findAllByOrderByCreatedAtDesc());
+    public EmpResponseDto<?> getEmployeeAll() {
+
+        List<Employee> employeeList = employeeRepository.findAllByOrderByCreatedAtDesc();
+        List<EmployeeResponseDto> employeeResponseDtoList = new ArrayList<>();
+
+        for (Employee employee : employeeList) {
+            employeeResponseDtoList.add(
+                    EmployeeResponseDto.builder()
+                            .empName(employee.getEmpName())
+                            .birth(employee.getBirth())
+                            .division(employee.getDivision())
+                            .extension_number(employee.getExtension_number())
+                            .mobile_number(employee.getMobile_number())
+                            .build());
+        }
+        return EmpResponseDto.version(employeeResponseDtoList);
     }
 
     //특정 직원 조회
     @Transactional
-    public ResponseDto<?> getEmployee(Long id) {
+    public EmpResponseDto<?> getEmployee(Long id) {
         //직원 유무 확인
         Employee employee = isPresentEmployee(id);
         if (null == employee) {
 //            return ResponseDto.fail(ErrorCode.NOT_EXIST_EMPLOYEE.name(),ErrorCode.NOT_EXIST_EMPLOYEE.getMessage());
             throw new CustomException(ErrorCode.NOT_EXIST_EMPLOYEE);
         }
-        return ResponseDto.version(employee);
+        return EmpResponseDto.version(employee);
     }
+
+//    public ResponseDto<?> getEmployee(Long id) {
+//        //직원 유무 확인
+//        Employee employee = isPresentEmployee(id);
+//        if (null == employee) {
+////            return ResponseDto.fail(ErrorCode.NOT_EXIST_EMPLOYEE.name(),ErrorCode.NOT_EXIST_EMPLOYEE.getMessage());
+//            throw new CustomException(ErrorCode.NOT_EXIST_EMPLOYEE);
+//        }
+//        return ResponseDto.version(employee);
+//    }
 
     //직원 정보 수정
     @Transactional
-    public ResponseDto<?> updateEmp(Long id, EmployeeRequestDto requestDto, HttpServletRequest request) {
+//    public ResponseDto<?> updateEmp(Long id, EmployeeRequestDto requestDto, HttpServletRequest request) {
+    public EmpResponseDto<?> updateEmp(Long id, EmployeeRequestDto requestDto, HttpServletRequest request) {
         // 1. 토큰 유효성 확인
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
 //            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
@@ -114,11 +138,13 @@ public class EmployeeService {
         }
         // 4. 수정
         employee.update(requestDto);
-        return ResponseDto.version(employee);
+//        return ResponseDto.version(employee);
+        return EmpResponseDto.version(employee);
     }
 
     //직원 삭제
-    public ResponseDto<?> deleteEmp(Long id, HttpServletRequest request) {
+//    public ResponseDto<?> deleteEmp(Long id, HttpServletRequest request) {
+    public EmpResponseDto<?> deleteEmp(Long id, HttpServletRequest request) {
 
         // 1. 토큰 유효성 확인
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
@@ -139,7 +165,8 @@ public class EmployeeService {
         }
         // 4. 삭제
         employeeRepository.delete(employee);
-        return ResponseDto.version("해당 직원이 삭제되었습니다.");
+//        return ResponseDto.version("해당 직원이 삭제되었습니다.");
+        return EmpResponseDto.version("해당 직원이 삭제되었습니다.");
     }
 
     @Transactional
