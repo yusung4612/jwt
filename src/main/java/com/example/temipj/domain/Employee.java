@@ -13,15 +13,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-//public class Employee extends Timestamped{
-public class Employee {
+public class Employee extends Timestamped{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id ;
-
-    @Enumerated(EnumType.STRING)
-    private Category category;
 
     @Column(nullable = false)
     private String empName; //직원이름
