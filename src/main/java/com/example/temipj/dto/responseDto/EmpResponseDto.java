@@ -16,9 +16,9 @@ public class EmpResponseDto<T> {
         return new EmpResponseDto<>("1.0.0", data);
     }
 
-    public static <T> EmpResponseDto<T> fail(String code, String message) {
-        return new EmpResponseDto<>("Error", null);
-    }
+//    public static <T> EmpResponseDto<T> fail(String code, String message) {
+//        return new EmpResponseDto<>("Error", null);
+//    }
 
     @Getter
     @AllArgsConstructor

@@ -15,7 +15,7 @@ public class EmployeeResponseDto {
 
 //    private Long id;
 
-    private String empName; //직원 이름
+    private String name; //직원 이름
 
     private String birth; //직원 생일
 
@@ -25,8 +25,8 @@ public class EmployeeResponseDto {
 
     private String mobile_number; //모바일번호
 
-//    private String email; //이메일
+    private String email; //이메일
 
-//    private String department; // 부서
+    private String department; // 부서
 
 }

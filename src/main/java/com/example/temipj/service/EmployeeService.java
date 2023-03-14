@@ -6,7 +6,6 @@ import com.example.temipj.domain.Member;
 import com.example.temipj.dto.requestDto.EmployeeRequestDto;
 import com.example.temipj.dto.responseDto.EmpResponseDto;
 import com.example.temipj.dto.responseDto.EmployeeResponseDto;
-import com.example.temipj.dto.responseDto.ResponseDto;
 import com.example.temipj.exception.CustomException;
 import com.example.temipj.exception.ErrorCode;
 import com.example.temipj.jwt.TokenProvider;
@@ -44,17 +43,17 @@ public class EmployeeService {
             throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
         }
         // 3. 등록
-        if (requestDto.getEmpName().isEmpty())
+        if (requestDto.getName().isEmpty())
 //            return ResponseDto.fail(ErrorCode.NOT_BLANK_NAME.name(), ErrorCode.NOT_BLANK_NAME.getMessage());
             throw new CustomException(ErrorCode.NOT_BLANK_NAME);
         Employee employee = Employee.builder()
-                .empName(requestDto.getEmpName())
+                .name(requestDto.getName())
                 .birth(requestDto.getBirth())
                 .division(requestDto.getDivision())
                 .extension_number(requestDto.getExtension_number())
                 .mobile_number(requestDto.getMobile_number())
-//                .email(requestDto.getEmail())
-//                .department(requestDto.getDepartment())
+                .email(requestDto.getEmail())
+                .department(requestDto.getDepartment())
                 .member(member)
                 .build();
         employeeRepository.save(employee);
@@ -62,13 +61,13 @@ public class EmployeeService {
         return EmpResponseDto.version(
                 EmployeeResponseDto.builder()
 //                        .id(employee.getId())
-                        .empName(requestDto.getEmpName())
+                        .name(requestDto.getName())
                         .birth(requestDto.getBirth())
                         .division(requestDto.getDivision())
                         .extension_number(requestDto.getExtension_number())
                         .mobile_number(requestDto.getMobile_number())
-//                        .email(employee.getEmail())
-//                        .department(employee.getDepartment())
+                        .email(employee.getEmail())
+                        .department(employee.getDepartment())
                         .build());
     }
 
@@ -82,7 +81,7 @@ public class EmployeeService {
         for (Employee employee : employeeList) {
             employeeResponseDtoList.add(
                     EmployeeResponseDto.builder()
-                            .empName(employee.getEmpName())
+                            .name(employee.getName())
                             .birth(employee.getBirth())
                             .division(employee.getDivision())
                             .extension_number(employee.getExtension_number())

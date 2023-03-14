@@ -15,9 +15,9 @@ public class EmployeeController {
 
     private final EmployeeService employeeService;
 
-    //직원 등록
+    //직원 생성
     @PostMapping(value = "/create")
-    private EmpResponseDto<EmployeeResponseDto> register(@RequestBody EmployeeRequestDto employeeRequestDto,
+    private EmpResponseDto<EmployeeResponseDto> create(@RequestBody EmployeeRequestDto employeeRequestDto,
                                                          HttpServletRequest request) {
         return employeeService.createEmp(employeeRequestDto, request);
     }
