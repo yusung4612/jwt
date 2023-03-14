@@ -13,8 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class EmployeeResponseDto {
 
-//    private Long id = Long.valueOf("secret");
-    private Long id;
+//    private Long id;
 
     private String empName; //직원 이름
 
@@ -29,11 +28,5 @@ public class EmployeeResponseDto {
 //    private String email; //이메일
 
 //    private String department; // 부서
-
-//    private LocalDateTime createdAt;
-//
-//    private LocalDateTime modifiedAt;
-
-//    private Category category;
 
 }
