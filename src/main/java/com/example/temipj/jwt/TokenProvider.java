@@ -126,6 +126,6 @@ public class TokenProvider {
         }
 
         refreshTokenRepository.delete(refreshToken);
-        return ResponseDto.version("success");
+        return ResponseDto.success("success");
     }
 }

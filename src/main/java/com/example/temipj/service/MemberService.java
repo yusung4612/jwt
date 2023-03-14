@@ -66,7 +66,7 @@ public class MemberService {
                 .build();
         memberRepository.save(member);
 
-        return ResponseDto.version(
+        return ResponseDto.success(
                 MemberResponseDto.builder()
                         .id(member.getId())
                         .membername(member.getMembername())
@@ -96,7 +96,7 @@ public class MemberService {
         TokenDto tokenDto = tokenProvider.generateTokenDto(member);
         tokenToHeaders(tokenDto, response);
 
-        return ResponseDto.version(
+        return ResponseDto.success(
                 MemberResponseDto.builder()
                         .id(member.getId())
                         .membername(member.getMembername())
@@ -155,7 +155,7 @@ public class MemberService {
 
         TokenDto tokenDto = tokenProvider.generateTokenDto(member);
         tokenToHeaders(tokenDto, response);
-        return ResponseDto.version(
+        return ResponseDto.success(
                 MemberResponseDto.builder()
                         .id(member.getId())
                         .membername(member.getMembername())
