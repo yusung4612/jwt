@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import java.util.List;
 
 @Builder
 @Getter
@@ -20,4 +21,7 @@ public class LeaderResponseDto {
     private String mobile_number; //모바일 번호
 
     private String email; //이메일
+
+    private List<EmployeeResponseDto> leaderCheck;
+
 }
