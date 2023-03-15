@@ -66,8 +66,8 @@ public class EmployeeService {
                         .division(requestDto.getDivision())
                         .extension_number(requestDto.getExtension_number())
                         .mobile_number(requestDto.getMobile_number())
-                        .email(employee.getEmail())
-                        .department(employee.getDepartment())
+//                        .email(employee.getEmail())
+//                        .department(employee.getDepartment())
                         .build());
     }
 

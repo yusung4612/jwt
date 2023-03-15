@@ -25,8 +25,8 @@ public class EmployeeResponseDto {
 
     private String mobile_number; //모바일번호
 
-    private String email; //이메일
-
-    private String department; // 부서
+//    private String email; //이메일
+//
+//    private String department; // 부서
 
 }

@@ -18,7 +18,7 @@ public class EmployeeRequestDto {
     private String birth; //직원 생일
 
 
-    private String extension_number; //무선 전화 번호
+    private String extension_number; //무선전화번호
 
 
     private String mobile_number; //모바일번호

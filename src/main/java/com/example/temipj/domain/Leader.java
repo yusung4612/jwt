@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class LeaderCheck extends Timestamped{
+public class Leader extends Timestamped{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,22 +23,20 @@ public class LeaderCheck extends Timestamped{
 //    @Column(nullable = false)
 //    private String department; //부서
 //
-//
 //    @Column(nullable = false)
 //    private String name; //직원이름
 //
 //    @Column(nullable = false)
-//    private String telephone; //유선전화번호
+//    private String mobile_number; //모바일 번호
 //
 //    @Column(nullable = false)
-//    private String email; //유선전화번호
+//    private String email;
 
-//    @JsonIgnore
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "employee_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Employee employee;
 
