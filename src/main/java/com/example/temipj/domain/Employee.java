@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import java.util.List;
 
 @Builder
 @Getter
@@ -40,10 +41,13 @@ public class Employee extends Timestamped{
     @Column(nullable = false)
     private String department; //부서
 
-    @JsonIgnore
+//    @JsonIgnore
     @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Leader> leaderCheck;
 
     public void update(EmployeeRequestDto requestDto) {
         this.name = requestDto.getName();
