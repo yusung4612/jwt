@@ -1,5 +1,6 @@
 package com.example.temipj.controller;
 
+import com.example.temipj.dto.responseDto.Leader.LeadResponseDto;
 import com.example.temipj.dto.responseDto.ResponseDto;
 import com.example.temipj.service.LeaderService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +22,7 @@ public class LeaderController {
 
     //리더 전체 목록 조회
     @GetMapping("/leaders")
-    public ResponseDto<?> getLeaderAll(HttpServletRequest request) {
+    public LeadResponseDto<?> getLeaderAll(HttpServletRequest request) {
         return leaderService.getLeaderAll(request);
     }
 }

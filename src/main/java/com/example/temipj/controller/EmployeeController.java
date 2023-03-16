@@ -1,8 +1,8 @@
 package com.example.temipj.controller;
 
 import com.example.temipj.dto.requestDto.EmployeeRequestDto;
-import com.example.temipj.dto.responseDto.EmpResponseDto;
-import com.example.temipj.dto.responseDto.EmployeeResponseDto;
+import com.example.temipj.dto.responseDto.Employee.EmpResponseDto;
+import com.example.temipj.dto.responseDto.Employee.EmployeeResponseDto;
 import com.example.temipj.service.EmployeeService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

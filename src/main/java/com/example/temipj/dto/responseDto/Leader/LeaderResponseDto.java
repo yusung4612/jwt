@@ -1,9 +1,11 @@
-package com.example.temipj.dto.responseDto;
+package com.example.temipj.dto.responseDto.Leader;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Builder
@@ -22,6 +24,6 @@ public class LeaderResponseDto {
 
     private String email; //이메일
 
-    private List<EmployeeResponseDto> leaderCheck;
+//    private List<EmployeeResponseDto> leaderCheck;
 
 }

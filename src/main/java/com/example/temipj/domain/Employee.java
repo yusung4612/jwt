@@ -41,7 +41,6 @@ public class Employee extends Timestamped{
     @Column(nullable = false)
     private String department; //부서
 
-//    @JsonIgnore
     @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;

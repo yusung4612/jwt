@@ -1,4 +1,4 @@
-package com.example.temipj.dto.responseDto;
+package com.example.temipj.dto.responseDto.Employee;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

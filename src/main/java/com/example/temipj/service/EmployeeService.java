@@ -4,8 +4,8 @@ package com.example.temipj.service;
 import com.example.temipj.domain.Employee;
 import com.example.temipj.domain.Member;
 import com.example.temipj.dto.requestDto.EmployeeRequestDto;
-import com.example.temipj.dto.responseDto.EmpResponseDto;
-import com.example.temipj.dto.responseDto.EmployeeResponseDto;
+import com.example.temipj.dto.responseDto.Employee.EmpResponseDto;
+import com.example.temipj.dto.responseDto.Employee.EmployeeResponseDto;
 import com.example.temipj.exception.CustomException;
 import com.example.temipj.exception.ErrorCode;
 import com.example.temipj.jwt.TokenProvider;
@@ -16,9 +16,7 @@ import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Builder
 @RequiredArgsConstructor
@@ -86,6 +84,7 @@ public class EmployeeService {
                             .division(employee.getDivision())
                             .extension_number(employee.getExtension_number())
                             .mobile_number(employee.getMobile_number())
+                            .member(employee.getMember())
                             .build());
         }
         return EmpResponseDto.version(employeeResponseDtoList);

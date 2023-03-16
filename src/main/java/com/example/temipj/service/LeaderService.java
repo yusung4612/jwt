@@ -4,6 +4,8 @@ import com.example.temipj.domain.Employee;
 import com.example.temipj.domain.Leader;
 import com.example.temipj.domain.Member;
 import com.example.temipj.dto.responseDto.*;
+import com.example.temipj.dto.responseDto.Leader.LeadResponseDto;
+import com.example.temipj.dto.responseDto.Leader.LeaderResponseDto;
 import com.example.temipj.exception.CustomException;
 import com.example.temipj.exception.ErrorCode;
 import com.example.temipj.jwt.TokenProvider;
@@ -13,8 +15,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -59,7 +60,7 @@ public class LeaderService {
 
     //리더 목록 조회
     @Transactional
-    public ResponseDto<?> getLeaderAll(HttpServletRequest request) {
+    public LeadResponseDto<?> getLeaderAll(HttpServletRequest request) {
         // 1. 토큰 유효성 확인
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
             throw new CustomException(ErrorCode.INVALID_TOKEN);
@@ -70,8 +71,11 @@ public class LeaderService {
             throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
         }
 
+        ////////////////////////////////원래/////////////////////
+
         List<Leader> leaderList = leaderRepository.findAllByMember(member);
         List<LeaderResponseDto> LeaderResponseDtoList = new ArrayList<>();
+
 
         for (Leader leader : leaderList) {
             LeaderResponseDtoList.add(
@@ -84,8 +88,23 @@ public class LeaderService {
                             .email(leader.getEmployee().getEmail())
                             .build());
         }
-        return ResponseDto.success(LeaderResponseDtoList);
+        return LeadResponseDto.version(LeaderResponseDtoList);
     }
 }
+////////////////////////////////원래/////////////////////
+
+//        List<Leader> leaderList = leaderRepository.findAllByMember(member);
+//        Map<String, List<Map<String, LeaderResponseDto>>> LeaderResponseDtoList = new HashMap<>();
+//
+//        for (Leader leader : leaderList) {
+//            Map<String, Object> leaderMap = new HashMap<>();
+//            leaderMap.put("name", leader.getEmployee().getName());
+//            leaderMap.put("email", leader.getEmployee().getEmail());
+//
+//        }
+//                return LeadResponseDto.version(LeaderResponseDtoList);
+////        return ReponseDto.success();
+//    }
+//}
 
 
