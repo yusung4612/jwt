@@ -1,5 +1,6 @@
 package com.example.temipj.controller;
 
+import com.example.temipj.domain.UserDetailsImpl;
 import com.example.temipj.dto.requestDto.LoginRequestDto;
 import com.example.temipj.dto.requestDto.MemberRequestDto;
 import com.example.temipj.dto.responseDto.ResponseDto;
@@ -8,10 +9,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 @RequiredArgsConstructor
@@ -45,9 +44,11 @@ public class MemberController {
         return memberService.reissue(request, response);
     }
 
-    //회원 정보 수정
-
     //회원탈퇴
+    @DeleteMapping(value="/delete/{memberId}")
+    public ResponseDto<?> delete(@PathVariable Long memberId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return memberService.deleteMember(memberId, userDetails);
+    }
 
     //이메일 중복 확인
 
