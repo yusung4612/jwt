@@ -1,11 +1,14 @@
 package com.example.temipj.controller;
 
+import com.example.temipj.domain.UserDetailsImpl;
 import com.example.temipj.dto.requestDto.EmployeeRequestDto;
 import com.example.temipj.dto.responseDto.Employee.EmpResponseDto;
 import com.example.temipj.dto.responseDto.Employee.EmployeeResponseDto;
+import com.example.temipj.dto.responseDto.ResponseDto;
 import com.example.temipj.service.EmployeeService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,8 +27,8 @@ public class EmployeeController {
 
     // 전체 직원 조회
     @GetMapping(value = "/all")
-    public EmpResponseDto<?> getEmployeeAll(){
-        return employeeService.getEmployeeAll();
+    public EmpResponseDto<?> getEmployeeAll(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return employeeService.getEmployeeAll(userDetails);
     }
 
     // 특정 직원 조회
@@ -46,5 +49,11 @@ public class EmployeeController {
     @DeleteMapping("delete/{id}")
     public EmpResponseDto<?>deleteEmp(@PathVariable Long id,HttpServletRequest request){
         return employeeService.deleteEmp(id,request);
+    }
+
+    // 직원 검색
+    @GetMapping("/search")
+    public ResponseDto<?> search(@RequestParam(value = "keyword") String keyword, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return employeeService.searchEmployee(keyword, userDetails);
     }
 }
