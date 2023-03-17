@@ -29,7 +29,7 @@ public class Employee extends Timestamped{
     @Column(nullable = false)
     private String division; //팀 구분
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String extension_number; //유선전화번호
 
     @Column(nullable = false, unique = true)
@@ -45,8 +45,8 @@ public class Employee extends Timestamped{
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Leader> leaderCheck;
+//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    private List<Leader> leaderCheck;
 
     public void update(EmployeeRequestDto requestDto) {
         this.name = requestDto.getName();
