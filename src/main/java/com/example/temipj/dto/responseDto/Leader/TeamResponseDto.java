@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class TeamResponseDto {
 
-    private Long id;
+//    private Long id;
 
     private String title;
 
