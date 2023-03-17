@@ -2,6 +2,7 @@ package com.example.temipj.service;
 
 
 import com.example.temipj.domain.Member;
+import com.example.temipj.domain.UserDetailsImpl;
 import com.example.temipj.dto.requestDto.LoginRequestDto;
 import com.example.temipj.dto.requestDto.MemberRequestDto;
 import com.example.temipj.dto.requestDto.TokenDto;
@@ -122,6 +123,20 @@ public class MemberService {
         return tokenProvider.deleteRefreshToken(member);
     }
 
+    //회원탈퇴
+    @Transactional
+    public ResponseDto<?> deleteMember(Long memberId, UserDetailsImpl userDetails) {
+        Member member = memberRepository.findById(memberId).orElseThrow(
+                () ->new IllegalArgumentException("등록되지 않은 회원입니다.")
+        );
+        if(!member.equals(userDetails.getMember())){
+            return ResponseDto.fail(ErrorCode.MEMBER_WRONG_DELETE.name(), ErrorCode.MEMBER_WRONG_DELETE.getMessage());
+        }
+        refreshTokenRepository.deleteByMemberId(memberId);
+        memberRepository.deleteById(memberId);
+
+        return ResponseDto.success("회원 탈퇴가 완료되었습니다.");
+    }
 
 
     // 사용자 이름 인증
