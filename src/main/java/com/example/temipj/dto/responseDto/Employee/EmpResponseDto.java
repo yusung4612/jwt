@@ -12,7 +12,6 @@ public class EmpResponseDto<T> {
 //    private Error error;
 
     public static <T> EmpResponseDto<T> version(T data) {
-//        return new ResponseDto<>(1, data, null);
         return new EmpResponseDto<>("1.0.0", data);
     }
 
