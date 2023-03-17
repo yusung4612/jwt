@@ -32,6 +32,9 @@ public class Leader extends Timestamped{
 //    @Column(nullable = false)
 //    private String email;
 
+    @Column(nullable = false)
+    private String title;
+
     @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
