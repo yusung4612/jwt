@@ -81,7 +81,7 @@ public class LeaderService {
             LeaderResponseDtoList.add(
                     LeaderResponseDto.builder()
 //                            .id(leader.getEmployee().getId())
-                            .division(leader.getEmployee().getDivision())
+//                            .division(leader.getEmployee().getDivision())
                             .department(leader.getEmployee().getDepartment())
                             .name(leader.getEmployee().getName())
                             .mobile_number(leader.getEmployee().getMobile_number())
@@ -93,18 +93,5 @@ public class LeaderService {
 }
 ////////////////////////////////원래/////////////////////
 
-//        List<Leader> leaderList = leaderRepository.findAllByMember(member);
-//        Map<String, List<Map<String, LeaderResponseDto>>> LeaderResponseDtoList = new HashMap<>();
-//
-//        for (Leader leader : leaderList) {
-//            Map<String, Object> leaderMap = new HashMap<>();
-//            leaderMap.put("name", leader.getEmployee().getName());
-//            leaderMap.put("email", leader.getEmployee().getEmail());
-//
-//        }
-//                return LeadResponseDto.version(LeaderResponseDtoList);
-////        return ReponseDto.success();
-//    }
-//}
 
 
