@@ -3,17 +3,21 @@ package com.example.temipj.service;
 
 import com.example.temipj.domain.Employee;
 import com.example.temipj.domain.Member;
+import com.example.temipj.domain.UserDetailsImpl;
 import com.example.temipj.dto.requestDto.EmployeeRequestDto;
 import com.example.temipj.dto.responseDto.Employee.EmpResponseDto;
 import com.example.temipj.dto.responseDto.Employee.EmployeeResponseDto;
+import com.example.temipj.dto.responseDto.ResponseDto;
 import com.example.temipj.exception.CustomException;
 import com.example.temipj.exception.ErrorCode;
 import com.example.temipj.jwt.TokenProvider;
 import com.example.temipj.repository.EmployeeRepository;
+import com.example.temipj.repository.LeaderRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -24,7 +28,10 @@ import java.util.*;
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+
     private final TokenProvider tokenProvider;
+
+    private final LeaderRepository leaderRepository;
 
     //직원 등록
     @Transactional
@@ -69,9 +76,18 @@ public class EmployeeService {
                         .build());
     }
 
+    //직원별 enabled 체크
+    @Transactional
+    public boolean enabledCheck(Employee employee, UserDetailsImpl userDetails) {
+        if (userDetails == null) {
+            return true;
+        }
+        return leaderRepository.existsByMemberAndEmployee(userDetails.getMember(), employee);
+    }
+
     //전체 직원 조회
     @Transactional
-    public EmpResponseDto<?> getEmployeeAll() {
+    public EmpResponseDto<?> getEmployeeAll(UserDetailsImpl userDetails) {
 
         List<Employee> employeeList = employeeRepository.findAllByOrderByCreatedAtDesc();
         List<EmployeeResponseDto> employeeResponseDtoList = new ArrayList<>();
@@ -84,7 +100,8 @@ public class EmployeeService {
                             .division(employee.getDivision())
                             .extension_number(employee.getExtension_number())
                             .mobile_number(employee.getMobile_number())
-                            .member(employee.getMember())
+                            .enabled(enabledCheck(employee, userDetails))
+//                            .member(employee.getMember())
                             .build());
         }
         return EmpResponseDto.version(employeeResponseDtoList);
@@ -101,16 +118,6 @@ public class EmployeeService {
         }
         return EmpResponseDto.version(employee);
     }
-
-//    public ResponseDto<?> getEmployee(Long id) {
-//        //직원 유무 확인
-//        Employee employee = isPresentEmployee(id);
-//        if (null == employee) {
-////            return ResponseDto.fail(ErrorCode.NOT_EXIST_EMPLOYEE.name(),ErrorCode.NOT_EXIST_EMPLOYEE.getMessage());
-//            throw new CustomException(ErrorCode.NOT_EXIST_EMPLOYEE);
-//        }
-//        return ResponseDto.version(employee);
-//    }
 
     //직원 정보 수정
     @Transactional
@@ -166,6 +173,32 @@ public class EmployeeService {
 //        return ResponseDto.version("해당 직원이 삭제되었습니다.");
         return EmpResponseDto.version("해당 직원이 삭제되었습니다.");
     }
+
+    //직원 검색
+    @Transactional
+    public ResponseDto<?> searchEmployee(String keyword, UserDetailsImpl userDetails) {
+        List<Employee> employeeList = employeeRepository.searchEmp(keyword);
+        // 검색된 항목 담아줄 리스트 생성
+        List<EmployeeResponseDto> employeeListResponseDtoList = new ArrayList<>();
+        //for문을 통해서 List에 담아주기
+        for (Employee employee : employeeList) {
+            employeeListResponseDtoList.add(
+                    EmployeeResponseDto.builder()
+//                            .id(employee.getId())
+                            .name(employee.getName())
+                            .birth(employee.getBirth())
+                            .division(employee.getDivision())
+                            .extension_number(employee.getExtension_number())
+                            .mobile_number(employee.getMobile_number())
+                            .enabled(enabledCheck(employee, userDetails))
+//                            .createdAt(employee.getCreatedAt())
+//                            .modifiedAt(employee.getModifiedAt())
+                            .build()
+            );
+        }
+        return ResponseDto.success(employeeListResponseDtoList);
+    }
+
 
     @Transactional
     public Employee isPresentEmployee(Long id) {
