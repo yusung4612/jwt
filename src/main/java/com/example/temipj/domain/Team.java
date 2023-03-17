@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Team {
+public class Team extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
