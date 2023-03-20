@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <title>로그인</title>
+
+    <script>
+
+        $(document).ready(function() {
+            $("#loginForm").submit(function(event) {
+                event.preventDefault(); // 폼 전송 방지
+
+                var formData = {
+                    email: $("#email").val(),
+                    password: $("#password").val(),
+                    passwordConfirm: $("#passwordConfirm").val()
+                };
+
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json",
+                    url: "/api/members/login",
+                    data: JSON.stringify(formData),
+                    dataType: 'json',
+                    success: function(response) {
+                        alert(response);
+                    },
+                    error: function(e) {
+                        alert("Error: " + e.responseText);
+                    }
+                });
+            });
+        });
+
+    </script>
+
+
+</head>
+<body>
+
+<form id="loginForm">
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email"><br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password"><br>
+    <label for="passwordConfirm">passwordConfirm:</label>
+    <input type="passwordConfirm" id="passwordConfirm" name="passwordConfirm"><br>
+    <button type="submit">Sign up</button>
+</form>
+
+</body>
+</html>

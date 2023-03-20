@@ -1,9 +1,14 @@
 package com.example.temipj.dto.responseDto.Employee;
 
+import com.example.temipj.exception.ErrorCode;
+import com.fasterxml.jackson.core.Version;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
+import org.aspectj.apache.bcel.classfile.Code;
 
 @Getter
+@Setter
 @AllArgsConstructor
 public class EmpResponseDto<T> {
 
@@ -19,8 +24,6 @@ public class EmpResponseDto<T> {
 //        return new EmpResponseDto<>("Error", null);
 //    }
 
-    @Getter
-    @AllArgsConstructor
     static class Error {
         private String code;
         private String message;

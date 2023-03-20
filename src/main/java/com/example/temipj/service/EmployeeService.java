@@ -17,15 +17,18 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-@Builder
+//@Builder
 @RequiredArgsConstructor
 @Service
 public class EmployeeService {
+
+    Map<Long, Employee> map = new HashMap<>();
 
     private final EmployeeRepository employeeRepository;
 

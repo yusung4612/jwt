@@ -3,7 +3,9 @@ package com.example.temipj.service;
 import com.example.temipj.domain.Employee;
 import com.example.temipj.domain.Leader;
 import com.example.temipj.domain.Member;
+import com.example.temipj.domain.UserDetailsImpl;
 import com.example.temipj.dto.responseDto.*;
+import com.example.temipj.dto.responseDto.Employee.EmployeeResponseDto;
 import com.example.temipj.dto.responseDto.Leader.LeadResponseDto;
 import com.example.temipj.dto.responseDto.Leader.LeaderResponseDto;
 import com.example.temipj.exception.CustomException;
@@ -90,8 +92,30 @@ public class LeaderService {
         }
         return LeadResponseDto.version(LeaderResponseDtoList);
     }
-}
 ////////////////////////////////원래/////////////////////
+
+    //리더 검색
+    @Transactional
+    public ResponseDto<?> searchLeader(String keyword) {
+        List<Employee> leaderList = leaderRepository.searchLead(keyword);
+        // 검색된 항목 담아줄 리스트 생성
+        List<LeaderResponseDto> LeaderResponseDtoList = new ArrayList<>();
+        //for문을 통해서 List에 담아주기
+        for (Employee employee : leaderList) {
+            LeaderResponseDtoList.add(
+                    LeaderResponseDto.builder()
+//                            .id(employee.getId())
+                            .department(employee.getDepartment())
+                            .name(employee.getName())
+                            .mobile_number(employee.getMobile_number())
+                            .email(employee.getEmail())
+                            .build()
+            );
+        }
+        return ResponseDto.success(LeaderResponseDtoList);
+    }
+
+}
 
 
 

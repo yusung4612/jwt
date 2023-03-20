@@ -22,18 +22,21 @@ public class MemberController {
 
     //회원가입
     @PostMapping(value="/signup")
+    @ResponseBody
     public ResponseDto<?> signup(@RequestBody @Valid MemberRequestDto requestDto) throws IOException {
         return memberService.createMember(requestDto);
     }
 
     //로그인
     @PostMapping(value = "/login")
+    @ResponseBody
     public ResponseDto<?> login(@RequestBody @Valid LoginRequestDto requestDto, HttpServletResponse response) {
         return memberService.loginMember(requestDto, response);
     }
 
     //로그아웃
     @PostMapping(value = "/logout")
+    @ResponseBody
     public ResponseDto<?> logout(HttpServletRequest request) {
         return memberService.logout(request);
     }
@@ -46,6 +49,7 @@ public class MemberController {
 
     //회원탈퇴
     @DeleteMapping(value="/delete/{memberId}")
+    @ResponseBody
     public ResponseDto<?> delete(@PathVariable Long memberId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return memberService.deleteMember(memberId, userDetails);
     }

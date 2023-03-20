@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
     //==========================sign up========================================
-
+    OK(300, "응답이 정상 처리 되었습니다."),
     SIGNUP_WRONG_MEMBERID(400, "MEMBER 아이디가 존재하지 않습니다."),
     SIGNUP_WRONG_LOGINID(400, "이메일 형식이 맞지 않습니다."),
     DUPLICATED_EMAIL(400,"중복된 이메일입니다."),
