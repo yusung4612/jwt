@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
@@ -29,14 +31,14 @@ public class MemberController {
 
     //로그인
     @PostMapping(value = "/login")
-    @ResponseBody
+//    @ResponseBody
     public ResponseDto<?> login(@RequestBody @Valid LoginRequestDto requestDto, HttpServletResponse response) {
         return memberService.loginMember(requestDto, response);
     }
 
     //로그아웃
     @PostMapping(value = "/logout")
-    @ResponseBody
+//    @ResponseBody
     public ResponseDto<?> logout(HttpServletRequest request) {
         return memberService.logout(request);
     }
@@ -49,9 +51,14 @@ public class MemberController {
 
     //회원탈퇴
     @DeleteMapping(value="/delete/{memberId}")
-    @ResponseBody
+//    @ResponseBody
     public ResponseDto<?> delete(@PathVariable Long memberId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return memberService.deleteMember(memberId, userDetails);
+    }
+
+    @RequestMapping(value = "/signup", method = RequestMethod.GET)
+    public String handleGetRequest() {
+        throw new UnsupportedOperationException("GET 요청은 지원하지 않습니다.");
     }
 
     //이메일 중복 확인

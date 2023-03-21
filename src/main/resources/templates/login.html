@@ -12,7 +12,7 @@
                 event.preventDefault(); // 폼 전송 방지
 
                 var formData = {
-                    email: $("#email").val(),
+                    email: $("#emailId").val(),
                     password: $("#password").val(),
                     passwordConfirm: $("#passwordConfirm").val()
                 };
@@ -40,8 +40,8 @@
 <body>
 
 <form id="loginForm">
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email"><br>
+    <label for="emailId">Email:</label>
+    <input type="emailId" id="emailId" name="emailId"><br>
     <label for="password">Password:</label>
     <input type="password" id="password" name="password"><br>
     <label for="passwordConfirm">passwordConfirm:</label>

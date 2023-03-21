@@ -13,6 +13,7 @@ public class CorsConfiguration {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         org.springframework.web.cors.CorsConfiguration config = new org.springframework.web.cors.CorsConfiguration();
         config.setAllowCredentials(true); // 내서버가 응답을 할 떄 json을 자바스크립트에서 처리할 수 있게 할지를 설정하는 것
+
         config.addAllowedOrigin("http://localhost:3000");
         config.addAllowedOrigin("http://localhost:8080");
         config.addAllowedOriginPattern("*"); //모든 ip의 응답 허용
@@ -20,7 +21,8 @@ public class CorsConfiguration {
         config.addAllowedMethod("*"); //모든 get, post, put, delete, patch 요청을 허용
         config.addExposedHeader("*");
         source.registerCorsConfiguration("/v1/members/**",config);
-        source.registerCorsConfiguration("/api/members/**",config);
+//        source.registerCorsConfiguration("/api/members/signup",config);
+        source.registerCorsConfiguration("/api/**",config);
         source.registerCorsConfiguration("/**",config);
         return new CorsFilter(source);
 
