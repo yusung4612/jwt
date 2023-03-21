@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous">
+    <title>회원가입</title>
+
+<script>
+
+    $(document).ready(function() {
+        // const Url = 'http://localhost:8080/api/members/signup';
+        $("#signupForm").submit(function(event) {
+            event.preventDefault(); // 폼 전송 방지
+
+            var formData = {
+                name: $("#membername").val(),
+                email: $("#emailId").val(),
+                password: $("#password").val(),
+                passwordConfirm: $("#passwordConfirm").val()
+            };
+
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "/api/members/signup",
+                // url: Url,
+                data: JSON.stringify(data),
+                dataType: 'json',
+                success: function(response) {
+                    alert(response);
+                },
+                error: function(e) {
+                    alert("Error: " + e.responseText);
+                }
+            });
+        });
+    });
+
+</script>
+
+</head>
+<body>
+
+<form id="signupForm">
+    <label for="membername">Name:</label>
+    <input type="membername" id="membername" name="membername"><br>
+    <label for="emailId">Email:</label>
+    <input type="emailId" id="emailId" name="emailId"><br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password"><br>
+    <label for="passwordConfirm">Password Confirm:</label>
+    <input type="passwordConfirm" id="passwordConfirm" name="passwordConfirm"><br>
+
+    <button type="submit">Sign up</button>
+    <a href="login.html"><input type="button" value="Back"></a>
+</form>
+
+</body>
+</html>

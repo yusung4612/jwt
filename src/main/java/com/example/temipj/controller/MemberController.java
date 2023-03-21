@@ -31,14 +31,14 @@ public class MemberController {
 
     //로그인
     @PostMapping(value = "/login")
-//    @ResponseBody
+    @ResponseBody
     public ResponseDto<?> login(@RequestBody @Valid LoginRequestDto requestDto, HttpServletResponse response) {
         return memberService.loginMember(requestDto, response);
     }
 
     //로그아웃
     @PostMapping(value = "/logout")
-//    @ResponseBody
+    @ResponseBody
     public ResponseDto<?> logout(HttpServletRequest request) {
         return memberService.logout(request);
     }

@@ -1,5 +1,7 @@
 package com.example.temipj.domain;
 
+
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

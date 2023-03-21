@@ -6,6 +6,7 @@ import com.example.temipj.jwt.AuthenticationEntryPointException;
 import com.example.temipj.jwt.JwtFilter;
 import com.example.temipj.jwt.TokenProvider;
 import com.example.temipj.service.UserDetailsServiceImpl;
+import jakarta.servlet.DispatcherType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -70,6 +71,10 @@ public class SecurityConfiguration {
 //                .addFilterBefore(new JwtFilter(SECRET_KEY, tokenProvider, userDetailsService), UsernamePasswordAuthenticationFilter.class)
 //                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
 
+                .authorizeHttpRequests(request -> request
+                        .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
+                )
+
                 //exception handling 할 때 직접 만든 class를 추가
                 .exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPointException)
@@ -83,10 +88,8 @@ public class SecurityConfiguration {
         http.authorizeHttpRequests(authorize -> authorize //요청에 대한 사용권한 설정 //로그인, 회원가입 Api는 토큰이 없는 상태에서 요청이 들어오기 때문에 permitAll 설정
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .requestMatchers("/api/**").permitAll()
-                        .requestMatchers("/api/members/login").hasRole("MEMBER")
+//                        .requestMatchers("/api/members/login").permitAll()
                         .requestMatchers("/", "/**").permitAll()
-                        .requestMatchers("/", "/**").hasRole("MEMBER")
-                        .requestMatchers(HttpMethod.POST, "/api/members/login").permitAll()
                         .requestMatchers("/v2/api-docs",
 //                                "/swagger-resources",
 //                                "/swagger-resources/**",
@@ -94,11 +97,14 @@ public class SecurityConfiguration {
                                 "/configuration/security",
                                 "/swagger-ui.html",
                                 "/api/members/**",
+                                "/",
+                                "/**",
                                 "/api/employees/**",
                                 "/api/**",
                                 "/webjars/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**").permitAll()
+
                         .anyRequest().authenticated() // 나머지 API는 전부 인증 필요
 
                         //JwtFilter를 addFilterBefore로 등록 했던 JwtSecurityConfig 클래스를 적용
