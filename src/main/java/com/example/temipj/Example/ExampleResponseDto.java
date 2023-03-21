@@ -17,7 +17,12 @@ public class ExampleResponseDto {
     private  String name;
 
     public ExampleResponseDto(Employee employee) {
+        this.email = employee.getEmail();
+        this.birth = employee.getBirth();
+        this.name = employee.getName();
     }
+
+
     // 필요한 데이터
         // 필요한 데이터 매핑
 
