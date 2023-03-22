@@ -1,6 +1,6 @@
-package com.example.temipj.Example;
+package com.example.temipj.example;
 
-import com.example.temipj.domain.Employee;
+import com.example.temipj.domain.employee.Employee;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

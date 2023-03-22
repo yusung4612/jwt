@@ -1,20 +1,20 @@
-package com.example.temipj.domain;
+package com.example.temipj.domain.employee;
 
+import com.example.temipj.domain.member.Member;
+import com.example.temipj.domain.Timestamped;
 import com.example.temipj.dto.requestDto.EmployeeRequestDto;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import java.util.List;
 
 @Builder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Employee extends Timestamped{
+public class Employee extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

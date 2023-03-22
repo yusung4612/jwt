@@ -16,19 +16,18 @@
                 event.preventDefault(); // 폼 전송 방지
 
                 var formData = {
-                    email: $("#emailId").val(),
+                    emailId: $("#emailId").val(),
                     password: $("#password").val(),
-                    passwordConfirm: $("#passwordConfirm").val()
                 };
 
                 $.ajax({
                     type: "POST",
                     contentType: "application/json; charset=utf-8",
-                    url: "/api/members/login",
+                    url: "http://localhost:8080/api/members/login",
                     data: JSON.stringify(formData),
                     dataType: 'json',
                     success: function(response) {
-                        alert(response);
+                        alert("로그인 성공!");
                     },
                     error: function(e) {
                         alert("Error: " + e.responseText);
@@ -48,8 +47,6 @@
     <input type="emailId" id="emailId" name="emailId"><br>
     <label for="password">Password:</label>
     <input type="password" id="password" name="password"><br>
-    <label for="passwordConfirm">passwordConfirm:</label>
-    <input type="passwordConfirm" id="passwordConfirm" name="passwordConfirm"><br>
     <button type="submit">Login</button>
 
     <a href="register.html"><input type="button" value="Sign up"></a>

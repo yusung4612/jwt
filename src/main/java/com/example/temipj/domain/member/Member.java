@@ -1,5 +1,6 @@
-package com.example.temipj.domain;
+package com.example.temipj.domain.member;
 
+import com.example.temipj.domain.Timestamped;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.Hibernate;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 import java.util.Objects;
 
 @Builder

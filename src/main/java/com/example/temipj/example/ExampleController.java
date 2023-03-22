@@ -1,6 +1,5 @@
-package com.example.temipj.Example;
+package com.example.temipj.example;
 
-import com.example.temipj.domain.Employee;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;

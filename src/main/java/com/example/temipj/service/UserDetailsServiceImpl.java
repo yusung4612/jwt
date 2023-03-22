@@ -1,6 +1,6 @@
 package com.example.temipj.service;
 
-import com.example.temipj.domain.Member;
+import com.example.temipj.domain.member.Member;
 import com.example.temipj.domain.UserDetailsImpl;
 import com.example.temipj.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;

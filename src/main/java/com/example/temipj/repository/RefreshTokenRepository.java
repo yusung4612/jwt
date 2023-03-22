@@ -1,7 +1,7 @@
 package com.example.temipj.repository;
 
 
-import com.example.temipj.domain.Member;
+import com.example.temipj.domain.member.Member;
 import com.example.temipj.domain.RefreshToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 

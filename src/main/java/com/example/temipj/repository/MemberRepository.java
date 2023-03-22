@@ -1,7 +1,6 @@
 package com.example.temipj.repository;
 
-
-import com.example.temipj.domain.Member;
+import com.example.temipj.domain.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 

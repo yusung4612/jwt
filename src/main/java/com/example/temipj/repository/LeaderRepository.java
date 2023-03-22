@@ -1,13 +1,11 @@
 package com.example.temipj.repository;
 
-import com.example.temipj.domain.Employee;
-import com.example.temipj.domain.Leader;
-import com.example.temipj.domain.Member;
+import com.example.temipj.domain.employee.Employee;
+import com.example.temipj.domain.employee.Leader;
+import com.example.temipj.domain.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +18,7 @@ public interface LeaderRepository extends JpaRepository<Leader, Long> {
 
     boolean existsByMemberAndEmployee(Member member, Employee employee);
 
-    //리더 체크
+    // 리더 선택
     Leader findByEmployeeIdAndMemberId(Long memberId, Long employeeId);
 
     //리더 검색

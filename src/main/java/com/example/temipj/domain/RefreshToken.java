@@ -1,5 +1,6 @@
 package com.example.temipj.domain;
 
+import com.example.temipj.domain.member.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

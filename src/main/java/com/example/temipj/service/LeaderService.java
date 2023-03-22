@@ -1,13 +1,11 @@
 package com.example.temipj.service;
 
-import com.example.temipj.domain.Employee;
-import com.example.temipj.domain.Leader;
-import com.example.temipj.domain.Member;
-import com.example.temipj.domain.UserDetailsImpl;
+import com.example.temipj.domain.employee.Employee;
+import com.example.temipj.domain.employee.Leader;
+import com.example.temipj.domain.member.Member;
 import com.example.temipj.dto.responseDto.*;
-import com.example.temipj.dto.responseDto.Employee.EmployeeResponseDto;
-import com.example.temipj.dto.responseDto.Leader.LeadResponseDto;
-import com.example.temipj.dto.responseDto.Leader.LeaderResponseDto;
+import com.example.temipj.dto.responseDto.LeadResponseDto;
+import com.example.temipj.dto.responseDto.LeaderResponseDto;
 import com.example.temipj.exception.CustomException;
 import com.example.temipj.exception.ErrorCode;
 import com.example.temipj.jwt.TokenProvider;
@@ -27,9 +25,9 @@ public class LeaderService {
     private final LeaderRepository leaderRepository;
     private final EmployeeService employeeService;
 
-    //리더 지정 및 해제
+    //리더 선택 및 해제
     @Transactional
-    public ResponseDto<?> LeaderCheck(Long employeeId, HttpServletRequest request) {
+    public ResponseDto<?> LeaderSelect(Long employeeId, HttpServletRequest request) {
         // 1. 토큰 유효성 확인
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
             throw new CustomException(ErrorCode.INVALID_TOKEN);
@@ -46,9 +44,9 @@ public class LeaderService {
         }
 
         // 4. 리더 체크 저장
-        Leader findLeaderCheck = leaderRepository.findByEmployeeIdAndMemberId(employee.getId(), member.getId());
-        if (null != findLeaderCheck) {
-            leaderRepository.delete(findLeaderCheck);
+        Leader findLeaderSelect = leaderRepository.findByEmployeeIdAndMemberId(employee.getId(), member.getId());
+        if (null != findLeaderSelect) {
+            leaderRepository.delete(findLeaderSelect);
             return ResponseDto.success("리더 해제");
         }
         Leader leader = Leader.builder()
@@ -60,7 +58,7 @@ public class LeaderService {
 
     }
 
-    //리더 목록 조회
+    // 선택한 리더 목록 조회
     @Transactional
     public LeadResponseDto<?> getLeaderAll(HttpServletRequest request) {
         // 1. 토큰 유효성 확인

@@ -1,5 +1,7 @@
-package com.example.temipj.domain;
+package com.example.temipj.domain.employee;
 
+import com.example.temipj.domain.member.Member;
+import com.example.temipj.domain.Timestamped;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Leader extends Timestamped{
+public class Leader extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

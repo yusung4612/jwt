@@ -1,14 +1,10 @@
-package com.example.temipj.dto.responseDto.Employee;
+package com.example.temipj.dto.responseDto;
 
-import com.example.temipj.exception.ErrorCode;
-import com.fasterxml.jackson.core.Version;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import org.aspectj.apache.bcel.classfile.Code;
+import lombok.*;
 
+@Builder
 @Getter
-@Setter
+@NoArgsConstructor
 @AllArgsConstructor
 public class EmpResponseDto<T> {
 

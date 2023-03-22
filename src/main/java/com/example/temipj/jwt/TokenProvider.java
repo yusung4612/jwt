@@ -1,7 +1,7 @@
 package com.example.temipj.jwt;
 
 
-import com.example.temipj.domain.Member;
+import com.example.temipj.domain.member.Member;
 import com.example.temipj.domain.RefreshToken;
 import com.example.temipj.domain.UserDetailsImpl;
 import com.example.temipj.dto.requestDto.TokenDto;

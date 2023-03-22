@@ -1,6 +1,6 @@
-package com.example.temipj.dto.responseDto.Leader;
+package com.example.temipj.dto.responseDto;
 
-import com.example.temipj.dto.responseDto.Employee.EmployeeResponseDto;
+import com.example.temipj.dto.responseDto.EmployeeResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

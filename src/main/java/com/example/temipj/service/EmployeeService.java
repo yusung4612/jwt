@@ -1,12 +1,12 @@
 package com.example.temipj.service;
 
 
-import com.example.temipj.domain.Employee;
-import com.example.temipj.domain.Member;
+import com.example.temipj.domain.employee.Employee;
+import com.example.temipj.domain.member.Member;
 import com.example.temipj.domain.UserDetailsImpl;
 import com.example.temipj.dto.requestDto.EmployeeRequestDto;
-import com.example.temipj.dto.responseDto.Employee.EmpResponseDto;
-import com.example.temipj.dto.responseDto.Employee.EmployeeResponseDto;
+import com.example.temipj.dto.responseDto.EmpResponseDto;
+import com.example.temipj.dto.responseDto.EmployeeResponseDto;
 import com.example.temipj.dto.responseDto.ResponseDto;
 import com.example.temipj.exception.CustomException;
 import com.example.temipj.exception.ErrorCode;
@@ -15,10 +15,7 @@ import com.example.temipj.repository.EmployeeRepository;
 import com.example.temipj.repository.LeaderRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -54,6 +51,7 @@ public class EmployeeService {
         if (requestDto.getName().isEmpty())
 //            return ResponseDto.fail(ErrorCode.NOT_BLANK_NAME.name(), ErrorCode.NOT_BLANK_NAME.getMessage());
             throw new CustomException(ErrorCode.NOT_BLANK_NAME);
+
         Employee employee = Employee.builder()
                 .name(requestDto.getName())
                 .birth(requestDto.getBirth())
@@ -194,8 +192,6 @@ public class EmployeeService {
                             .extension_number(employee.getExtension_number())
                             .mobile_number(employee.getMobile_number())
                             .enabled(enabledCheck(employee, userDetails))
-//                            .createdAt(employee.getCreatedAt())
-//                            .modifiedAt(employee.getModifiedAt())
                             .build()
             );
         }

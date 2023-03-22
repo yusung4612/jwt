@@ -2,8 +2,8 @@ package com.example.temipj.controller;
 
 import com.example.temipj.domain.UserDetailsImpl;
 import com.example.temipj.dto.requestDto.EmployeeRequestDto;
-import com.example.temipj.dto.responseDto.Employee.EmpResponseDto;
-import com.example.temipj.dto.responseDto.Employee.EmployeeResponseDto;
+import com.example.temipj.dto.responseDto.EmpResponseDto;
+import com.example.temipj.dto.responseDto.EmployeeResponseDto;
 import com.example.temipj.dto.responseDto.ResponseDto;
 import com.example.temipj.service.EmployeeService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,19 +27,19 @@ public class EmployeeController {
 
     // 전체 직원 조회
     @GetMapping(value = "/all")
-    public EmpResponseDto<?> getEmployeeAll(@AuthenticationPrincipal UserDetailsImpl userDetails){
+    public EmpResponseDto<?> getAll(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return employeeService.getEmployeeAll(userDetails);
     }
 
     // 특정 직원 조회
     @GetMapping(value = "/{id}")
-    public EmpResponseDto<?> getPost(@PathVariable Long id) {
+    public EmpResponseDto<?> get(@PathVariable Long id) {
         return employeeService.getEmployee(id);
     }
 
     // 직원 수정
     @PutMapping(value = "/{id}")
-    public EmpResponseDto<?> updateEmp(@PathVariable Long id,
+    public EmpResponseDto<?> update(@PathVariable Long id,
                                        @RequestBody EmployeeRequestDto employeeRequestDto,
                                        HttpServletRequest request) {
         return employeeService.updateEmp(id, employeeRequestDto, request);
@@ -47,7 +47,7 @@ public class EmployeeController {
 
     // 직원 삭제
     @DeleteMapping("delete/{id}")
-    public EmpResponseDto<?>deleteEmp(@PathVariable Long id,HttpServletRequest request){
+    public EmpResponseDto<?>delete(@PathVariable Long id,HttpServletRequest request){
         return employeeService.deleteEmp(id,request);
     }
 

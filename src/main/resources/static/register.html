@@ -12,13 +12,12 @@
 <script>
 
     $(document).ready(function() {
-        // const Url = 'http://localhost:8080/api/members/signup';
         $("#signupForm").submit(function(event) {
             event.preventDefault(); // 폼 전송 방지
 
             var formData = {
-                name: $("#membername").val(),
-                email: $("#emailId").val(),
+                membername: $("#membername").val(),
+                emailId: $("#emailId").val(),
                 password: $("#password").val(),
                 passwordConfirm: $("#passwordConfirm").val()
             };
@@ -26,9 +25,8 @@
             $.ajax({
                 type: "POST",
                 contentType: "application/json; charset=utf-8",
-                url: "/api/members/signup",
-                // url: Url,
-                data: JSON.stringify(data),
+                url: "http://localhost:8080/api/members/signup",
+                data: JSON.stringify(formData),
                 dataType: 'json',
                 success: function(response) {
                     alert(response);
@@ -55,7 +53,7 @@
     <label for="passwordConfirm">Password Confirm:</label>
     <input type="passwordConfirm" id="passwordConfirm" name="passwordConfirm"><br>
 
-    <button type="submit">Sign up</button>
+    <button id="btn-save" class="btn btn-primary">Sign up</button>
     <a href="login.html"><input type="button" value="Back"></a>
 </form>
 

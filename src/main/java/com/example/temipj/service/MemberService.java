@@ -1,13 +1,13 @@
 package com.example.temipj.service;
 
 
-import com.example.temipj.domain.Member;
+import com.example.temipj.domain.member.Member;
 import com.example.temipj.domain.UserDetailsImpl;
 import com.example.temipj.dto.requestDto.LoginRequestDto;
 import com.example.temipj.dto.requestDto.MemberRequestDto;
 import com.example.temipj.dto.requestDto.TokenDto;
-import com.example.temipj.dto.responseDto.MemberResponseDto;
 import com.example.temipj.dto.responseDto.ResponseDto;
+import com.example.temipj.dto.responseDto.MemberResponseDto;
 import com.example.temipj.exception.ErrorCode;
 import com.example.temipj.jwt.TokenProvider;
 import com.example.temipj.repository.MemberRepository;
@@ -62,8 +62,8 @@ public class MemberService {
 
         Member member = Member.builder()
                 .membername(requestDto.getMembername())
-                .password(passwordEncoder.encode(requestDto.getPassword()))
                 .emailId(requestDto.getEmailId())
+                .password(passwordEncoder.encode(requestDto.getPassword()))
                 .build();
         memberRepository.save(member);
 
