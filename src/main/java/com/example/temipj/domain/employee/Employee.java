@@ -45,6 +45,11 @@ public class Employee extends Timestamped {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
+    //테스트//////////////////////////////////
+    @Column
+    private String leader = "false";
+    /////////////////////////////////////////
+
 //    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 //    private List<Leader> leaderCheck;
 
@@ -62,5 +67,8 @@ public class Employee extends Timestamped {
         return !this.member.equals(member);
     }
 
+    public void updateLeader(Long Id) {
+        this.leader = "true";
+    }
 
 }

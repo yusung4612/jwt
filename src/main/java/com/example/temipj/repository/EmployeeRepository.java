@@ -21,4 +21,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
             "OR p.email LIKE %:keyword% OR p.department LIKE %:keyword% ORDER BY p.createdAt desc")
     List <Employee> searchEmp(@Param("keyword") String keyword);
 
+    //테스트////////////////////
+    @Query(value = "SELECT p FROM Employee p WHERE p.leader = 'true' AND p.department = '영업기획'")
+    Employee findByLeader();
 }
