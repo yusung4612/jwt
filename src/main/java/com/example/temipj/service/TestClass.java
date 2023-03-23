@@ -5,6 +5,7 @@ import com.example.temipj.repository.EmployeeRepository;
 import jakarta.transaction.Transactional;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +34,13 @@ public class TestClass {
         list.put("department", employee.getDepartment());
         list.put("contact", contact);
 
+        //JSONObject를 여러개 갖고 싶어 JSONArray 안에 다시 넣는다.
+//        JSONArray jsonArr1 = new JSONArray();
+//        jsonArr1.put(jsonArr1);
+
+//        JSONObject jsonObject1 = new JSONObject();
+//        JSONObject1.put()
+
         return list;
     }
-
 }

@@ -22,6 +22,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     List <Employee> searchEmp(@Param("keyword") String keyword);
 
     //테스트////////////////////
-    @Query(value = "SELECT p FROM Employee p WHERE p.leader = 'true' AND p.department = '영업기획'")
+    @Query(value = "SELECT p FROM Employee p WHERE p.leader = 'true'")
     Employee findByLeader();
 }

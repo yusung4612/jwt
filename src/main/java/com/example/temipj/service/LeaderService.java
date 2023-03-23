@@ -3,19 +3,18 @@ package com.example.temipj.service;
 import com.example.temipj.domain.employee.Employee;
 import com.example.temipj.domain.employee.Leader;
 import com.example.temipj.domain.member.Member;
-import com.example.temipj.dto.responseDto.*;
-import com.example.temipj.dto.responseDto.LeadResponseDto;
 import com.example.temipj.dto.responseDto.LeaderResponseDto;
+import com.example.temipj.dto.responseDto.ResponseDto;
 import com.example.temipj.exception.CustomException;
 import com.example.temipj.exception.ErrorCode;
 import com.example.temipj.jwt.TokenProvider;
 import com.example.temipj.repository.EmployeeRepository;
 import com.example.temipj.repository.LeaderRepository;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -30,6 +29,8 @@ public class LeaderService {
     // 테스트 때문에 추가////////////////////////////
     private final EmployeeRepository employeeRepository;
     //////////////////////////////////////////////
+
+    private Employee employee;
 
     //리더 선택 및 해제
     @Transactional
@@ -73,37 +74,7 @@ public class LeaderService {
 
     // 선택한 리더 목록 조회
     @Transactional
-    public LeadResponseDto<?> getLeaderAll(HttpServletRequest request) {
-        // 1. 토큰 유효성 확인
-        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-            throw new CustomException(ErrorCode.INVALID_TOKEN);
-        }
-        // 2. tokenProvider Class의 SecurityContextHolder에 저장된 Member 정보 확인
-        Member member = tokenProvider.getMemberFromAuthentication();
-        if (null == member) {
-            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
-        }
-
-        List<Leader> leaderList = leaderRepository.findAllByMember(member);
-        List<LeaderResponseDto> LeaderResponseDtoList = new ArrayList<>();
-
-
-        for (Leader leader : leaderList) {
-            LeaderResponseDtoList.add(
-                    LeaderResponseDto.builder()
-//                            .id(leader.getEmployee().getId())
-//                            .division(leader.getEmployee().getDivision())
-                            .department(leader.getEmployee().getDepartment())
-                            .name(leader.getEmployee().getName())
-                            .mobile_number(leader.getEmployee().getMobile_number())
-                            .email(leader.getEmployee().getEmail())
-                            .build());
-        }
-        return LeadResponseDto.version(LeaderResponseDtoList);
-    }
-////////////////////////////////원래/////////////////////
-//    @Transactional
-//    public JSONObject getLeaderAll(HttpServletRequest request) {
+//    public LeadResponseDto<?> getLeaderAll(HttpServletRequest request) {
 //        // 1. 토큰 유효성 확인
 //        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
 //            throw new CustomException(ErrorCode.INVALID_TOKEN);
@@ -114,21 +85,51 @@ public class LeaderService {
 //            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
 //        }
 //
-//        String version = "2323";
+//        List<Leader> leaderList = leaderRepository.findAllByMember(member);
+//        List<LeaderResponseDto> LeaderResponseDtoList = new ArrayList<>();
 //
-//        Map<String, String> contact = new LinkedHashMap<>();
-//
-//        Employee employee = employeeRepository.findByLeader();
-//        contact.put("name", employee.getName());
-//        contact.put("mobile_number", employee.getMobile_number());
-//        contact.put("email", employee.getEmail());
-//
-//        JSONObject list = new JSONObject();
-//        list.put("department", employee.getDepartment());
-//        list.put("contact", contact);
-//
-//        return list;
+//        for (Leader leader : leaderList) {
+//            LeaderResponseDtoList.add(
+//                    LeaderResponseDto.builder()
+////                            .id(leader.getEmployee().getId())
+////                            .division(leader.getEmployee().getDivision())
+//                            .department(leader.getEmployee().getDepartment())
+//                            .name(leader.getEmployee().getName())
+//                            .mobile_number(leader.getEmployee().getMobile_number())
+//                            .email(leader.getEmployee().getEmail())
+//                            .build());
+//        }
+//        return LeadResponseDto.version(LeaderResponseDtoList);
 //    }
+////////////////////////////////원래/////////////////////
+
+    public JSONObject getLeaderAll(HttpServletRequest request) {
+
+        // 1. 토큰 유효성 확인
+        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
+        // 2. tokenProvider Class의 SecurityContextHolder에 저장된 Member 정보 확인
+        Member member = tokenProvider.getMemberFromAuthentication();
+        if (null == member) {
+            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+        }
+
+        String version = "2323";
+
+        Map<String, String> contact = new LinkedHashMap<>();
+
+        Employee employee = employeeRepository.findByLeader();
+        contact.put("name", employee.getName());
+        contact.put("mobile_number", employee.getMobile_number());
+        contact.put("email", employee.getEmail());
+
+        JSONObject list = new JSONObject();
+        list.put("department", employee.getDepartment());
+        list.put("contact", contact);
+
+        return list;
+    }
 
     //리더 검색
     @Transactional

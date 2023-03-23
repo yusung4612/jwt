@@ -70,5 +70,4 @@ public class Employee extends Timestamped {
     public void updateLeader(Long Id) {
         this.leader = "true";
     }
-
 }
