@@ -1,6 +1,7 @@
 package com.example.temipj.controller;
 
 import com.example.temipj.domain.UserDetailsImpl;
+import com.example.temipj.domain.employee.Employee;
 import com.example.temipj.dto.requestDto.EmployeeRequestDto;
 import com.example.temipj.dto.responseDto.EmpResponseDto;
 import com.example.temipj.dto.responseDto.EmployeeResponseDto;
@@ -8,8 +9,13 @@ import com.example.temipj.dto.responseDto.ResponseDto;
 import com.example.temipj.service.EmployeeService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,6 +36,28 @@ public class EmployeeController {
     public EmpResponseDto<?> getAll(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return employeeService.getEmployeeAll(userDetails);
     }
+//    @GetMapping("/all")
+//    public String getAll(@AuthenticationPrincipal UserDetailsImpl userDetails) throws JSONException {
+//        List<Employee> employees = employeeService.getEmployeeAll(userDetails);
+//
+//        JSONArray employeeArray = new JSONArray();
+//
+//        for (Employee employee : employees) {
+//            JSONObject employeeObj = new JSONObject();
+//            employeeObj.put("name", employee.getName());
+//            employeeObj.put("department", employee.getDepartment());
+//
+//            JSONArray divisionArray = new JSONArray();
+//            String[] divisions = employee.getDivision().split(",");
+//            for (String language : divisions) {
+//                divisionArray.put(language.trim());
+//            }
+//            employeeObj.put("languages", divisionArray);
+//
+//            employeeArray.put(employeeObj);
+//        }
+//        return employeeArray.toString();
+//    }
 
     // 특정 직원 조회
     @GetMapping(value = "/{id}")

@@ -3,6 +3,7 @@ package com.example.temipj.service;
 import com.example.temipj.domain.employee.Employee;
 import com.example.temipj.domain.employee.Leader;
 import com.example.temipj.domain.member.Member;
+import com.example.temipj.dto.responseDto.LeadResponseDto;
 import com.example.temipj.dto.responseDto.LeaderResponseDto;
 import com.example.temipj.dto.responseDto.ResponseDto;
 import com.example.temipj.exception.CustomException;
@@ -103,33 +104,10 @@ public class LeaderService {
 //    }
 ////////////////////////////////원래/////////////////////
 
-    public JSONObject getLeaderAll(HttpServletRequest request) {
-
-        // 1. 토큰 유효성 확인
-        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-            throw new CustomException(ErrorCode.INVALID_TOKEN);
-        }
-        // 2. tokenProvider Class의 SecurityContextHolder에 저장된 Member 정보 확인
-        Member member = tokenProvider.getMemberFromAuthentication();
-        if (null == member) {
-            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
-        }
-
-        String version = "2323";
-
-        Map<String, String> contact = new LinkedHashMap<>();
-
-        Employee employee = employeeRepository.findByLeader();
-        contact.put("name", employee.getName());
-        contact.put("mobile_number", employee.getMobile_number());
-        contact.put("email", employee.getEmail());
-
-        JSONObject list = new JSONObject();
-        list.put("department", employee.getDepartment());
-        list.put("contact", contact);
-
-        return list;
+    public List<Leader> getLeaderAll(HttpServletRequest request) {
+        return leaderRepository.findAll();
     }
+
 
     //리더 검색
     @Transactional

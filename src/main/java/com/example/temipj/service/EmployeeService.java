@@ -107,6 +107,11 @@ public class EmployeeService {
         }
         return EmpResponseDto.version(employeeResponseDtoList);
     }
+//    @Transactional
+//    public List<Employee> getEmployeeAll(UserDetailsImpl userDetails) {
+//        return employeeRepository.findAll();
+//    }
+
 
     //특정 직원 조회
     @Transactional
