@@ -1,7 +1,7 @@
 package com.example.temipj.jwt;
 
 
-import com.example.temipj.domain.member.Member;
+import com.example.temipj.domain.admin.Admin;
 import com.example.temipj.domain.RefreshToken;
 import com.example.temipj.domain.UserDetailsImpl;
 import com.example.temipj.dto.requestDto.TokenDto;
@@ -44,7 +44,7 @@ public class TokenProvider {
     }
 
     //jwt Token 생성 메서드
-    public TokenDto generateTokenDto(Member member) {
+    public TokenDto generateTokenDto(Admin admin) {
         long now = (new Date().getTime());
 
         //Access Token 생성
@@ -52,8 +52,8 @@ public class TokenProvider {
         //토큰을 만드는데 Payload 정보와 만료시간, 알고리즘 종료와 암호화 키를 넣어 암호화 함
         String accessToken = Jwts.builder()
 
-                .setSubject(member.getMembername()) // payload "sub": "name"
-                .claim(AUTHORITIES_KEY, Authority.ROLE_MEMBER.name()) // payload "auth": "ROLE_USER" //auth,role설정
+                .setSubject(admin.getAdminName()) // payload "sub": "name"
+                .claim(AUTHORITIES_KEY, Authority.ROLE_ADMIN.name()) // payload "auth": "ROLE_ADMIN" //auth,role설정
                 .setExpiration(accessTokenExpiresIn) //만료시간 토큰에 담기
                 .signWith(key, SignatureAlgorithm.HS256) //사용할 암호화 알고리즘과 signature에 들어갈 secret값 세팅
                 .compact();
@@ -66,8 +66,8 @@ public class TokenProvider {
 
         //저장할 refreshToken 객체 build
         RefreshToken refreshTokenObject = RefreshToken.builder()
-                .id(member.getId())
-                .member(member)
+                .id(admin.getId())
+                .admin(admin)
                 .value(refreshToken)
                 .build();
 
@@ -85,14 +85,14 @@ public class TokenProvider {
     //토큰으로부터 유저 정보 추출 (토큰으로부터 받은 정보를 기반으로 Authentication 객체를 반환하는 메서드)
 
     //SecurityContext에 유저 정보가 저장되는 시점
-    public Member getMemberFromAuthentication() {
+    public Admin getAdminFromAuthentication() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || AnonymousAuthenticationToken.class.
                 isAssignableFrom(authentication.getClass())) {
             return null;
         }
         //authentication은 principal을 extends 받은 객체. getMember() 메서드를 통해 사용자의 이름을 넘겨줌
-        return ((UserDetailsImpl) authentication.getPrincipal()).getMember();
+        return ((UserDetailsImpl) authentication.getPrincipal()).getAdmin();
     }
 
     //토큰 유효성 확인
@@ -113,14 +113,14 @@ public class TokenProvider {
     }
 
     @Transactional(readOnly = true)
-    public RefreshToken isPresentRefreshToken(Member member) {
-        Optional<RefreshToken> optionalRefreshToken = refreshTokenRepository.findByMember(member);
+    public RefreshToken isPresentRefreshToken(Admin amdin) {
+        Optional<RefreshToken> optionalRefreshToken = refreshTokenRepository.findByAdmin(amdin);
         return optionalRefreshToken.orElse(null);
     }
 
     @Transactional
-    public ResponseDto<?> deleteRefreshToken(Member member) {
-        RefreshToken refreshToken = isPresentRefreshToken(member);
+    public ResponseDto<?> deleteRefreshToken(Admin admin) {
+        RefreshToken refreshToken = isPresentRefreshToken(admin);
         if (null == refreshToken) {
             return ResponseDto.fail("TOKEN_NOT_FOUND", "존재하지 않는 Token 입니다.");
         }

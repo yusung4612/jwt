@@ -20,8 +20,8 @@ public class CorsConfiguration {
         config.addAllowedHeader("*"); //모든 header의 응답 허용
         config.addAllowedMethod("*"); //모든 get, post, put, delete, patch 요청을 허용
         config.addExposedHeader("*");
-        source.registerCorsConfiguration("/v1/members/**",config);
-//        source.registerCorsConfiguration("/api/members/signup",config);
+        source.registerCorsConfiguration("/v1/admins/**",config);
+//        source.registerCorsConfiguration("/api/admins/signup",config);
         source.registerCorsConfiguration("/api/**",config);
         source.registerCorsConfiguration("/**",config);
         return new CorsFilter(source);

@@ -1,8 +1,8 @@
 package com.example.temipj.service;
 
-import com.example.temipj.domain.member.Member;
+import com.example.temipj.domain.admin.Admin;
 import com.example.temipj.domain.UserDetailsImpl;
-import com.example.temipj.repository.MemberRepository;
+import com.example.temipj.repository.AdminRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,7 +20,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     // 이 메서드가 loadUserByUsername() 이다.
     // 다시 말하자면 DB 에서 유저정보를 가지고와서 return 해주는 작업이다.
     // @Service 를 해줘야 IoC 로 등록이 되고 그래야 loadUserByUsername() 오버라이드 사용가능
-    private final MemberRepository memberRepository;
+    private final AdminRepository adminRepository;
 
     // UserDetails return 은 어디로 가나?
     // security Session => Authentication => UserDetails(UserDetailsImpl)
@@ -31,8 +31,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     //유저의 id를 통해서 유저에 대한 인증 정보를 가져온다.
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Member> member = memberRepository.findByMembername(username);
-        return member
+        Optional<Admin> admin = adminRepository.findByAdminName(username);
+        return admin
                 .map(UserDetailsImpl::new)
                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
     }

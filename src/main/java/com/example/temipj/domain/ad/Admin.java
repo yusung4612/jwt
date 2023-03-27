@@ -1,4 +1,4 @@
-package com.example.temipj.domain.member;
+package com.example.temipj.domain.admin;
 
 import com.example.temipj.domain.Timestamped;
 import jakarta.persistence.*;
@@ -16,14 +16,14 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Member extends Timestamped {
+public class Admin extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String membername;
+    private String adminName;
 
     @Column(nullable = false, unique = true)
     private String emailId;
@@ -31,12 +31,9 @@ public class Member extends Timestamped {
     @Column(nullable = false)
     private String password;
 
-//    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    private List<Employee> employee;
-
-//    public Member(String emailId, String membername, String encodedPassword) {
+//    public Admin(String emailId, String admin_name, String encodedPassword) {
 //        this.emailId = emailId;
-//        this.membername = membername;
+//        this.admin_name = admin_name;
 //        this.password = encodedPassword;
 //    }
 
@@ -48,17 +45,17 @@ public class Member extends Timestamped {
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
             return false;
         }
-        Member member = (Member) o;
-        return id != null && Objects.equals(id, member.id);
+        Admin admin = (Admin) o;
+        return id != null && Objects.equals(id, admin.id);
     }
 
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
+//    @Override
+//    public int hashCode() {
+//        return getClass().hashCode();
+//    }
 
     public void nameUpdate(String username) {
-        this.membername = membername;
+        this.adminName = adminName;
     }
 
     public void passwordUpdate(String password) {

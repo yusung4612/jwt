@@ -1,6 +1,6 @@
 package com.example.temipj.domain;
 
-import com.example.temipj.domain.member.Member;
+import com.example.temipj.domain.admin.Admin;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,9 +18,9 @@ public class RefreshToken extends Timestamped {
     @Column(nullable = false)
     private Long id;
 
-    @JoinColumn(nullable = false)
+    @JoinColumn
     @OneToOne(fetch = FetchType.LAZY)
-    private Member member;
+    private Admin admin;
 
     @Column(nullable = false)
     private String value;

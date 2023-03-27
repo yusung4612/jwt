@@ -1,8 +1,7 @@
 package com.example.temipj.domain.news;
 
 import com.example.temipj.domain.Timestamped;
-import com.example.temipj.domain.member.Member;
-import com.example.temipj.domain.news.News;
+import com.example.temipj.domain.admin.Admin;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,17 +13,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Selects extends Timestamped {
+public class Choice extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member member;
+    private Admin admin;
 
-    @JoinColumn(name = "news_id", nullable = false)
+    @JoinColumn(name = "news_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private News news;
 }

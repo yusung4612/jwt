@@ -13,7 +13,7 @@ public class EmpResponseDto<T> {
 //    private Error error;
 
     public static <T> EmpResponseDto<T> version(T data) {
-        return new EmpResponseDto<>("1.0.0", data);
+        return new EmpResponseDto<>("20230331", data);
     }
 
 //    public static <T> EmpResponseDto<T> fail(String code, String message) {

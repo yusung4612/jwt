@@ -2,9 +2,9 @@ package com.example.temipj.controller;
 
 import com.example.temipj.domain.UserDetailsImpl;
 import com.example.temipj.dto.requestDto.LoginRequestDto;
-import com.example.temipj.dto.requestDto.MemberRequestDto;
+import com.example.temipj.dto.requestDto.AdminRequestDto;
 import com.example.temipj.dto.responseDto.ResponseDto;
-import com.example.temipj.service.MemberService;
+import com.example.temipj.service.AdminService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -15,43 +15,43 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/api/members")
-public class MemberController {
+@RequestMapping(value = "/api/admins")
+public class AdminController {
 
-    private final MemberService memberService;
+    private final AdminService adminService;
 
     //회원가입
     @PostMapping(value="/signup")
     @ResponseBody
-    public ResponseDto<?> signup(@RequestBody @Valid MemberRequestDto requestDto) throws IOException {
-        return memberService.createMember(requestDto);
+    public ResponseDto<?> signup(@RequestBody @Valid AdminRequestDto requestDto) throws IOException {
+        return adminService.createAdmin(requestDto);
     }
 
     //로그인
     @PostMapping(value = "/login")
     @ResponseBody
     public ResponseDto<?> login(@RequestBody @Valid LoginRequestDto requestDto, HttpServletResponse response) {
-        return memberService.loginMember(requestDto, response);
+        return adminService.loginAdmin(requestDto, response);
     }
 
     //로그아웃
     @PostMapping(value = "/logout")
     @ResponseBody
     public ResponseDto<?> logout(HttpServletRequest request) {
-        return memberService.logout(request);
+        return adminService.logout(request);
     }
 
     //토큰재발급
     @PostMapping(value = "/reissue")
     public ResponseDto<?> reissue(HttpServletRequest request, HttpServletResponse response) {
-        return memberService.reissue(request, response);
+        return adminService.reissue(request, response);
     }
 
     //회원탈퇴
-    @DeleteMapping(value="/delete/{memberId}")
+    @DeleteMapping(value="/delete/{adminId}")
 //    @ResponseBody
-    public ResponseDto<?> delete(@PathVariable Long memberId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return memberService.deleteMember(memberId, userDetails);
+    public ResponseDto<?> delete(@PathVariable Long adminId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return adminService.deleteAdmin(adminId, userDetails);
     }
 
     @RequestMapping(value = "/signup", method = RequestMethod.GET)

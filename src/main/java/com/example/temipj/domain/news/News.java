@@ -1,7 +1,7 @@
 package com.example.temipj.domain.news;
 
 import com.example.temipj.domain.Timestamped;
-import com.example.temipj.domain.member.Member;
+import com.example.temipj.domain.admin.Admin;
 import com.example.temipj.dto.requestDto.NewsRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -26,16 +26,16 @@ public class News extends Timestamped {
     @Column(nullable = false)
     private String author; //작성자
 
-    @JoinColumn(nullable = false)
+    @JoinColumn
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member member;
+    private Admin admin;
 
     public void update(NewsRequestDto requestDto) {
         this.message = requestDto.getMessage();
         this.author = requestDto.getAuthor();
     }
 
-    public boolean validateMember(Member member) {
-        return !this.member.equals(member);
+    public boolean validateAdmin(Admin admin) {
+        return !this.admin.equals(admin);
     }
 }

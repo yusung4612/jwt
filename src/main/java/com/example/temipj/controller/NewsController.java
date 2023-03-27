@@ -19,7 +19,7 @@ public class NewsController {
     //뉴스 생성
     @PostMapping(value = "/create")
     private ResponseDto<?> createNews(@RequestBody NewsRequestDto newsRequestDto,
-                                                    HttpServletRequest request) {
+                                      HttpServletRequest request) {
         return newsService.createNews(newsRequestDto, request);
     }
 
@@ -38,8 +38,8 @@ public class NewsController {
     // 뉴스 수정
     @PutMapping(value = "/{id}")
     public ResponseDto<?> updateNews(@PathVariable Long id,
-                                       @RequestBody NewsRequestDto newsRequestDto,
-                                       HttpServletRequest request) {
+                                     @RequestBody NewsRequestDto newsRequestDto,
+                                     HttpServletRequest request) {
         return newsService.updateNews(id, newsRequestDto, request);
     }
 

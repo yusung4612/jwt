@@ -2,20 +2,18 @@ package com.example.temipj.service;
 
 import com.example.temipj.domain.employee.Employee;
 import com.example.temipj.domain.employee.Leader;
-import com.example.temipj.domain.member.Member;
-import com.example.temipj.dto.responseDto.LeadResponseDto;
+import com.example.temipj.domain.admin.Admin;
+import com.example.temipj.dto.responseDto.*;
 import com.example.temipj.dto.responseDto.LeaderResponseDto;
-import com.example.temipj.dto.responseDto.ResponseDto;
 import com.example.temipj.exception.CustomException;
 import com.example.temipj.exception.ErrorCode;
 import com.example.temipj.jwt.TokenProvider;
 import com.example.temipj.repository.EmployeeRepository;
 import com.example.temipj.repository.LeaderRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.json.JSONObject;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -26,12 +24,7 @@ public class LeaderService {
     private final TokenProvider tokenProvider;
     private final LeaderRepository leaderRepository;
     private final EmployeeService employeeService;
-
-    // 테스트 때문에 추가////////////////////////////
     private final EmployeeRepository employeeRepository;
-    //////////////////////////////////////////////
-
-    private Employee employee;
 
     //리더 선택 및 해제
     @Transactional
@@ -40,34 +33,35 @@ public class LeaderService {
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
-        // 2. tokenProvider Class의 SecurityContextHolder에 저장된 Member 정보 확인
-        Member member = tokenProvider.getMemberFromAuthentication();
-        if (null == member) {
-            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+        // 2. tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
+        Admin admin = tokenProvider.getAdminFromAuthentication();
+        if (null == admin) {
+            throw new CustomException(ErrorCode.ADMIN_NOT_FOUND);
         }
         // 3. 직원 확인
         Employee employee = employeeService.isPresentEmployee(employeeId);
         if (null == employee) {
             throw new CustomException(ErrorCode.NOT_EXIST_EMPLOYEE);
         }
-
         // 4. 리더 체크 저장
-        Leader findLeaderSelect = leaderRepository.findByEmployeeIdAndMemberId(employee.getId(), member.getId());
+        Leader findLeaderSelect = leaderRepository.findByEmployeeIdAndAdminId(employee.getId(), admin.getId());
         if (null != findLeaderSelect) {
             leaderRepository.delete(findLeaderSelect);
+
+            employee.cancelLeader(employeeId);
+            employeeRepository.saveAndFlush(employee);
+
             return ResponseDto.success("리더 해제");
         }
         Leader leader = Leader.builder()
-                .member(member)
+                .admin(admin)
                 .employee(employee)
                 .build();
         leaderRepository.save(leader);
 
-        // 테스트//////////////////////////////////
         Employee employee1 = employeeRepository.findById(employeeId).get();
         employee1.updateLeader(employeeId);
         employeeRepository.saveAndFlush(employee1);
-        //////////////////////////////////////////
 
         return ResponseDto.success("리더 지정");
 
@@ -75,18 +69,18 @@ public class LeaderService {
 
     // 선택한 리더 목록 조회
     @Transactional
-    public LeadResponseDto<?> getLeaderAll(HttpServletRequest request) {
+    public ResponseDto<?> getLeaderAll(HttpServletRequest request) {
         // 1. 토큰 유효성 확인
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
-        // 2. tokenProvider Class의 SecurityContextHolder에 저장된 Member 정보 확인
-        Member member = tokenProvider.getMemberFromAuthentication();
-        if (null == member) {
-            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+        // 2. tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
+        Admin admin = tokenProvider.getAdminFromAuthentication();
+        if (null == admin) {
+            throw new CustomException(ErrorCode.ADMIN_NOT_FOUND);
         }
 
-        List<Leader> leaderList = leaderRepository.findAllByMember(member);
+        List<Leader> leaderList = leaderRepository.findAllByAdmin(admin);
         List<LeaderResponseDto> LeaderResponseDtoList = new ArrayList<>();
 
         for (Leader leader : leaderList) {
@@ -94,20 +88,14 @@ public class LeaderService {
                     LeaderResponseDto.builder()
 //                            .id(leader.getEmployee().getId())
 //                            .division(leader.getEmployee().getDivision())
-                            .department(leader.getEmployee().getDepartment())
+                            .department(leader.getEmployee().getDepartment().getDepartment())
                             .name(leader.getEmployee().getName())
                             .mobile_number(leader.getEmployee().getMobile_number())
                             .email(leader.getEmployee().getEmail())
                             .build());
         }
-        return LeadResponseDto.version(LeaderResponseDtoList);
+        return ResponseDto.success(LeaderResponseDtoList);
     }
-////////////////////////////////원래/////////////////////
-
-//    public List<Leader> getLeaderAll(HttpServletRequest request) {
-//        return leaderRepository.findAll();
-//    }
-
 
     //리더 검색
     @Transactional
@@ -120,7 +108,7 @@ public class LeaderService {
             LeaderResponseDtoList.add(
                     LeaderResponseDto.builder()
 //                            .id(employee.getId())
-                            .department(employee.getDepartment())
+                            .department(employee.getDepartment().getDepartment())
                             .name(employee.getName())
                             .mobile_number(employee.getMobile_number())
                             .email(employee.getEmail())

@@ -11,11 +11,11 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemberResponseDto {
+public class AdminResponseDto {
 
     private Long id;
 
-    private String membername; //이름
+    private String adminName; //이름
 
     private String emailId; //이메일
 

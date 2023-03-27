@@ -2,7 +2,7 @@ package com.example.temipj.repository;
 
 import com.example.temipj.domain.employee.Employee;
 import com.example.temipj.domain.employee.Leader;
-import com.example.temipj.domain.member.Member;
+import com.example.temipj.domain.admin.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,16 +14,17 @@ public interface LeaderRepository extends JpaRepository<Leader, Long> {
 
     Optional<Leader> findById(Long id);
 
-    List<Leader> findAllByMember(Member member);
+    List<Leader> findAllByAdmin(Admin admin);
 
-    boolean existsByMemberAndEmployee(Member member, Employee employee);
+    boolean existsByAdminAndEmployee(Admin admin, Employee employee);
 
     // 리더 선택
-    Leader findByEmployeeIdAndMemberId(Long memberId, Long employeeId);
+    Leader findByEmployeeIdAndAdminId(Long adminId, Long employeeId);
 
     //리더 검색
     @Query(value = "SELECT p FROM Employee p WHERE p.name LIKE %:keyword% OR p.birth LIKE %:keyword% " +
-            "OR p.division LIKE %:keyword% OR p.extension_number LIKE %:keyword% OR p.mobile_number LIKE %:keyword% " +
-            "OR p.email LIKE %:keyword% OR p.department LIKE %:keyword% ORDER BY p.createdAt desc")
+            "OR p.extension_number LIKE %:keyword% OR p.mobile_number LIKE %:keyword% " +
+            "OR p.email LIKE %:keyword% ORDER BY p.createdAt desc")
+//            "OR p.email LIKE %:keyword% OR p.department LIKE %:keyword% ORDER BY p.createdAt desc")
     List <Employee> searchLead(@Param("keyword") String keyword);
 }

@@ -1,6 +1,6 @@
 package com.example.temipj.domain;
 
-import com.example.temipj.domain.member.Member;
+import com.example.temipj.domain.admin.Admin;
 import com.example.temipj.shared.Authority;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,12 +23,12 @@ import java.util.Collection;
 //5. 사용자 계정 정보와 권한 정보를 DB에서 조회하여 제공합니다.
 public class UserDetailsImpl implements UserDetails {
 
-    private Member member;
+    private Admin admin;
 
     //해당 권한 정보 가져오기
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(Authority.ROLE_MEMBER.toString());
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(Authority.ROLE_ADMIN.toString());
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(authority);
         return authorities;
@@ -37,13 +37,13 @@ public class UserDetailsImpl implements UserDetails {
     //DB에서 사용자의 비밀번호를 조회하여 반환
     @Override
     public String getPassword() {
-        return member.getPassword();
+        return admin.getPassword();
     }
 
     //사용자를 인증하는데 사용되는 이름을 반환
     @Override
     public String getUsername() {
-        return member.getEmailId();
+        return admin.getEmailId();
     }
 
     //사용자 계정이 만료되었는지 여부를 나타냄

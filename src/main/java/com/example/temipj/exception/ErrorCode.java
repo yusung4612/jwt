@@ -10,29 +10,33 @@ public enum ErrorCode {
 
     //==========================sign up========================================
     OK(300, "응답이 정상 처리 되었습니다."),
-    SIGNUP_WRONG_MEMBERID(400, "MEMBER 아이디가 존재하지 않습니다."),
+    SIGNUP_WRONG_ADMINID(400, "ADMIN 아이디가 존재하지 않습니다."),
     SIGNUP_WRONG_LOGINID(400, "이메일 형식이 맞지 않습니다."),
     DUPLICATED_EMAIL(400,"중복된 이메일입니다."),
     EMAIL_NOT_FOUND(400, "해당 이메일을 찾을 수 없습니다."),
     SIGNUP_WRONG_PASSWORD(400, "비밀번호 형식이 맞지 않습니다."),
     ALREADY_SAVED_ID(400, "중복된 아이디입니다."),
+    ALREADY_SAVED_ADMIN_NAME(400, "중복된 이름입니다."),
     PASSWORDS_NOT_MATCHED(400,"비밀번호와 비밀번호가 일치하지 않습니다."),
-    ALREADY_SAVED_MEMBERNAME(400, "중복된 이름입니다."),
+    ALREADY_SAVED_ADMIN(400, "중복된 이름입니다."),
 
     //=============================login=======================================
-    MEMBER_NOT_FOUND(404,"사용자를 찾을 수 없습니다."),
-    INVALID_MEMBER(404,"사용자를 찾을 수 없습니다."),
+    ADMIN_NOT_FOUND(404,"사용자를 찾을 수 없습니다."),
+    INVALID_ADMIN(404,"사용자를 찾을 수 없습니다."),
     LOGINID_EMPTY(400,"아이디를 입력해주세요."),
     PASSWORD_EMPTY(400,"비밀번호를 입력해주세요."),
     LOGINID_MISMATCH(404,"아이디가 일치하지 않습니다."),
     PASSWORD_MISMATCH(404,"비밀번호가 일치하지 않습니다."),
-    MEMBER_WRONG_UPDATE(400,"이름과 비밀번호를 정확하게 입력해주세요."),
-    MEMBER_WRONG_DELETE(400,"본인 아이디만 탈퇴 가능합니다."),
+    ADMIN_WRONG_UPDATE(400,"이름과 비밀번호를 정확하게 입력해주세요."),
+    ADMIN_WRONG_DELETE(400,"본인 아이디만 탈퇴 가능합니다."),
     //================================team========================================
     NOT_BLANK_TEAM(400,"공백은 허용되지 않습니다."),
     NOT_EXIST_TEAM(404, "존재하지 않는 팀 입니다."),
     TEAM_UPDATE_WRONG_ACCESS(400, "잘못된 접근입니다."),
     TEAM_DELETE_WRONG_ACCESS(400, "잘못된 접근입니다."),
+    //=============
+    DEPARTMENT_NOT_FOUND(404,"부서를 찾을 수 없습니다."),
+    DIVISION_NOT_FOUND(404,"팀을 찾을 수 없습니다."),
 
     //================================employee========================================
     NOT_BLANK_NAME(400,"공백은 허용되지 않습니다."),

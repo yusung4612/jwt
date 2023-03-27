@@ -1,6 +1,6 @@
 package com.example.temipj.service;
 
-import com.example.temipj.domain.member.Member;
+import com.example.temipj.domain.admin.Admin;
 import com.example.temipj.domain.news.News;
 import com.example.temipj.domain.UserDetailsImpl;
 import com.example.temipj.dto.requestDto.NewsRequestDto;
@@ -36,10 +36,10 @@ public class NewsService {
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
         // 2. tokenProvider Class의 SecurityContextHolder에 저장된 Member 정보 확인
-        Member member = (Member) tokenProvider.getMemberFromAuthentication();
-        if (null == member) {
+        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
+        if (null == admin) {
 //            return ResponseDto.fail(ErrorCode.MEMBER_NOT_FOUND.name(), ErrorCode.MEMBER_NOT_FOUND.getMessage());
-            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+            throw new CustomException(ErrorCode.ADMIN_NOT_FOUND);
         }
         // 3. 뉴스 등록
         if (requestDto.getMessage().isEmpty())
@@ -49,7 +49,7 @@ public class NewsService {
         News news = News.builder()
                 .message(requestDto.getMessage())
                 .author(requestDto.getAuthor())
-                .member(member)
+                .admin(admin)
                 .build();
         newsRepository.save(news);
 
@@ -105,8 +105,8 @@ public class NewsService {
             throw new CustomException(ErrorCode.NOT_EXIST_EMPLOYEE);
         }
         // 3. tokenProvider Class의 SecurityContextHolder에 저장된 Member 정보 확인
-        Member member = (Member) tokenProvider.getMemberFromAuthentication();
-        if (news.validateMember(member)) {
+        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
+        if (news.validateAdmin(admin)) {
 //            return ResponseDto.fail(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.name(), ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.getMessage());
             throw new CustomException(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS);
         }
@@ -131,9 +131,9 @@ public class NewsService {
 //            return ResponseDto.fail(ErrorCode.NOT_EXIST_EMPLOYEE.name(), ErrorCode.NOT_EXIST_EMPLOYEE.getMessage());
             throw new CustomException(ErrorCode.NOT_EXIST_EMPLOYEE);
         }
-        // 3. tokenProvider Class의 SecurityContextHolder에 저장된 Member 정보 확인
-        Member member = (Member) tokenProvider.getMemberFromAuthentication();
-        if (news.validateMember(member)) {
+        // 3. tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
+        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
+        if (news.validateAdmin(admin)) {
 //            return ResponseDto.fail(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.name(), ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.getMessage());
             throw new CustomException(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS);
         }

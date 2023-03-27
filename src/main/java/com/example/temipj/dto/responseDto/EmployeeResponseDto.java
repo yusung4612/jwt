@@ -1,6 +1,5 @@
 package com.example.temipj.dto.responseDto;
 
-import com.example.temipj.domain.member.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,11 +23,6 @@ public class EmployeeResponseDto {
 
     private String mobile_number; //모바일번호
 
-    private boolean enabled;
-
-    private Member member;
-//    private String email; //이메일
-//
-//    private String department; // 부서
+    private String enabled;
 
 }

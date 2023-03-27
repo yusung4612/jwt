@@ -1,16 +1,16 @@
 package com.example.temipj.service;
 
 
-import com.example.temipj.domain.member.Member;
+import com.example.temipj.domain.admin.Admin;
 import com.example.temipj.domain.UserDetailsImpl;
 import com.example.temipj.dto.requestDto.LoginRequestDto;
-import com.example.temipj.dto.requestDto.MemberRequestDto;
+import com.example.temipj.dto.requestDto.AdminRequestDto;
 import com.example.temipj.dto.requestDto.TokenDto;
 import com.example.temipj.dto.responseDto.ResponseDto;
-import com.example.temipj.dto.responseDto.MemberResponseDto;
+import com.example.temipj.dto.responseDto.AdminResponseDto;
 import com.example.temipj.exception.ErrorCode;
 import com.example.temipj.jwt.TokenProvider;
-import com.example.temipj.repository.MemberRepository;
+import com.example.temipj.repository.AdminRepository;
 import com.example.temipj.repository.RefreshTokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,19 +26,19 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class MemberService {
+public class AdminService {
 
-    private final MemberRepository memberRepository;
+    private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
     // 회원가입
     @Transactional
-    public ResponseDto<?> createMember(MemberRequestDto requestDto) throws IOException {
+    public ResponseDto<?> createAdmin(AdminRequestDto requestDto) throws IOException {
 
         //이메일 중복 체크
-        if (null != isPresentMember(requestDto.getEmailId())) {
+        if (null != isPresentAdmin(requestDto.getEmailId())) {
             return ResponseDto.fail(ErrorCode.ALREADY_SAVED_ID.name(),
                     ErrorCode.ALREADY_SAVED_ID.getMessage());
         }
@@ -49,9 +49,9 @@ public class MemberService {
         }
 
         // 사용자 이름 중복 체크
-        if(null != isPresentMembername(requestDto.getMembername())) {
-            return ResponseDto.fail(ErrorCode.ALREADY_SAVED_MEMBERNAME.name(),
-                    ErrorCode.ALREADY_SAVED_MEMBERNAME.getMessage());
+        if(null != isPresentAdminName(requestDto.getAdminName())) {
+            return ResponseDto.fail(ErrorCode.ALREADY_SAVED_ADMIN_NAME.name(),
+                    ErrorCode.ALREADY_SAVED_ADMIN_NAME.getMessage());
         }
 
         //패스워드 일치 체크
@@ -60,50 +60,50 @@ public class MemberService {
                     ErrorCode.PASSWORDS_NOT_MATCHED.getMessage());
         }
 
-        Member member = Member.builder()
-                .membername(requestDto.getMembername())
+        Admin admin = Admin.builder()
+                .adminName(requestDto.getAdminName())
                 .emailId(requestDto.getEmailId())
                 .password(passwordEncoder.encode(requestDto.getPassword()))
                 .build();
-        memberRepository.save(member);
+        adminRepository.save(admin);
 
         return ResponseDto.success(
-                MemberResponseDto.builder()
-                        .id(member.getId())
-                        .membername(member.getMembername())
-                        .emailId(member.getEmailId())
-                        .createdAt(member.getCreatedAt())
-                        .modifiedAt(member.getModifiedAt())
+                AdminResponseDto.builder()
+                        .id(admin.getId())
+                        .adminName(admin.getAdminName())
+                        .emailId(admin.getEmailId())
+                        .createdAt(admin.getCreatedAt())
+                        .modifiedAt(admin.getModifiedAt())
                         .build()
         );
     }
 
     // 로그인
     @Transactional
-    public ResponseDto<?> loginMember(LoginRequestDto requestDto, HttpServletResponse response) {
+    public ResponseDto<?> loginAdmin(LoginRequestDto requestDto, HttpServletResponse response) {
 
-        Member member = isPresentMember(requestDto.getEmailId());
+        Admin admin = isPresentAdmin(requestDto.getEmailId());
 
         //null값 사용자 유효성 체크
-        if (null == member) {
-            return ResponseDto.fail(ErrorCode.MEMBER_NOT_FOUND.name(),
-                    ErrorCode.MEMBER_NOT_FOUND.getMessage());
+        if (null == admin) {
+            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(),
+                    ErrorCode.ADMIN_NOT_FOUND.getMessage());
         }
         //비밀번호 사용자 유효성 체크
-        if (!member.validatePassword(passwordEncoder, requestDto.getPassword())) {
+        if (!admin.validatePassword(passwordEncoder, requestDto.getPassword())) {
             return ResponseDto.fail(ErrorCode.PASSWORD_MISMATCH.name(), ErrorCode.PASSWORD_MISMATCH.getMessage());
         }
         //인증 정보를 기반으로 JWT 토큰 생성
-        TokenDto tokenDto = tokenProvider.generateTokenDto(member);
+        TokenDto tokenDto = tokenProvider.generateTokenDto(admin);
         tokenToHeaders(tokenDto, response);
 
         return ResponseDto.success(
-                MemberResponseDto.builder()
-                        .id(member.getId())
-                        .membername(member.getMembername())
-                        .createdAt(member.getCreatedAt())
-                        .modifiedAt(member.getModifiedAt())
-                        .emailId(member.getEmailId())
+                AdminResponseDto.builder()
+                        .id(admin.getId())
+                        .adminName(admin.getAdminName())
+                        .createdAt(admin.getCreatedAt())
+                        .modifiedAt(admin.getModifiedAt())
+                        .emailId(admin.getEmailId())
                         .build()
         );
     }
@@ -112,28 +112,28 @@ public class MemberService {
     @Transactional
     public ResponseDto<?> logout(HttpServletRequest request) {
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-            return ResponseDto.fail(ErrorCode.INVALID_MEMBER.name(), ErrorCode.INVALID_MEMBER.getMessage());
+            return ResponseDto.fail(ErrorCode.INVALID_ADMIN.name(), ErrorCode.INVALID_ADMIN.getMessage());
         }
-        Member member = (Member) tokenProvider.getMemberFromAuthentication();
+        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
 
-        if (null == member) {
-            return ResponseDto.fail(ErrorCode.MEMBER_NOT_FOUND.name(),
-                    ErrorCode.MEMBER_NOT_FOUND.getMessage());
+        if (null == admin) {
+            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(),
+                    ErrorCode.ADMIN_NOT_FOUND.getMessage());
         }
-        return tokenProvider.deleteRefreshToken(member);
+        return tokenProvider.deleteRefreshToken(admin);
     }
 
     //회원탈퇴
     @Transactional
-    public ResponseDto<?> deleteMember(Long memberId, UserDetailsImpl userDetails) {
-        Member member = memberRepository.findById(memberId).orElseThrow(
+    public ResponseDto<?> deleteAdmin(Long adminId, UserDetailsImpl userDetails) {
+        Admin admin = adminRepository.findById(adminId).orElseThrow(
                 () ->new IllegalArgumentException("등록되지 않은 회원입니다.")
         );
-        if(!member.equals(userDetails.getMember())){
-            return ResponseDto.fail(ErrorCode.MEMBER_WRONG_DELETE.name(), ErrorCode.MEMBER_WRONG_DELETE.getMessage());
+        if(!admin.equals(userDetails.getAdmin())){
+            return ResponseDto.fail(ErrorCode.ADMIN_WRONG_DELETE.name(), ErrorCode.ADMIN_WRONG_DELETE.getMessage());
         }
-        refreshTokenRepository.deleteByMemberId(memberId);
-        memberRepository.deleteById(memberId);
+        refreshTokenRepository.deleteByAdminId(adminId);
+        adminRepository.deleteById(adminId);
 
         return ResponseDto.success("회원 탈퇴가 완료되었습니다.");
     }
@@ -141,16 +141,16 @@ public class MemberService {
 
     // 사용자 이름 인증
     @Transactional
-    public Object isPresentMembername(String membername) {
-        Optional<Member> Member = memberRepository.findByMembername(membername);
-        return Member.orElse(null);
+    public Object isPresentAdminName(String admin_name) {
+        Optional<Admin> Admin = adminRepository.findByAdminName(admin_name);
+        return Admin.orElse(null);
     }
 
     //회원 이메일 유효성 인증
     @Transactional
-    public Member isPresentMember(String emailId) {
-        Optional<Member> Member = memberRepository.findByEmailId(emailId);
-        return Member.orElse(null);
+    public Admin isPresentAdmin(String emailId) {
+        Optional<Admin> Admin = adminRepository.findByEmailId(emailId);
+        return Admin.orElse(null);
     }
 
     // 헤더에 담기는 토큰
@@ -163,20 +163,20 @@ public class MemberService {
     //토큰 재발급
     public ResponseDto<?> reissue(HttpServletRequest request, HttpServletResponse response) {
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-            return ResponseDto.fail(ErrorCode.INVALID_MEMBER.name(), ErrorCode.INVALID_MEMBER.getMessage());
+            return ResponseDto.fail(ErrorCode.INVALID_ADMIN.name(), ErrorCode.INVALID_ADMIN.getMessage());
         }
 
-        Member member = refreshTokenRepository.findByValue(request.getHeader("Refresh_Token")).get().getMember();
+        Admin admin = refreshTokenRepository.findByValue(request.getHeader("Refresh_Token")).get().getAdmin();
 
-        TokenDto tokenDto = tokenProvider.generateTokenDto(member);
+        TokenDto tokenDto = tokenProvider.generateTokenDto(admin);
         tokenToHeaders(tokenDto, response);
         return ResponseDto.success(
-                MemberResponseDto.builder()
-                        .id(member.getId())
-                        .membername(member.getMembername())
-                        .createdAt(member.getCreatedAt())
-                        .modifiedAt(member.getModifiedAt())
-                        .emailId(member.getEmailId())
+                AdminResponseDto.builder()
+                        .id(admin.getId())
+                        .adminName(admin.getAdminName())
+                        .createdAt(admin.getCreatedAt())
+                        .modifiedAt(admin.getModifiedAt())
+                        .emailId(admin.getEmailId())
                         .build()
         );
     }
