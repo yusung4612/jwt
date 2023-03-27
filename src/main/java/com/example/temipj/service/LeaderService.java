@@ -75,38 +75,38 @@ public class LeaderService {
 
     // 선택한 리더 목록 조회
     @Transactional
-//    public LeadResponseDto<?> getLeaderAll(HttpServletRequest request) {
-//        // 1. 토큰 유효성 확인
-//        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-//            throw new CustomException(ErrorCode.INVALID_TOKEN);
-//        }
-//        // 2. tokenProvider Class의 SecurityContextHolder에 저장된 Member 정보 확인
-//        Member member = tokenProvider.getMemberFromAuthentication();
-//        if (null == member) {
-//            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
-//        }
-//
-//        List<Leader> leaderList = leaderRepository.findAllByMember(member);
-//        List<LeaderResponseDto> LeaderResponseDtoList = new ArrayList<>();
-//
-//        for (Leader leader : leaderList) {
-//            LeaderResponseDtoList.add(
-//                    LeaderResponseDto.builder()
-////                            .id(leader.getEmployee().getId())
-////                            .division(leader.getEmployee().getDivision())
-//                            .department(leader.getEmployee().getDepartment())
-//                            .name(leader.getEmployee().getName())
-//                            .mobile_number(leader.getEmployee().getMobile_number())
-//                            .email(leader.getEmployee().getEmail())
-//                            .build());
-//        }
-//        return LeadResponseDto.version(LeaderResponseDtoList);
-//    }
+    public LeadResponseDto<?> getLeaderAll(HttpServletRequest request) {
+        // 1. 토큰 유효성 확인
+        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
+        // 2. tokenProvider Class의 SecurityContextHolder에 저장된 Member 정보 확인
+        Member member = tokenProvider.getMemberFromAuthentication();
+        if (null == member) {
+            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+        }
+
+        List<Leader> leaderList = leaderRepository.findAllByMember(member);
+        List<LeaderResponseDto> LeaderResponseDtoList = new ArrayList<>();
+
+        for (Leader leader : leaderList) {
+            LeaderResponseDtoList.add(
+                    LeaderResponseDto.builder()
+//                            .id(leader.getEmployee().getId())
+//                            .division(leader.getEmployee().getDivision())
+                            .department(leader.getEmployee().getDepartment())
+                            .name(leader.getEmployee().getName())
+                            .mobile_number(leader.getEmployee().getMobile_number())
+                            .email(leader.getEmployee().getEmail())
+                            .build());
+        }
+        return LeadResponseDto.version(LeaderResponseDtoList);
+    }
 ////////////////////////////////원래/////////////////////
 
-    public List<Leader> getLeaderAll(HttpServletRequest request) {
-        return leaderRepository.findAll();
-    }
+//    public List<Leader> getLeaderAll(HttpServletRequest request) {
+//        return leaderRepository.findAll();
+//    }
 
 
     //리더 검색

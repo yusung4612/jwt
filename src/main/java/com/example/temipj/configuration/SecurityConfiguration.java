@@ -3,7 +3,6 @@ package com.example.temipj.configuration;
 
 import com.example.temipj.jwt.AccessDeniedHandlerException;
 import com.example.temipj.jwt.AuthenticationEntryPointException;
-import com.example.temipj.jwt.JwtFilter;
 import com.example.temipj.jwt.TokenProvider;
 import com.example.temipj.service.UserDetailsServiceImpl;
 import jakarta.servlet.DispatcherType;
@@ -12,19 +11,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.security.ConditionalOnDefaultWebSecurity;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
-import org.springframework.boot.autoconfigure.security.reactive.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity //Security 활성화
@@ -49,7 +44,7 @@ public class SecurityConfiguration {
 
     private static final String[] AUTH_WHITELIST = {
 //            "/v1/members/**", "/v1/auth/**", "/v1/member/emailcheck",
-            "/api/members/**","/api/employees/**", "/" ,"/**"
+            "/api/admins/**","/api/employees/**", "/" ,"/**"
     };
 
 //    @Bean
@@ -87,8 +82,9 @@ public class SecurityConfiguration {
 
         http.authorizeHttpRequests(authorize -> authorize //요청에 대한 사용권한 설정 //로그인, 회원가입 Api는 토큰이 없는 상태에서 요청이 들어오기 때문에 permitAll 설정
                         .requestMatchers(AUTH_WHITELIST).permitAll()
+                        .requestMatchers("/api/**").hasRole("ROLE_ADMIN")
                         .requestMatchers("/api/**").permitAll()
-//                        .requestMatchers("/api/members/login").permitAll()
+//                        .requestMatchers("/api/admins/login").permitAll()
                         .requestMatchers("/", "/**").permitAll()
                         .requestMatchers("/v2/api-docs",
 //                                "/swagger-resources",
@@ -96,7 +92,7 @@ public class SecurityConfiguration {
                                 "/configuration/ui",
                                 "/configuration/security",
                                 "/swagger-ui.html",
-                                "/api/members/**",
+                                "/api/admins/**",
                                 "/",
                                 "/**",
                                 "/api/employees/**",
