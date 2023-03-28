@@ -70,6 +70,7 @@ public class NewsService {
         for (News news : newsList) {
             NewsResponseDtoList.add(
                     NewsResponseDto.builder()
+//                            .id(news.getId())
                             .message(news.getMessage())
                             .author(news.getAuthor())
                             .build());
@@ -104,15 +105,14 @@ public class NewsService {
 //            return ResponseDto.fail(ErrorCode.NOT_EXIST_EMPLOYEE.name(), ErrorCode.NOT_EXIST_EMPLOYEE.getMessage());
             throw new CustomException(ErrorCode.NOT_EXIST_EMPLOYEE);
         }
-        // 3. tokenProvider Class의 SecurityContextHolder에 저장된 Member 정보 확인
+        // 3. tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
         Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
-        if (news.validateAdmin(admin)) {
+//        if (news.validateAdmin(admin)) {
 //            return ResponseDto.fail(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.name(), ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.getMessage());
-            throw new CustomException(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS);
-        }
+////            throw new CustomException(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS);
+//        }
         // 4. 뉴스 수정
         news.update(requestDto);
-//        return ResponseDto.version(employee);
         return ResponseDto.success(news);
     }
 

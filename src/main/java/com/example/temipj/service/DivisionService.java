@@ -69,6 +69,7 @@ public class DivisionService {
         for (Division division : divisionList) {
             divisionResponseDtoList.add(
                     DivisionResponseDto.builder()
+                            .id(division.getId())
                             .division(division.getDivision())
                             .build());
         }

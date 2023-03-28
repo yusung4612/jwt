@@ -3,13 +3,14 @@ package com.example.temipj.service;
 import com.example.temipj.domain.admin.Admin;
 import com.example.temipj.domain.news.News;
 import com.example.temipj.domain.news.Choice;
+import com.example.temipj.dto.responseDto.ChoiceNewsResponseDto;
 import com.example.temipj.dto.responseDto.ResponseDto;
 import com.example.temipj.dto.responseDto.ChoiceResponseDto;
 import com.example.temipj.dto.responseDto.NewsResponseDto;
 import com.example.temipj.exception.CustomException;
 import com.example.temipj.exception.ErrorCode;
 import com.example.temipj.jwt.TokenProvider;
-import com.example.temipj.repository.ChoiceRepository;
+import com.example.temipj.repository.ChoiceNewsRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class ChoiceService {
 
     private final TokenProvider tokenProvider;
 
-    private final ChoiceRepository choiceRepository;
+    private final ChoiceNewsRepository choiceNewsRepository;
 
     private final NewsService newsService;
 
@@ -47,16 +48,16 @@ public class ChoiceService {
         }
 
         // 4. 뉴스 선택 저장
-        Choice findNewsSelect = choiceRepository.findByNewsIdAndAdminId(news.getId(), admin.getId());
+        Choice findNewsSelect = choiceNewsRepository.findByNewsIdAndAdminId(news.getId(), admin.getId());
         if (null != findNewsSelect) {
-            choiceRepository.delete(findNewsSelect);
+            choiceNewsRepository.delete(findNewsSelect);
             return ResponseDto.success("뉴스 선택 해제");
         }
         Choice select = Choice.builder()
-//                .admin(admin)
+                .admin(admin)
                 .news(news)
                 .build();
-        choiceRepository.save(select);
+        choiceNewsRepository.save(select);
         return ResponseDto.success("뉴스 선택");
     }
 
@@ -67,13 +68,13 @@ public class ChoiceService {
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
-        // 2. tokenProvider Class의 SecurityContextHolder에 저장된 Member 정보 확인
+        // 2. tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
         Admin admin = tokenProvider.getAdminFromAuthentication();
         if (null == admin) {
             throw new CustomException(ErrorCode.ADMIN_NOT_FOUND);
         }
 
-        List<Choice> choiceList = choiceRepository.findAllByAdmin(admin);
+        List<Choice> choiceList = choiceNewsRepository.findAllByAdmin(admin);
         List<NewsResponseDto> NewsResponseDtoList = new ArrayList<>();
 
         for (Choice selects : choiceList) {
@@ -86,22 +87,23 @@ public class ChoiceService {
         return ChoiceResponseDto.version(NewsResponseDtoList);
     }
 
-    // 뉴스 검색
+    // 선택한 뉴스 중에서 검색
     @Transactional
     public ResponseDto<?> findNews(String keyword) {
 
-        List<News> choiceList = choiceRepository.findNews1(keyword);
+//        List<News> choiceList = choiceRepository.findNews1(keyword);
+        List<News> choiceList = choiceNewsRepository.findNews(keyword);
         // 검색된 항목 담아줄 리스트 생성
-        List<NewsResponseDto> NewsResponseDtoList = new ArrayList<>();
+        List<ChoiceNewsResponseDto> ChoiceNewsResponseDtoList = new ArrayList<>();
         //for문을 통해서 List에 담아주기
         for (News news : choiceList) {
-            NewsResponseDtoList.add(
-                    NewsResponseDto.builder()
+            ChoiceNewsResponseDtoList.add(
+                    ChoiceNewsResponseDto.builder()
                             .message(news.getMessage())
                             .author(news.getAuthor())
                             .build());
         }
-        return ResponseDto.success(NewsResponseDtoList);
+        return ResponseDto.success(ChoiceNewsResponseDtoList);
     }
 
 }

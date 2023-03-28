@@ -31,6 +31,7 @@ public class Admin extends Timestamped {
     @Column(nullable = false)
     private String password;
 
+
 //    public Admin(String emailId, String admin_name, String encodedPassword) {
 //        this.emailId = emailId;
 //        this.admin_name = admin_name;

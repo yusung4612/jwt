@@ -23,8 +23,7 @@ public class Leader extends Timestamped {
     @ManyToOne(fetch = FetchType.LAZY)
     private Employee employee;
 
-
-    @JoinColumn(nullable = false)
+    @JoinColumn
     @ManyToOne(fetch = FetchType.LAZY)
     private Admin admin;
 

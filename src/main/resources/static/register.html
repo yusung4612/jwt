@@ -16,7 +16,7 @@
             event.preventDefault(); // 폼 전송 방지
 
             var formData = {
-                membername: $("#membername").val(),
+                adminName: $("#adminName").val(),
                 emailId: $("#emailId").val(),
                 password: $("#password").val(),
                 passwordConfirm: $("#passwordConfirm").val()
@@ -25,7 +25,7 @@
             $.ajax({
                 type: "POST",
                 contentType: "application/json; charset=utf-8",
-                url: "http://localhost:8080/api/members/signup",
+                url: "http://localhost:8080/api/admins/signup",
                 data: JSON.stringify(formData),
                 dataType: 'json',
                 success: function(response) {
@@ -44,8 +44,8 @@
 <body>
 
 <form id="signupForm">
-    <label for="membername">Name:</label>
-    <input type="membername" id="membername" name="membername"><br>
+    <label for="adminName">Name:</label>
+    <input type="adminName" id="adminName" name="adminName"><br>
     <label for="emailId">Email:</label>
     <input type="emailId" id="emailId" name="emailId"><br>
     <label for="password">Password:</label>

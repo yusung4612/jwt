@@ -33,9 +33,9 @@ public class DepartmentController {
     }
 
     // 부서 삭제
-    @DeleteMapping("delete/{id}")
-    public ResponseDto<?>delete(@PathVariable Long id,HttpServletRequest request){
-        return departmentService.deleteDepart(id,request);
+    @DeleteMapping("delete/{departmentId}")
+    public ResponseDto<?>delete(@PathVariable Long departmentId,HttpServletRequest request){
+        return departmentService.deleteDepart(departmentId,request);
     }
 
 }

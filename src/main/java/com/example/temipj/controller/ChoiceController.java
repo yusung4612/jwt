@@ -26,7 +26,7 @@ public class ChoiceController {
         return choiceService.getChoiceAll(request);
     }
 
-    // 뉴스 검색
+    // 선택한 뉴스 목록중에서 검색
     @GetMapping("/search")
     public ResponseDto<?> findNews(@RequestParam(value = "keyword") String keyword){
         return choiceService.findNews(keyword);

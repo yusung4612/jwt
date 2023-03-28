@@ -9,15 +9,16 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface ChoiceRepository extends JpaRepository<Choice, Long> {
+public interface ChoiceNewsRepository extends JpaRepository<Choice, Long> {
 
     // 뉴스 선택
-    Choice findByNewsIdAndAdminId(Long adminId, Long newsId);
+    Choice findByNewsIdAndAdminId(Long newsId, Long adminId);
 
-    // 뉴스 검색
+
     List<Choice> findAllByAdmin(Admin admin);
 
+    // 선택한 뉴스 목록 중에서 검색
     @Query(value = "SELECT p FROM News p WHERE p.message LIKE %:keyword% OR p.author LIKE %:keyword% ORDER BY p.createdAt desc")
-    List <News> findNews1(@Param("keyword") String keyword);
+    List <News> findNews(@Param("keyword") String keyword);
 
 }

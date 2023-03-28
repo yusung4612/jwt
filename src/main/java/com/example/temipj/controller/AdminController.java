@@ -49,15 +49,15 @@ public class AdminController {
 
     //회원탈퇴
     @DeleteMapping(value="/delete/{adminId}")
-//    @ResponseBody
-    public ResponseDto<?> delete(@PathVariable Long adminId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return adminService.deleteAdmin(adminId, userDetails);
+    @ResponseBody
+    public ResponseDto<?> delete(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return adminService.deleteAdmin(id, userDetails);
     }
 
-    @RequestMapping(value = "/signup", method = RequestMethod.GET)
-    public String handleGetRequest() {
-        throw new UnsupportedOperationException("GET 요청은 지원하지 않습니다.");
-    }
+//    @RequestMapping(value = "/signup", method = RequestMethod.GET)
+//    public String handleGetRequest() {
+//        throw new UnsupportedOperationException("GET 요청은 지원하지 않습니다.");
+//    }
 
     //이메일 중복 확인
 

@@ -42,11 +42,11 @@ public class DepartmentService {
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
         // 2. tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
-        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
-        if (null == admin) {
-//            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(), ErrorCode.ADMIN_NOT_FOUND.getMessage());
-            throw new CustomException(ErrorCode.ADMIN_NOT_FOUND);
-        }
+//        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
+//        if (null == admin) {
+////            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(), ErrorCode.ADMIN_NOT_FOUND.getMessage());
+//            throw new CustomException(ErrorCode.ADMIN_NOT_FOUND);
+//        }
         // 3. 등록
         if (requestDto.getDepartment().isEmpty())
 //            return ResponseDto.fail(ErrorCode.NOT_BLANK_NAME.name(), ErrorCode.NOT_BLANK_NAME.getMessage());
@@ -77,6 +77,7 @@ public class DepartmentService {
         for (Department department : departmentList) {
             departmentResponseDtoList.add(
                     DepartmentResponseDto.builder()
+                            .id(department.getId())
                             .department(department.getDepartment())
                             .build());
         }
@@ -84,7 +85,7 @@ public class DepartmentService {
     }
 
     // 부서 삭제
-    public ResponseDto<?> deleteDepart(Long id, HttpServletRequest request) {
+    public ResponseDto<?> deleteDepart(Long departmentId, HttpServletRequest request) {
 
         // 1. 토큰 유효성 확인
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
@@ -92,13 +93,13 @@ public class DepartmentService {
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
         // 2. 부서 유무 확인
-        Department department = isPresentDepartment(id);
+        Department department = isPresentDepartment(departmentId);
         if (null == department) {
 //            return ResponseDto.fail(ErrorCode.NOT_EXIST_EMPLOYEE.name(), ErrorCode.NOT_EXIST_EMPLOYEE.getMessage());
             throw new CustomException(ErrorCode.NOT_EXIST_EMPLOYEE);
         }
         // 3. SecurityContextHolder에 저장된 Admin 확인
-        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
+//        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
 //        if (department.validateAdmin(admin)) {
 ////            return ResponseDto.fail(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.name(), ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.getMessage());
 //            throw new CustomException(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS);

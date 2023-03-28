@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class NewsResponseDto {
+public class ChoiceNewsResponseDto {
 
-//    private Long id;
     private String message;
 
     private String author;

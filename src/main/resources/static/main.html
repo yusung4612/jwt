@@ -7,11 +7,11 @@
     <script>
 
         $(document).ready(function() {
-            $("#deleteMember").submit(function(event) {
+            $("#deleteAdmin").submit(function(event) {
                 event.preventDefault(); // 폼 전송 방지
 
                 var formData = {
-                    membername: $("#membername").val(),
+                    adminName: $("#adminName").val(),
                     emailId: $("#emailId").val(),
                     password: $("#password").val(),
                     passwordConfirm: $("#passwordConfirm").val()
@@ -20,7 +20,7 @@
                 $.ajax({
                     type: "POST",
                     contentType: "application/json; charset=utf-8",
-                    url: "http://localhost:8080/api/members/signup",
+                    url: "http://localhost:8080/api/admins/signup",
                     data: JSON.stringify(formData),
                     dataType: 'json',
                     success: function(response) {
@@ -38,9 +38,9 @@
 <body>
 <p>메인 화면</p>
 
-<form id="deleteMember">
+<form id="deleteAdmin">
     <button id="btn-delete">회원탈퇴</button>
-    <a href="login.html"><input type="button" value="deleteMember"></a>
+    <a href="login.html"><input type="button" value="deleteAdmin"></a>
 </form>
 <form id="logout">
     <button id="btn-logout">로그아웃</button>

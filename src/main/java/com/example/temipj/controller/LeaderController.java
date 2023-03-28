@@ -8,19 +8,19 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/leaders/")
 public class LeaderController {
 
     private final LeaderService leaderService;
 
     // 리더 선택
-    @PostMapping("/leaders/choice/{employeeId}")
+    @PostMapping("/choice/{employeeId}")
     public ResponseDto<?> selectLeader(@PathVariable Long employeeId, HttpServletRequest request) {
         return leaderService.LeaderSelect(employeeId, request);
     }
 
     // 선택한 리더 목록 조회
-    @GetMapping("/leaders")
+    @GetMapping("/all")
     public ResponseDto<?> getLeaderAll(HttpServletRequest request) {
         return leaderService.getLeaderAll(request);
     }

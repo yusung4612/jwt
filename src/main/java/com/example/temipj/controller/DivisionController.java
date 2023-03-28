@@ -22,13 +22,13 @@ public class DivisionController {
         return divisionService.createDivision(divisionRequestDto, request);
     }
 
-    // 부서 전체 조회
+    // 팀 전체 조회
     @GetMapping(value = "/all")
     public ResponseDto<?> getAll(){
         return divisionService.getDivisionAll();
     }
 
-    // 부서 삭제
+    // 팀 삭제
     @DeleteMapping("delete/{id}")
     public ResponseDto<?>delete(@PathVariable Long id,HttpServletRequest request){
         return divisionService.deleteDivision(id,request);

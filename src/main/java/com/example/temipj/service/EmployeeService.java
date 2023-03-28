@@ -22,7 +22,6 @@ import com.example.temipj.repository.LeaderRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -43,6 +42,50 @@ public class EmployeeService {
     private final DepartmentRepository departmentRepository;
 
     //직원 등록
+//    @Transactional
+//    public EmpResponseDto<EmployeeResponseDto> createEmp(EmployeeRequestDto requestDto, HttpServletRequest request) {
+//        // 1. 토큰 유효성 확인
+//        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+////            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
+//            throw new CustomException(ErrorCode.INVALID_TOKEN);
+//        }
+//        // 2. tokenProvider Class의 SecurityContextHolder에 저장된 Member 정보 확인
+//        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
+//        if (null == admin) {
+////            return ResponseDto.fail(ErrorCode.MEMBER_NOT_FOUND.name(), ErrorCode.MEMBER_NOT_FOUND.getMessage());
+//            throw new CustomException(ErrorCode.ADMIN_NOT_FOUND);
+//        }
+//        // 3. 등록
+//        if (requestDto.getName().isEmpty())
+////            return ResponseDto.fail(ErrorCode.NOT_BLANK_NAME.name(), ErrorCode.NOT_BLANK_NAME.getMessage());
+//            throw new CustomException(ErrorCode.NOT_BLANK_NAME);
+//
+//        Employee employee = Employee.builder()
+////                .admin(admin)
+//                .name(requestDto.getName())
+//                .birth(requestDto.getBirth())
+//                .extension_number(requestDto.getExtension_number())
+//                .mobile_number(requestDto.getMobile_number())
+//                .email(requestDto.getEmail())
+//                .leader("false")
+//                .build();
+//        System.out.println("employee = " + employee.getLeader());
+//
+//        employeeRepository.save(employee);
+//
+//        return EmpResponseDto.version(
+//                EmployeeResponseDto.builder()
+////                        .id(employee.getId())
+//                        .name(employee.getName())
+//                        .birth(employee.getBirth())
+//                        .extension_number(employee.getExtension_number())
+//                        .mobile_number(employee.getMobile_number())
+////                        .email(employee.getEmail())
+////                        .department(employee.getDepartment())
+//                        .build());
+//    }
+
+    //직원 등록 Service
     @Transactional
     public EmpResponseDto createEmp(String departmentId  , EmployeeRequestDto requestDto, HttpServletRequest request) {
 // 1. 토큰 유효성 확인
@@ -91,6 +134,7 @@ public class EmployeeService {
                         .build());
     }
 
+
     //직원별 enabled 체크
     @Transactional
     public String enabledCheck(Employee employee, UserDetailsImpl userDetails) {
@@ -132,7 +176,6 @@ public class EmployeeService {
         //직원 유무 확인
         Employee employee = isPresentEmployee(id);
         if (null == employee) {
-//            return ResponseDto.fail(ErrorCode.NOT_EXIST_EMPLOYEE.name(),ErrorCode.NOT_EXIST_EMPLOYEE.getMessage());
             throw new CustomException(ErrorCode.NOT_EXIST_EMPLOYEE);
         }
         return EmpResponseDto.version(employee);
@@ -231,21 +274,23 @@ public class EmployeeService {
     }
 
 //    @Transactional
-//    public ResponseDto<?> mainBuisness(HttpServletRequest request) {
+////    public ResponseDto<?> mainBuisness(HttpServletRequest request) {
+//    public ResponseFirstDto mainBuisness() {
 //        //1
 //        ResponseFirstDto responseFirstDto = new ResponseFirstDto();
 //
 //        HashMap RnDMap = methodTester("R&D");
-//        HashMap 영업지원 = methodTester("영업지원");
+//        HashMap salseMap = methodTester("영업");
 //
 //        ArrayList resultList = new ArrayList<>();
 //
 //        resultList.add(RnDMap);
+//        resultList.add(salseMap);
 //
 //        responseFirstDto.setDivision(resultList);
-//
+//        return responseFirstDto;
 //    }
-
+//
 //    @Transactional
 //    public HashMap methodTester(String paramDivision) {
 //
@@ -279,16 +324,17 @@ public class EmployeeService {
 //        responseSecondDtoMap.put(paramDivision , responseSecondDtos);
 //        return responseSecondDtoMap;
 //        }
-//        return responseSecondDtoMap;
-//    }
+////        return responseSecondDtoMap;
+////    }
 
     @Transactional
-    public ResponseDto<?> test(String paramDivision) {
+//    public ResponseDto<?> test(String paramDivision) {
+    public ResponseFirstDto test(String paramDivision) {
         ResponseFirstDto responseFirstDto = new ResponseFirstDto();
 
         //2
         HashMap<String, List<ResponseSecondDto>> responseSecondDtoMap = new HashMap<>();
-        //3
+        //3\
         ArrayList<ResponseSecondDto> responseSecondDtos = new ArrayList<>();
         //4
         ResponseSecondDto responseSecondDto = new ResponseSecondDto();
@@ -297,7 +343,6 @@ public class EmployeeService {
 
         MapperDto mapperDto = new MapperDto();
 //        mapperDto = employeeRepository.test11("R&D");
-//        mapperDto = employeeRepository.test12("영업업");
 
         List<Employee> test = employeeRepository.test(paramDivision);
 
@@ -318,8 +363,11 @@ public class EmployeeService {
         ArrayList test1 = new ArrayList();
         test1.add(responseSecondDtoMap);
         responseFirstDto.setDivision(test1);
-        return ResponseDto.success(responseFirstDto);
+//        return ResponseDto.success(responseFirstDto);
+        return responseFirstDto;
     }
+
+
 }
 
 //    public class ResponseFirstDto {
@@ -351,5 +399,3 @@ public class EmployeeService {
 //     "mobile_number": "010",
 //     "email": "yusung@everybot.net"
 //    }
-
-

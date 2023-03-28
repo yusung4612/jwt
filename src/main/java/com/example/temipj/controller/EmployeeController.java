@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/employees")
@@ -65,7 +67,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/test")
-    public  ResponseDto<?>  test(){
+    public ResponseFirstDto test(){
         return employeeService.test("R&D");
     }
 
