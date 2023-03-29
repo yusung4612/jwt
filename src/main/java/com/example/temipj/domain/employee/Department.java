@@ -26,11 +26,4 @@ public class Department extends Timestamped {
     @ManyToOne(fetch = FetchType.LAZY)
     private Division division;
 
-//    @JoinColumn
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    private Admin admin; // join 해야하나?
-//
-//    public boolean validateAdmin(Admin admin) {
-//        return !this.admin.equals(admin);
-//    }
 }
