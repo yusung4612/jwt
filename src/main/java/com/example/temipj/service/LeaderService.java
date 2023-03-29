@@ -86,8 +86,6 @@ public class LeaderService {
         for (Leader leader : leaderList) {
             LeaderResponseDtoList.add(
                     LeaderResponseDto.builder()
-//                            .id(leader.getEmployee().getId())
-//                            .division(leader.getEmployee().getDivision())
                             .department(leader.getEmployee().getDepartment().getDepartment())
                             .name(leader.getEmployee().getName())
                             .mobile_number(leader.getEmployee().getMobile_number())
@@ -107,7 +105,6 @@ public class LeaderService {
         for (Employee employee : leaderList) {
             LeaderResponseDtoList.add(
                     LeaderResponseDto.builder()
-//                            .id(employee.getId())
                             .department(employee.getDepartment().getDepartment())
                             .name(employee.getName())
                             .mobile_number(employee.getMobile_number())
