@@ -35,17 +35,10 @@ public class Employee extends Timestamped {
 
     @JoinColumn
     @ManyToOne(fetch = FetchType.LAZY)
-    private Department department; // 부서
+    private Department department;
 
     @Column(nullable = false)
     private String leader = "false";
-
-//    @JoinColumn(nullable = true)
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    private Admin admin;
-
-//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    private List<Leader> leaderCheck;
 
     public void update(EmployeeRequestDto requestDto) {
         this.name = requestDto.getName();
@@ -53,12 +46,7 @@ public class Employee extends Timestamped {
         this.extension_number = requestDto.getExtension_number();
         this.mobile_number = requestDto.getMobile_number();
         this.email = requestDto.getEmail();
-//        this.department = requestDto.getDepartment();
     }
-
-//    public boolean validateAdmin(Admin admin) {
-//        return !this.admin.equals(admin);
-//    }
 
     public void updateLeader(Long Id) {
         this.leader = "true";
