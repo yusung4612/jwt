@@ -28,14 +28,16 @@ public class Admin extends Timestamped {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String adminName;
+    private String adminName; // 관리자 이름
 
     @Column(nullable = false, unique = true)
-    private String emailId;
+    private String emailId; // 이메일 아이디
 
     @Column(nullable = false)
-    @JsonIgnore
-    private String password;
+    private String password; // 비밀번호
+
+    @Column(nullable = false)
+    private String passwordConfirm; // 비밀번호 확인
 
     @OneToMany(mappedBy = "admin", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<News> news;
@@ -43,11 +45,12 @@ public class Admin extends Timestamped {
     @OneToMany(mappedBy = "admin", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Choice> choice;
 
-//    public Admin(String emailId, String admin_name, String encodedPassword) {
-//        this.emailId = emailId;
-//        this.admin_name = admin_name;
-//        this.password = encodedPassword;
-//    }
+    public Admin(String emailId, String adminName, String encodedPassword, String encodePasswordConfirm) {
+        this.emailId = emailId;
+        this.adminName = adminName;
+        this.password = encodedPassword;
+        this.passwordConfirm = encodePasswordConfirm;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -66,13 +69,13 @@ public class Admin extends Timestamped {
 //        return getClass().hashCode();
 //    }
 
-    public void nameUpdate(String username) {
-        this.adminName = adminName;
-    }
-
-    public void passwordUpdate(String password) {
-        this.password = password;
-    }
+//    public void nameUpdate(String username) {
+//        this.adminName = adminName;
+//    }
+//
+//    public void passwordUpdate(String password) {
+//        this.password = password;
+//    }
 
     public boolean validatePassword(PasswordEncoder passwordEncoder, String password) {
         return passwordEncoder.matches(password, this.password);
