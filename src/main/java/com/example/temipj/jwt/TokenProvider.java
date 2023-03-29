@@ -30,7 +30,7 @@ public class TokenProvider {
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_PREFIX = "Bearer ";
     public static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24; // 우선 1일설정, access 재발급 이용가능하면 30분으로 수정예정
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7; //기준: (1000 -> 1s) // Refresh Token 7일
+    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7; // 기준: (1000 -> 1s) // Refresh Token 7일
     private final Key key;
     private final RefreshTokenRepository refreshTokenRepository;
 
@@ -43,28 +43,28 @@ public class TokenProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    //jwt Token 생성 메서드
+    // jwt Token 생성 메서드
     public TokenDto generateTokenDto(Admin admin) {
         long now = (new Date().getTime());
 
-        //Access Token 생성
+        // Access Token 생성
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME); //Access Token 만료시간
-        //토큰을 만드는데 Payload 정보와 만료시간, 알고리즘 종료와 암호화 키를 넣어 암호화 함
+        // 토큰을 만드는데 Payload 정보와 만료시간, 알고리즘 종료와 암호화 키를 넣어 암호화 함
         String accessToken = Jwts.builder()
 
                 .setSubject(admin.getAdminName()) // payload "sub": "name"
                 .claim(AUTHORITIES_KEY, Authority.ROLE_ADMIN.name()) // payload "auth": "ROLE_ADMIN" //auth,role설정
-                .setExpiration(accessTokenExpiresIn) //만료시간 토큰에 담기
-                .signWith(key, SignatureAlgorithm.HS256) //사용할 암호화 알고리즘과 signature에 들어갈 secret값 세팅
+                .setExpiration(accessTokenExpiresIn) // 만료시간 토큰에 담기
+                .signWith(key, SignatureAlgorithm.HS256) // 사용할 암호화 알고리즘과 signature에 들어갈 secret값 세팅
                 .compact();
 
         // Refresh Token 생성
         String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME)) //만료시간 토큰에 담기
+                .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME)) // 만료시간 토큰에 담기
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
-        //저장할 refreshToken 객체 build
+        // 저장할 refreshToken 객체 build
         RefreshToken refreshTokenObject = RefreshToken.builder()
                 .id(admin.getId())
                 .admin(admin)
@@ -82,20 +82,20 @@ public class TokenProvider {
 
     }
 
-    //토큰으로부터 유저 정보 추출 (토큰으로부터 받은 정보를 기반으로 Authentication 객체를 반환하는 메서드)
+    // 토큰으로부터 유저 정보 추출 (토큰으로부터 받은 정보를 기반으로 Authentication 객체를 반환하는 메서드)
 
-    //SecurityContext에 유저 정보가 저장되는 시점
+    // SecurityContext에 유저 정보가 저장되는 시점
     public Admin getAdminFromAuthentication() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || AnonymousAuthenticationToken.class.
                 isAssignableFrom(authentication.getClass())) {
             return null;
         }
-        //authentication은 principal을 extends 받은 객체. getMember() 메서드를 통해 사용자의 이름을 넘겨줌
+        // authentication은 principal을 extends 받은 객체. getMember() 메서드를 통해 사용자의 이름을 넘겨줌
         return ((UserDetailsImpl) authentication.getPrincipal()).getAdmin();
     }
 
-    //토큰 유효성 확인
+    // 토큰 유효성 확인
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
