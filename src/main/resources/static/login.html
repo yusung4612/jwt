@@ -15,7 +15,7 @@
             $("#loginForm").submit(function(event) {
                 event.preventDefault(); // 폼 전송 방지
 
-                var formData = {
+                const formData = {
                     emailId: $("#emailId").val(),
                     password: $("#password").val(),
                 };
@@ -27,7 +27,10 @@
                     data: JSON.stringify(formData),
                     dataType: 'json',
                     success: function(response) {
-                        alert("로그인 성공!");
+                        if (response === 'success') {
+                            alert("로그인 성공!");
+                            window.location.href = 'http://localhost:8080/main.html';
+                        }
                     },
                     error: function(e) {
                         alert("Error: " + e.responseText);
