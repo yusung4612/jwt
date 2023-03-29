@@ -4,35 +4,6 @@
     <meta charset="UTF-8">
     <title>Title</title>
 
-    <script>
-
-        $(document).ready(function() {
-            $("#deleteAdmin").submit(function(event) {
-                event.preventDefault(); // 폼 전송 방지
-
-                var formData = {
-                    adminName: $("#adminName").val(),
-                    emailId: $("#emailId").val(),
-                    password: $("#password").val(),
-                    passwordConfirm: $("#passwordConfirm").val()
-                };
-
-                $.ajax({
-                    type: "POST",
-                    contentType: "application/json; charset=utf-8",
-                    url: "http://localhost:8080/api/admins/signup",
-                    data: JSON.stringify(formData),
-                    dataType: 'json',
-                    success: function(response) {
-                        alert(response);
-                    },
-                    error: function(e) {
-                        alert("Error: " + e.responseText);
-                    }
-                });
-            });
-        });
-    </script>
 
 </head>
 <body>
