@@ -14,7 +14,7 @@ public class ChoiceController {
 
     private final ChoiceService choiceService;
 
-    // 노출될 뉴스 선택
+    // 노출시킬 뉴스 선택
     @PostMapping("/{newsId}")
     public ResponseDto<?> choiceNews(@PathVariable Long newsId, HttpServletRequest request) {
         return choiceService.choiceNews(newsId, request);
