@@ -28,23 +28,20 @@ public class DivisionService {
 
     private final DivisionRepository divisionRepository;
 
-    // 부서 생성
+    // 팀(division) 생성
     @Transactional
     public ResponseDto<?> createDivision(DivisionRequestDto requestDto, HttpServletRequest request) {
         // 1. 토큰 유효성 확인
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-//            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
         // 2. tokenProvider Class의 SecurityContextHolder에 저장된 Member 정보 확인
         Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
         if (null == admin) {
-//            return ResponseDto.fail(ErrorCode.MEMBER_NOT_FOUND.name(), ErrorCode.MEMBER_NOT_FOUND.getMessage());
             throw new CustomException(ErrorCode.ADMIN_NOT_FOUND);
         }
         // 3. 등록
         if (requestDto.getDivision().isEmpty())
-//            return ResponseDto.fail(ErrorCode.NOT_BLANK_NAME.name(), ErrorCode.NOT_BLANK_NAME.getMessage());
             throw new CustomException(ErrorCode.NOT_BLANK_NAME);
 
         Division division = Division.builder()
@@ -59,7 +56,7 @@ public class DivisionService {
                         .build());
     }
 
-    // 팀 전체 조회
+    // 팀(division) 전체 조회
     @Transactional
     public ResponseDto<?> getDivisionAll() {
 
@@ -76,19 +73,17 @@ public class DivisionService {
         return ResponseDto.success(divisionResponseDtoList);
     }
 
-    // 부서 삭제
+    // 팀(division) 삭제
     public ResponseDto<?> deleteDivision(Long id, HttpServletRequest request) {
 
         // 1. 토큰 유효성 확인
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-//            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
-        // 2. 부서 유무 확인
+        // 2. 팀 유무 확인
         Division division = isPresentDivision(id);
         if (null == division) {
-//            return ResponseDto.fail(ErrorCode.NOT_EXIST_EMPLOYEE.name(), ErrorCode.NOT_EXIST_EMPLOYEE.getMessage());
-            throw new CustomException(ErrorCode.NOT_EXIST_EMPLOYEE);
+            throw new CustomException(ErrorCode.NOT_EXIST_DIVISION);
         }
         // 3. SecurityContextHolder에 저장된 Admin 확인
         Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
@@ -96,9 +91,8 @@ public class DivisionService {
 ////            return ResponseDto.fail(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.name(), ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.getMessage());
 //            throw new CustomException(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS);
 //        }
-        // 4. 부서 삭제
+        // 4. 팀 삭제
         divisionRepository.delete(division);
-//        return ResponseDto.version("해당 팀이 삭제되었습니다.");
         return ResponseDto.success("해당 팀이 삭제되었습니다.");
     }
 
