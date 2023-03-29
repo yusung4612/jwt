@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @Builder
-public class NewsCrollDto {
+public class NewsCrawlDto {
     private String title;
     private String url;
     private String author;

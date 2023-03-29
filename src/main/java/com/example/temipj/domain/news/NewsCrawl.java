@@ -8,7 +8,7 @@ import lombok.ToString;
 @Builder
 @ToString
 
-public class NewsCroll {
+public class NewsCrawl {
 
     private String title;
     private String url;
