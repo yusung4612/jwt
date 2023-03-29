@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+  <table class= "table">
+    <tr>
+      <th>이미지</th>
+      <th>제목</th>
+    </tr>
+    <tr th:each="newsCroll : ${newsCroll} ">
+      <td><a th:href="${newsCroll.url}"><img th:src="${newsCroll.image}"></a></td>
+      <td><a th:href="${newsCroll.url}"><span th:text="${newsCroll.subject}"></span></a></td>
+      </a>
+    </tr>
+  </table>
+</div>
+</body>
+</html>
