@@ -21,7 +21,7 @@ public class AuthenticationEntryPointException implements AuthenticationEntryPoi
                         ResponseDto.fail("BAD_REQUEST", "인증 오류가 발생했습니다.")
                 )
         );
-        // 유효한 자격증명을 제공하지 않고 접근하려 할때 401
+        // 유효한 자격증명을 제공하지 않고 접근하려 할 때 401 에러
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     }
 }
