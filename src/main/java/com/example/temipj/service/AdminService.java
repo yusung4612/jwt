@@ -37,7 +37,7 @@ public class AdminService {
     @Transactional
     public ResponseDto<?> createAdmin(AdminRequestDto requestDto) throws IOException {
 
-        //이메일 중복 체크
+        // 이메일 중복 체크
         if (null != isPresentAdmin(requestDto.getEmailId())) {
             return ResponseDto.fail(ErrorCode.ALREADY_SAVED_ID.name(),
                     ErrorCode.ALREADY_SAVED_ID.getMessage());
@@ -54,7 +54,7 @@ public class AdminService {
                     ErrorCode.ALREADY_SAVED_ADMIN_NAME.getMessage());
         }
 
-        //패스워드 일치 체크
+        // 패스워드 일치 체크
         if(!Objects.equals(requestDto.getPasswordConfirm(), requestDto.getPassword())){
             return ResponseDto.fail(ErrorCode.PASSWORDS_NOT_MATCHED.name(),
                     ErrorCode.PASSWORDS_NOT_MATCHED.getMessage());
@@ -64,6 +64,7 @@ public class AdminService {
                 .adminName(requestDto.getAdminName())
                 .emailId(requestDto.getEmailId())
                 .password(passwordEncoder.encode(requestDto.getPassword()))
+                .passwordConfirm(passwordEncoder.encode((requestDto.getPasswordConfirm())))
                 .build();
         adminRepository.save(admin);
 
@@ -84,16 +85,16 @@ public class AdminService {
 
         Admin admin = isPresentAdmin(requestDto.getEmailId());
 
-        //null값 사용자 유효성 체크
+        // null값 사용자 유효성 체크
         if (null == admin) {
             return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(),
                     ErrorCode.ADMIN_NOT_FOUND.getMessage());
         }
-        //비밀번호 사용자 유효성 체크
+        // 비밀번호 사용자 유효성 체크
         if (!admin.validatePassword(passwordEncoder, requestDto.getPassword())) {
             return ResponseDto.fail(ErrorCode.PASSWORD_MISMATCH.name(), ErrorCode.PASSWORD_MISMATCH.getMessage());
         }
-        //인증 정보를 기반으로 JWT 토큰 생성
+        // 인증 정보를 기반으로 JWT 토큰 생성
         TokenDto tokenDto = tokenProvider.generateTokenDto(admin);
         tokenToHeaders(tokenDto, response);
 
@@ -108,7 +109,7 @@ public class AdminService {
         );
     }
 
-    //로그아웃
+    // 로그아웃
     @Transactional
     public ResponseDto<?> logout(HttpServletRequest request) {
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
@@ -123,7 +124,7 @@ public class AdminService {
         return tokenProvider.deleteRefreshToken(admin);
     }
 
-    //회원탈퇴
+    // 회원탈퇴
     @Transactional
     public ResponseDto<?> deleteAdmin(Long adminId, UserDetailsImpl userDetails) {
         Admin admin = adminRepository.findById(adminId).orElseThrow(
@@ -147,21 +148,21 @@ public class AdminService {
         return Admin.orElse(null);
     }
 
-    //회원 이메일 유효성 인증
+    // 회원 이메일 유효성 인증
     @Transactional
     public Admin isPresentAdmin(String emailId) {
         Optional<Admin> Admin = adminRepository.findByEmailId(emailId);
         return Admin.orElse(null);
     }
 
-    // 헤더에 담기는 토큰
+    // Header에 담기는 Token
     private void tokenToHeaders(TokenDto tokenDto, HttpServletResponse response) {
         response.addHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
         response.addHeader("Refresh_Token", tokenDto.getRefreshToken());
         response.addHeader("Access-Token-Expire-Time", tokenDto.getAccessTokenExpiresIn().toString());
     }
 
-    //토큰 재발급
+    // 토큰 재발급
     public ResponseDto<?> reissue(HttpServletRequest request, HttpServletResponse response) {
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
             return ResponseDto.fail(ErrorCode.INVALID_ADMIN.name(), ErrorCode.INVALID_ADMIN.getMessage());
