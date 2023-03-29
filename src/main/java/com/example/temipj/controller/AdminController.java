@@ -53,13 +53,4 @@ public class AdminController {
     public ResponseDto<?> delete(@PathVariable Long adminId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return adminService.deleteAdmin(adminId, userDetails);
     }
-
-//    @RequestMapping(value = "/signup", method = RequestMethod.GET)
-//    public String handleGetRequest() {
-//        throw new UnsupportedOperationException("GET 요청은 지원하지 않습니다.");
-//    }
-
-    //이메일 중복 확인
-
-    //이메일 인증
 }
