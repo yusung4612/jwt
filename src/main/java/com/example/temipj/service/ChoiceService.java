@@ -92,15 +92,15 @@ public class ChoiceService {
     public ResponseDto<?> findNews(String keyword) {
 
 //        List<News> choiceList = choiceRepository.findNews1(keyword);
-        List<News> choiceList = choiceNewsRepository.findNews(keyword);
+        List<Choice> choiceList = choiceNewsRepository.findNews(keyword);
         // 검색된 항목 담아줄 리스트 생성
         List<ChoiceNewsResponseDto> ChoiceNewsResponseDtoList = new ArrayList<>();
         //for문을 통해서 List에 담아주기
-        for (News news : choiceList) {
+        for (Choice choice : choiceList) {
             ChoiceNewsResponseDtoList.add(
                     ChoiceNewsResponseDto.builder()
-                            .message(news.getMessage())
-                            .author(news.getAuthor())
+                            .message(choice.getNews().getMessage())
+                            .author(choice.getNews().getAuthor())
                             .build());
         }
         return ResponseDto.success(ChoiceNewsResponseDtoList);

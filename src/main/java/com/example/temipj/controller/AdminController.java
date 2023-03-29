@@ -50,8 +50,8 @@ public class AdminController {
     //회원탈퇴
     @DeleteMapping(value="/delete/{adminId}")
     @ResponseBody
-    public ResponseDto<?> delete(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return adminService.deleteAdmin(id, userDetails);
+    public ResponseDto<?> delete(@PathVariable Long adminId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return adminService.deleteAdmin(adminId, userDetails);
     }
 
 //    @RequestMapping(value = "/signup", method = RequestMethod.GET)

@@ -18,7 +18,7 @@ public interface ChoiceNewsRepository extends JpaRepository<Choice, Long> {
     List<Choice> findAllByAdmin(Admin admin);
 
     // 선택한 뉴스 목록 중에서 검색
-    @Query(value = "SELECT p FROM News p WHERE p.message LIKE %:keyword% OR p.author LIKE %:keyword% ORDER BY p.createdAt desc")
-    List <News> findNews(@Param("keyword") String keyword);
+    @Query(value = "SELECT p FROM Choice p WHERE p.news.message LIKE %:keyword% OR p.news.author LIKE %:keyword% ORDER BY p.createdAt desc")
+    List <Choice> findNews(@Param("keyword") String keyword);
 
 }

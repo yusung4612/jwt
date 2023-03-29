@@ -1,6 +1,9 @@
 package com.example.temipj.domain.admin;
 
 import com.example.temipj.domain.Timestamped;
+import com.example.temipj.domain.news.Choice;
+import com.example.temipj.domain.news.News;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +12,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.Hibernate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.awt.*;
+import java.util.List;
 import java.util.Objects;
 
 @Builder
@@ -29,8 +34,14 @@ public class Admin extends Timestamped {
     private String emailId;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
+    @OneToMany(mappedBy = "admin", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<News> news;
+
+    @OneToMany(mappedBy = "admin", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Choice> choice;
 
 //    public Admin(String emailId, String admin_name, String encodedPassword) {
 //        this.emailId = emailId;

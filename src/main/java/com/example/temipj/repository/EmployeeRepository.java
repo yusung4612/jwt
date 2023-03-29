@@ -38,9 +38,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
                     "      from Employee a \n" +
                     "inner join department b on a.department_id = b.id \n" +
                     "inner join division c on b.division_id = c.id \n" +
-//                    "inner join division d on b.division_id = c.id \n" +
                     "      where a.leader = 'true' \n" +
                     "        and c.division = :paramDivision ")
-//                    "        and d.division = :paramDivision ")
     List<Employee> test(@Param("paramDivision") String paramDivision);
 }

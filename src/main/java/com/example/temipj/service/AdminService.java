@@ -125,16 +125,16 @@ public class AdminService {
 
     //회원탈퇴
     @Transactional
-    public ResponseDto<?> deleteAdmin(Long id, UserDetailsImpl userDetails) {
-        Admin admin = adminRepository.findById(id).orElseThrow(
+    public ResponseDto<?> deleteAdmin(Long adminId, UserDetailsImpl userDetails) {
+        Admin admin = adminRepository.findById(adminId).orElseThrow(
                 () ->new IllegalArgumentException("등록되지 않은 회원입니다.")
         );
-        if(!admin.equals(userDetails.getAdmin())){
-            return ResponseDto.fail(ErrorCode.ADMIN_WRONG_DELETE.name(), ErrorCode.ADMIN_WRONG_DELETE.getMessage());
-        }
-        refreshTokenRepository.deleteByAdminId(id);
+//        if(!admin.equals(userDetails.getAdmin())){
+//            return ResponseDto.fail(ErrorCode.ADMIN_WRONG_DELETE.name(), ErrorCode.ADMIN_WRONG_DELETE.getMessage());
+//        }
+        refreshTokenRepository.deleteByAdminId(adminId);
 
-        adminRepository.deleteById(id);
+        adminRepository.deleteById(adminId);
 
         return ResponseDto.success("회원 탈퇴가 완료되었습니다.");
     }
