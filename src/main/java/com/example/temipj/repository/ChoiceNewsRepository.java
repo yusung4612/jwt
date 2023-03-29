@@ -1,7 +1,6 @@
 package com.example.temipj.repository;
 
 import com.example.temipj.domain.admin.Admin;
-import com.example.temipj.domain.news.News;
 import com.example.temipj.domain.news.Choice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,7 +12,6 @@ public interface ChoiceNewsRepository extends JpaRepository<Choice, Long> {
 
     // 뉴스 선택
     Choice findByNewsIdAndAdminId(Long newsId, Long adminId);
-
 
     List<Choice> findAllByAdmin(Admin admin);
 
