@@ -14,10 +14,11 @@ import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 public class CustomExceptionHandler {
+
     //바인드 에러
     @ExceptionHandler({BindException.class})
     protected ResponseEntity<Object> handleServerException(BindException ex) {
-        RestApiException error = new RestApiException(ErrorCode.BIND_Fails.name(), ErrorCode.BIND_Fails.getMessage());
+        RestApiException error = new RestApiException(ErrorCode.BIND_FAILS.name(), ErrorCode.BIND_FAILS.getMessage());
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(error);
@@ -46,7 +47,7 @@ public class CustomExceptionHandler {
                 .body(error);
     }
 
-    //Element 없을 떼
+    //Element 없을 때
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<Object> handleNoSuchElementException(NoSuchElementException ex){
         RestApiException error = new RestApiException(ErrorCode.NOT_VALUE_AT.name(),ErrorCode.NOT_VALUE_AT.getMessage());
