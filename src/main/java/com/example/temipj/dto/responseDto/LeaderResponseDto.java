@@ -14,16 +14,14 @@ import java.util.List;
 @AllArgsConstructor
 public class LeaderResponseDto {
 
-//    private String division; //구분
+    private String department; // 부서
 
-    private String department; //부서
+    private String name; // 이름
 
-    private String name; //이름
+    private String mobile_number; // 모바일 번호
 
-    private String mobile_number; //모바일 번호
+    private String email; // 이메일
 
-    private String email; //이메일
-
-    private List<EmployeeResponseDto> leaderCheck;
+//    private List<EmployeeResponseDto> leaderCheck;
 
 }
