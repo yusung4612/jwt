@@ -32,18 +32,15 @@ public class NewsService {
     public ResponseDto<?> createNews(NewsRequestDto requestDto, HttpServletRequest request) {
         // 1. 토큰 유효성 확인
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-//            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
         // 2. tokenProvider Class의 SecurityContextHolder에 저장된 Member 정보 확인
         Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
         if (null == admin) {
-//            return ResponseDto.fail(ErrorCode.MEMBER_NOT_FOUND.name(), ErrorCode.MEMBER_NOT_FOUND.getMessage());
             throw new CustomException(ErrorCode.ADMIN_NOT_FOUND);
         }
         // 3. 뉴스 등록
         if (requestDto.getMessage().isEmpty())
-//            return ResponseDto.fail(ErrorCode.NOT_BLANK_NAME.name(), ErrorCode.NOT_BLANK_NAME.getMessage());
             throw new CustomException(ErrorCode.NOT_BLANK_NAME);
 
         News news = News.builder()
@@ -62,7 +59,7 @@ public class NewsService {
 
     // 전체 뉴스 조회
     @Transactional
-    public ResponseDto<?> getNewsAll(UserDetailsImpl userDetails){
+    public ResponseDto<?> getNewsAll(){
 
         List<News> newsList = newsRepository.findAllByOrderByCreatedAtDesc();
         List<NewsResponseDto> NewsResponseDtoList = new ArrayList<>();
@@ -70,7 +67,6 @@ public class NewsService {
         for (News news : newsList) {
             NewsResponseDtoList.add(
                     NewsResponseDto.builder()
-//                            .id(news.getId())
                             .message(news.getMessage())
                             .author(news.getAuthor())
                             .build());
@@ -84,32 +80,28 @@ public class NewsService {
         //뉴스 유무 확인
         News news = isPresentNews(id);
         if (null == news) {
-//            return ResponseDto.fail(ErrorCode.NOT_EXIST_EMPLOYEE.name(),ErrorCode.NOT_EXIST_EMPLOYEE.getMessage());
-            throw new CustomException(ErrorCode.NOT_EXIST_EMPLOYEE);
+            throw new CustomException(ErrorCode.NOT_EXIST_NEWS);
         }
         return ResponseDto.success(news);
     }
 
     // 뉴스 수정
     @Transactional
-//    public ResponseDto<?> updateEmp(Long id, EmployeeRequestDto requestDto, HttpServletRequest request) {
     public ResponseDto<?> updateNews(Long id, NewsRequestDto requestDto, HttpServletRequest request) {
         // 1. 토큰 유효성 확인
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-//            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
         // 2. 뉴스 유무 확인
         News news = isPresentNews(id);
         if (null == news) {
-//            return ResponseDto.fail(ErrorCode.NOT_EXIST_EMPLOYEE.name(), ErrorCode.NOT_EXIST_EMPLOYEE.getMessage());
-            throw new CustomException(ErrorCode.NOT_EXIST_EMPLOYEE);
+            throw new CustomException(ErrorCode.NOT_EXIST_NEWS);
         }
         // 3. tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
         Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
 //        if (news.validateAdmin(admin)) {
 //            return ResponseDto.fail(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.name(), ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.getMessage());
-////            throw new CustomException(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS);
+////            throw new CustomException(ErrorCode.ADMIN_UPDATE_WRONG_ACCESS);
 //        }
         // 4. 뉴스 수정
         news.update(requestDto);
@@ -118,28 +110,23 @@ public class NewsService {
 
     // 뉴스 삭제
     @Transactional
-    //    public ResponseDto<?> deleteEmp(Long id, HttpServletRequest request) {
     public ResponseDto<?> deleteNews(Long id, HttpServletRequest request) {
         // 1. 토큰 유효성 확인
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-//            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
         // 2. 뉴스 유무 확인
         News news = isPresentNews(id);
         if (null == news) {
-//            return ResponseDto.fail(ErrorCode.NOT_EXIST_EMPLOYEE.name(), ErrorCode.NOT_EXIST_EMPLOYEE.getMessage());
-            throw new CustomException(ErrorCode.NOT_EXIST_EMPLOYEE);
+            throw new CustomException(ErrorCode.NOT_EXIST_NEWS);
         }
         // 3. tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
         Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
         if (news.validateAdmin(admin)) {
-//            return ResponseDto.fail(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.name(), ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.getMessage());
-            throw new CustomException(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS);
+            throw new CustomException(ErrorCode.ADMIN_UPDATE_WRONG_ACCESS);
         }
         // 4. 뉴스 삭제
         newsRepository.delete(news);
-//        return ResponseDto.version("해당 뉴스가 삭제되었습니다.");
         return ResponseDto.success("해당 뉴스가 삭제되었습니다.");
     }
 
@@ -162,21 +149,11 @@ public class NewsService {
     }
 
 
-
     // 뉴스 유무 확인 메서드 생성
     @Transactional
     public News isPresentNews(Long id) {
         Optional<News> optionalNews = newsRepository.findById(id);
         return optionalNews.orElse(null);
     }
-
-//    @Transactional
-//    public Member validateMember(HttpServletRequest request) {
-//        if (!tokenProvider.validateToken(request.getHeader("Refresh-Token"))) {
-//            return null;
-//        }
-//        return tokenProvider.getMemberFromAuthentication();
-//    }
-//
 
 }
