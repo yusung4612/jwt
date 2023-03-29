@@ -15,7 +15,7 @@
         $("#signupForm").submit(function(event) {
             event.preventDefault(); // 폼 전송 방지
 
-            var formData = {
+            const formData = {
                 adminName: $("#adminName").val(),
                 emailId: $("#emailId").val(),
                 password: $("#password").val(),
@@ -29,7 +29,14 @@
                 data: JSON.stringify(formData),
                 dataType: 'json',
                 success: function(response) {
-                    alert(response);
+                    if (response === 'success') {
+                        alert('회원가입이 완료되었습니다.');
+                        // localStorage.setItem('jwtToken', data.token);
+                        window.location.href = 'http://localhost:8080/login.html';
+                    } else {
+                        // alert('Invalid email or password. Please try again.');
+                        alert('이메일 또는 비밀번호가 일치하지 않습니다. 다시 시도해 주세요.');
+                    }
                 },
                 error: function(e) {
                     alert("Error: " + e.responseText);
