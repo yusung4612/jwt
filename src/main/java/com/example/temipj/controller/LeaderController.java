@@ -24,27 +24,6 @@ public class LeaderController {
     public ResponseDto<?> getLeaderAll(HttpServletRequest request) {
         return leaderService.getLeaderAll(request);
     }
-//    public String getLeaderAll(HttpServletRequest request) throws JSONException {
-//        List<Leader> leaders = leaderService.getLeaderAll(request);
-//
-//        JSONArray leadersArray = new JSONArray();
-//
-//        for (Leader leader : leaders) {
-//            JSONObject leaderObj = new JSONObject();
-//            leaderObj.put("department", leader.getEmployee().getDepartment());
-//            leaderObj.put("division", leader.getEmployee().getDivision()    );
-//
-//            JSONArray emailsArray = new JSONArray();
-//            String[] emails = leader.getEmployee().getEmail().split(",");
-//            for (String email : emails) {
-//                emailsArray.put(email.trim());
-//            }
-//            leaderObj.put("emails", emailsArray);
-//
-//            leadersArray.put(leaderObj);
-//        }
-//        return leadersArray.toString();
-//    }
 
     // 리더 검색
     @GetMapping("/search")
