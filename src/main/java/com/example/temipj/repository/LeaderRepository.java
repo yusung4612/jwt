@@ -21,7 +21,7 @@ public interface LeaderRepository extends JpaRepository<Leader, Long> {
     // 리더 선택
     Leader findByEmployeeIdAndAdminId(Long adminId, Long employeeId);
 
-    //리더 검색
+    // 리더 검색
     @Query(value = "SELECT p FROM Employee p WHERE p.name LIKE %:keyword% OR p.birth LIKE %:keyword% " +
             "OR p.extension_number LIKE %:keyword% OR p.mobile_number LIKE %:keyword% " +
             "OR p.email LIKE %:keyword% ORDER BY p.createdAt desc")
