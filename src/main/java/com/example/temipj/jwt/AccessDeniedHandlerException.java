@@ -20,7 +20,7 @@ public class AccessDeniedHandlerException implements AccessDeniedHandler {
                         ResponseDto.fail("BAD_REQUEST", "권한 오류가 발생하였습니다.")
                 )
         );
-        //필요한 권한이 없이 접근하려 할때 403
+        // 필요한 권한이 없이 접근하려 할 때 403 에러
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
     }
 }
