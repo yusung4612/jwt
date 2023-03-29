@@ -21,10 +21,10 @@ public class News extends Timestamped {
     private Long id;
 
     @Column(nullable = false)
-    private String message; //뉴스 메세지
+    private String message; //뉴스 제목 메세지
 
     @Column(nullable = false)
-    private String author; //작성자
+    private String author; // 작성자, 작성사이트
 
     @JoinColumn
     @ManyToOne(fetch = FetchType.LAZY)
