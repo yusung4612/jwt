@@ -8,7 +8,6 @@ import java.util.function.Supplier;
 public class CustomException extends RuntimeException implements Supplier<ErrorCode> {
     private final ErrorCode errorCode;
 
-
     @Override
     public ErrorCode get() {
         return errorCode;
