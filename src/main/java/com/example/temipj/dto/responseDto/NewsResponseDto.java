@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class NewsResponseDto {
 
-//    private Long id;
     private String message;
 
     private String author;
