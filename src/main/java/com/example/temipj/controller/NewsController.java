@@ -25,8 +25,8 @@ public class NewsController {
 
     //전체 뉴스 목록 조회
     @GetMapping(value = "/all")
-    public ResponseDto<?> getNewsAll(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        return newsService.getNewsAll(userDetails);
+    public ResponseDto<?> getNewsAll(){
+        return newsService.getNewsAll();
     }
 
     //특정 뉴스 조회
