@@ -12,13 +12,13 @@ public class EmployeeRequestDto {
     //    @NotBlank(message = "이름을 입력해주세요.")
 //    @Size(min = 1, max = 10, message = "이름은 최소 1자이상 최대 10자미만으로 입력해주세요.")
 //    @Pattern(regexp = "[a-zA-Zㄱ-ㅎ가-힣]*${1,10}", message = "이름 형식을 확인해 주세요.")
-    private String name; //직원 이름
+    private String name; // 직원 이름
 
-    private String birth; //직원 생일
+    private String birth; // 직원 생일
 
-    private String extension_number; //무선전화번호
+    private String extension_number; // 무선전화번호
 
-    private String mobile_number; //모바일번호
+    private String mobile_number; // 모바일번호
 
     //    @NotBlank(message = "이메일을 입력해주세요!")
 //    @Size(min=8,max=30, message= "8자리이상 30자리 미만 글자로 email를 만들어주세요")
