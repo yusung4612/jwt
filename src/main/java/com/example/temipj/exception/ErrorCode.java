@@ -29,21 +29,31 @@ public enum ErrorCode {
     PASSWORD_MISMATCH(404,"비밀번호가 일치하지 않습니다."),
     ADMIN_WRONG_UPDATE(400,"이름과 비밀번호를 정확하게 입력해주세요."),
     ADMIN_WRONG_DELETE(400,"본인 아이디만 탈퇴 가능합니다."),
+    ADMIN_UPDATE_WRONG_ACCESS(400,"잘못된 접근입니다."),
+
     //================================team========================================
     NOT_BLANK_TEAM(400,"공백은 허용되지 않습니다."),
     NOT_EXIST_TEAM(404, "존재하지 않는 팀 입니다."),
     TEAM_UPDATE_WRONG_ACCESS(400, "잘못된 접근입니다."),
     TEAM_DELETE_WRONG_ACCESS(400, "잘못된 접근입니다."),
-    //=============
-    DEPARTMENT_NOT_FOUND(404,"부서를 찾을 수 없습니다."),
+
+    //==============================division====================================
     DIVISION_NOT_FOUND(404,"팀을 찾을 수 없습니다."),
+    NOT_EXIST_DIVISION(404, "존재하지 않는 팀 입니다."),
+
+    //==============================department====================================
+    DEPARTMENT_NOT_FOUND(404,"부서를 찾을 수 없습니다."),
+    NOT_EXIST_DEPARTMENT(404, "존재하지 않는 부서 입니다."),
 
     //================================employee========================================
     NOT_BLANK_NAME(400,"공백은 허용되지 않습니다."),
     NOT_EXIST_EMPLOYEE(404,"해당 직원이 존재하지 않습니다."),
     EMPLOYEE_UPDATE_WRONG_ACCESS(400,"잘못된 접근입니다."),
+
     //================================news========================================
-    NEWS_NOT_FOUND(404,"해당 뉴스가 존재하지 않습니다."),
+    NEWS_NOT_FOUND(404,"해당 뉴스를 찾을 수 없습니다."),
+    NOT_EXIST_NEWS(404,"해당 뉴스가 존재하지 않습니다."),
+    NEWS_UPDATE_WRONG_ACCESS(400,"잘못된 접근입니다."),
 
     //================================token========================================
     INVALID_TOKEN(404,"Token이 유효하지 않습니다."),
@@ -57,11 +67,11 @@ public enum ErrorCode {
     AUTH_CODE_NOT_CORRECT(505, "인증번호가 틀렸습니다."),
 
     //==============================500 INTERNAL SERVER ERROR========================
-
     INTERNAL_SERVER_ERROR(500, "서버 에러입니다. 고객센터에 문의해주세요."),
-    BIND_Fails(500,"서버 에러입니다. 고객센터에 문의해주세요."),
+    BIND_FAILS(500,"서버 에러입니다. 고객센터에 문의해주세요."),
     NOT_VALUE_AT(500,"서버 에러입니다. 고객센터에 문의해주세요."),
     NO_ELEMENT(500,"서버 에러입니다. 고객센터에 문의해주세요.");
+
 
 
     private final int status;
