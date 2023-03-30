@@ -2,6 +2,7 @@ package com.example.temipj.domain.employee;
 
 import com.example.temipj.domain.Timestamped;
 import com.example.temipj.dto.requestDto.EmployeeRequestDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,6 +35,7 @@ public class Employee extends Timestamped {
     private String email; // 이메일
 
     @JoinColumn
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     private Department department;
 
@@ -48,11 +50,11 @@ public class Employee extends Timestamped {
         this.email = requestDto.getEmail();
     }
 
-    public void updateLeader(Long Id) {
+    public void updateLeader(Long id) {
         this.leader = "true";
     }
 
-    public void cancelLeader(Long Id) {
+    public void cancelLeader(Long id) {
         this.leader = "false";
     }
 }

@@ -33,17 +33,17 @@ public enum ErrorCode {
 
     //================================team========================================
     NOT_BLANK_TEAM(400,"공백은 허용되지 않습니다."),
-    NOT_EXIST_TEAM(404, "존재하지 않는 팀 입니다."),
+    NOT_EXIST_TEAM(404, "존재하지 않는 상위부서 입니다."),
     TEAM_UPDATE_WRONG_ACCESS(400, "잘못된 접근입니다."),
     TEAM_DELETE_WRONG_ACCESS(400, "잘못된 접근입니다."),
 
     //==============================division====================================
-    DIVISION_NOT_FOUND(404,"팀을 찾을 수 없습니다."),
-    NOT_EXIST_DIVISION(404, "존재하지 않는 팀 입니다."),
+    DIVISION_NOT_FOUND(404,"상위부서를 찾을 수 없습니다."),
+    NOT_EXIST_DIVISION(404, "존재하지 않는 상위부서 입니다."),
 
     //==============================department====================================
-    DEPARTMENT_NOT_FOUND(404,"부서를 찾을 수 없습니다."),
-    NOT_EXIST_DEPARTMENT(404, "존재하지 않는 부서 입니다."),
+    DEPARTMENT_NOT_FOUND(404,"하위부서를 찾을 수 없습니다."),
+    NOT_EXIST_DEPARTMENT(404, "존재하지 않는 하위부서 입니다."),
 
     //================================employee========================================
     NOT_BLANK_NAME(400,"공백은 허용되지 않습니다."),

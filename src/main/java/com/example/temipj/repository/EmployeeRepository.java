@@ -2,7 +2,6 @@ package com.example.temipj.repository;
 
 
 import com.example.temipj.domain.employee.Employee;
-import com.example.temipj.dto.responseDto.TestDto.MapperDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -39,4 +38,11 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
                     "      where a.leader = 'true' \n" +
                     "        and c.division = :paramDivision ")
     List<Employee> test(@Param("paramDivision") String paramDivision);
+
+//    void delete(Optional<Employee> employee1);
+
+
+    //============================리더테스트============================
+    @Query( value = "select p from Employee p where p.leader = 'true'")
+    List<Employee> findAllByLeader();
 }

@@ -9,43 +9,43 @@
           crossorigin="anonymous">
     <title>회원가입</title>
 
-<script>
+    <script>
 
-    $(document).ready(function() {
-        $("#signupForm").submit(function(event) {
-            event.preventDefault(); // 폼 전송 방지
+        $(document).ready(function() {
+            $("#signupForm").submit(function(event) {
+                event.preventDefault(); // 폼 전송 방지
 
-            const formData = {
-                adminName: $("#adminName").val(),
-                emailId: $("#emailId").val(),
-                password: $("#password").val(),
-                passwordConfirm: $("#passwordConfirm").val()
-            };
+                const formData = {
+                    department: '1',
+                    emailId: $("#emailId").val(),
+                    password: $("#password").val(),
+                    passwordConfirm: $("#passwordConfirm").val()
+                };
 
-            $.ajax({
-                type: "POST",
-                contentType: "application/json; charset=utf-8",
-                url: "http://localhost:8080/api/admins/signup",
-                data: JSON.stringify(formData),
-                dataType: 'json',
-                success: function(response) {
-                    if (response === 'success') {
-                        alert('회원가입이 완료되었습니다.');
-                        // localStorage.setItem('jwtToken', data.token);
-                        window.location.href = 'http://localhost:8080/login.html';
-                    } else {
-                        // alert('Invalid email or password. Please try again.');
-                        alert('이메일 또는 비밀번호가 일치하지 않습니다. 다시 시도해 주세요.');
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    url: "http://localhost:8080/api/admins/signup",
+                    data: JSON.stringify(formData),
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success === true) {
+                            alert('회원가입이 완료되었습니다.');
+                            // localStorage.setItem('jwtToken', data.token);
+                            window.location.href = 'http://localhost:8080/login.html';
+                        } else {
+                            // alert('Invalid email or password. Please try again.');
+                            alert('이메일 또는 비밀번호가 일치하지 않습니다. 다시 시도해 주세요.');
+                        }
+                    },
+                    error: function(e) {
+                        alert("Error: " + e.responseText);
                     }
-                },
-                error: function(e) {
-                    alert("Error: " + e.responseText);
-                }
+                });
             });
         });
-    });
 
-</script>
+    </script>
 
 </head>
 <body>

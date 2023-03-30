@@ -17,7 +17,7 @@ public class EmployeeResponseDto {
 
     private String birth; // 직원 생일
 
-    private String division; // 팀 구분
+    private String division; // 상위부서 구분
 
     private String extension_number; // 무선 전화 번호
 

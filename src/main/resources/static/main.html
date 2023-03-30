@@ -2,9 +2,181 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <title>Title</title>
+    <style>
+        tr {
+            border: 1px solid #444444;
+        }
+        th {
+            border: 1px solid #444444;
+        }
+        td {
+            border: 1px solid #444444;
+        }
+
+    </style>
+    <script>
+        $(document).ready(function() {
+            // 1. 상위부서 리스트 조회
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: "http://localhost:8080/api/divisions/all",
+                // data: JSON.stringify(formData),
+                dataType: 'json',
+                success: function(response) {
+                    let list = response.data;
+                    let htmlArr = [];
+                    for (let i = 0, length = list.length; i < length; i++) {
+                        let item = list[i];
+                        htmlArr.push('<tr>');
+                        htmlArr.push('<td class="division" data-id="'+ item.id + '">' + item.division + '</td>');
+                        htmlArr.push('</tr>');
+
+                    }
+
+                    $('#tbodyDivision').html(htmlArr.join(''));
+                    console.log(response);
+
+                },
+                error: function(e) {
+                    alert("Error: " + e.responseText);
+                }
+            });
+
+            // 2. 상위부서 클릭 시 하위부서 리스트 조회
+            $(document).on('click', '.division', function() {
+                $.ajax({
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    //url: "http://localhost:8080/api/departments/list/" + $(this).attr('data-id'),
+                    url: "http://localhost:8080/api/departments/all",
+                    //data: JSON.stringify(formData),
+                    dataType: 'json',
+                    success: function(response) {
+                        let list = response.data;
+                        let htmlArr = [];
+                        for (let i = 0, length = list.length; i < length; i++) {
+                            let item = list[i];
+                            htmlArr.push('<tr>');
+                            htmlArr.push('<td class="department" data-id="'+ item.id + '">');
+                            htmlArr.push('<input type="checkbox" class="department" id="department' + item.id + '" value="' + item.id + '">');
+                            htmlArr.push('<label for="department' + item.id + '">' + item.department + '</label>">');
+                            htmlArr.push('</td>');
+                            htmlArr.push('</tr>');
+                        }
+
+                        $('#tbodyDepartment').html(htmlArr.join(''));
+                        console.log(response);
+
+                    },
+                    error: function(e) {
+                        alert("Error: " + e.responseText);
+                    }
+                });
+            });
+
+            // 3. 하위부서 클릭 시 직원 리스트 조회
+            $(document).on('click', '.department', function() {
+                $.ajax({
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    url: "http://localhost:8080/api/employees/all",
+                    //data: JSON.stringify(formData),
+                    dataType: 'json',
+                    success: function(response) {
+                        let list = response.member;
+                        let htmlArr = [];
+                        for (let i = 0, length = list.length; i < length; i++) {
+                            let item = list[i];
+                            htmlArr.push('<tr>');
+                            htmlArr.push('<td class="employee" data-id="'+ item.id + '">');
+                            htmlArr.push('<input type="checkbox" class="employee" id="employee' + item.id + '" value="' + item.id + '">');
+                            htmlArr.push('<label for="employee' + item.id + '">' + item.name + '</label>');
+                            htmlArr.push('</td>');
+                            htmlArr.push('</tr>');
+                        }
+
+                        $('#tbodyEmployee').html(htmlArr.join(''));
 
 
+                    },
+                    error: function(e) {
+                        alert("Error: " + e.responseText);
+                    }
+                });
+            });
+
+            // 4. 직원 선택 시 리더 지정
+            $(document).on('click', '.employee', function() {
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    url: "http://localhost:8080/api/leaders/choice/" + $(this).val(),
+                    //data: JSON.stringify(formData),
+                    dataType: 'json',
+                    success: function(response) {
+
+                        let list = response.member;
+                        let htmlArr = [];
+                        for (let i = 0, length = list.length; i < length; i++) {
+                            let item = list[i];
+                            htmlArr.push('<tr>');
+                            htmlArr.push('<td class="employee" data-id="'+ item.id + '">');
+                            htmlArr.push('<input type="checkbox" class="employee" id="employee' + item.id + '" value="' + item.id + '">');
+                            htmlArr.push('<label for="employee' + item.id + '">' + item.name + '</label>');
+                            htmlArr.push('</td>');
+                            htmlArr.push('</tr>');
+                        }
+
+                        $('#tbodyEmployee').html(htmlArr.join(''));
+
+                        console.log(response);
+
+
+                    },
+                    error: function(e) {
+                        alert("Error: " + e.responseText);
+                    }
+                });
+            });
+
+            // 4. 직원 선택 시 리더 리스트 불러오기
+            $(document).on('click', '.employee', function() {
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    // 리더 전체 불러오는 URL로 바꿔야함
+                    url: "http://localhost:8080/api/leaders/choice/",
+                    //data: JSON.stringify(formData),
+                    dataType: 'json',
+                    success: function(response) {
+
+                        let list = response.member;
+                        let htmlArr = [];
+                        for (let i = 0, length = list.length; i < length; i++) {
+                            let item = list[i];
+                            htmlArr.push('<tr>');
+                            htmlArr.push('<td>' + item.leader + '</td>'); // leader를 리더 이름 변수명으로 바꿔야함
+                            htmlArr.push('</tr>');
+                        }
+
+                        $('#tbodyLeader').html(htmlArr.join(''));
+
+                    },
+                    error: function(e) {
+                        alert("Error: " + e.responseText);
+                    }
+                });
+            });
+
+
+
+
+        });
+
+    </script>
 </head>
 <body>
 <p>메인 화면</p>
@@ -18,5 +190,48 @@
     <a href="login.html"><input type="button" value="logout"></a>
 </form>
 
+<table>
+    <thead>
+    <tr>
+        <th>상위부서</th>
+    </tr>
+    </thead>
+    <tbody id="tbodyDivision">
+
+    </tbody>
+</table>
+
+<table>
+    <thead>
+    <tr>
+        <th>하위부서</th>
+    </tr>
+    </thead>
+    <tbody id="tbodyDepartment">
+
+    </tbody>
+</table>
+
+<table>
+    <thead>
+    <tr>
+        <th>직원</th>
+    </tr>
+    </thead>
+    <tbody id="tbodyEmployee">
+
+    </tbody>
+</table>
+
+<table>
+    <thead>
+    <tr>
+        <th>리더</th>
+    </tr>
+    </thead>
+    <tbody id="tbodyLeader">
+
+    </tbody>
+</table>
 </body>
 </html>

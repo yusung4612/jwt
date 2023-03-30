@@ -68,6 +68,21 @@ public class EmployeeController {
         return employeeService.searchEmployee(keyword, userDetails);
     }
 
+    //==========================리더테스트==========================
+    // 리더 선택
+    @PostMapping("/choice/{id}")
+    public ResponseDto<?> selectLeader(@PathVariable Long id) {
+        return employeeService.LeaderSelect(id);
+    }
+
+    // 선택한 리더 목록 조회
+    @GetMapping("/leader/all")
+    public ResponseDto<?> getLeaderAll() {
+        return employeeService.getLeaderAll();
+    }
+
+    //==============================================================
+
     @GetMapping("/test")
     public ResponseFirstDto test(){
         return employeeService.test("R&D");

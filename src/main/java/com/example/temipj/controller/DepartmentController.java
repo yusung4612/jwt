@@ -19,20 +19,26 @@ public class DepartmentController {
 
     private final DepartmentService departmentService;
 
-    // 부서 생성
+    // 하위부서 생성
     @PostMapping(value = "/create/{divisionId}")
     private ResponseDto<?> create(@PathVariable String divisionId, @RequestBody DepartmentRequestDto departmentRequestDto,
                                   HttpServletRequest request) {
         return departmentService.createDepart(divisionId, departmentRequestDto, request);
     }
 
-    // 부서 전체 조회
+    // 하위부서 전체 조회
     @GetMapping(value = "/all")
     public ResponseDto<?> getAll(){
         return departmentService.getDepartmentAll();
     }
 
-    // 부서 삭제
+    // 특정 하위부터 조회
+    @GetMapping(value = "/{id}")
+    public ResponseDto<?> get(@PathVariable Long id) {
+        return departmentService.getDepartment(id);
+    }
+
+    // 하위부서 삭제
     @DeleteMapping("delete/{departmentId}")
     public ResponseDto<?>delete(@PathVariable Long departmentId,HttpServletRequest request){
         return departmentService.deleteDepart(departmentId,request);

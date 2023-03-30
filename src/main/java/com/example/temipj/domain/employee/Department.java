@@ -2,11 +2,15 @@ package com.example.temipj.domain.employee;
 
 import com.example.temipj.domain.Timestamped;
 import com.example.temipj.domain.admin.Admin;
+import com.example.temipj.domain.news.Choice;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Builder
 @Getter
@@ -20,10 +24,14 @@ public class Department extends Timestamped {
     private Long id;
 
     @Column(nullable = false)
-    private String department; // 부서 이름
+    private String department; // 하위부서 이름
 
     @JoinColumn
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     private Division division;
+
+    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Employee> employee;
 
 }

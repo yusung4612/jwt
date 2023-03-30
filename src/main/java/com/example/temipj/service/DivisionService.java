@@ -1,13 +1,18 @@
 package com.example.temipj.service;
 
 import com.example.temipj.domain.admin.Admin;
+import com.example.temipj.domain.employee.Department;
 import com.example.temipj.domain.employee.Division;
+import com.example.temipj.domain.employee.Employee;
 import com.example.temipj.dto.requestDto.DivisionRequestDto;
 import com.example.temipj.dto.responseDto.DivisionResponseDto;
+import com.example.temipj.dto.responseDto.EmpResponseDto;
+import com.example.temipj.dto.responseDto.EmployeeResponseDto;
 import com.example.temipj.dto.responseDto.ResponseDto;
 import com.example.temipj.exception.CustomException;
 import com.example.temipj.exception.ErrorCode;
 import com.example.temipj.jwt.TokenProvider;
+import com.example.temipj.repository.DepartmentRepository;
 import com.example.temipj.repository.DivisionRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
@@ -28,7 +33,7 @@ public class DivisionService {
 
     private final DivisionRepository divisionRepository;
 
-    // 팀(division) 생성
+    // 상위부서(division) 생성
     @Transactional
     public ResponseDto<?> createDivision(DivisionRequestDto requestDto, HttpServletRequest request) {
         // 1. 토큰 유효성 확인
@@ -56,7 +61,7 @@ public class DivisionService {
                         .build());
     }
 
-    // 팀(division) 전체 조회
+    // 상위부서 전체 조회
     @Transactional
     public ResponseDto<?> getDivisionAll() {
 
@@ -73,14 +78,26 @@ public class DivisionService {
         return ResponseDto.success(divisionResponseDtoList);
     }
 
-    // 팀(division) 삭제
+    // 특정 상위부서 조회
+    @Transactional
+    public ResponseDto<?> getDivision(Long id) {
+        // 상위부서 유무 확인
+        Division division = isPresentDivision(id);
+        if (null == division) {
+            throw new CustomException(ErrorCode.NOT_EXIST_DIVISION);
+        }
+        return ResponseDto.success(division);
+    }
+
+
+    // 상위부서 삭제
     public ResponseDto<?> deleteDivision(Long id, HttpServletRequest request) {
 
         // 1. 토큰 유효성 확인
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
-        // 2. 팀 유무 확인
+        // 2. 상위부서 유무 확인
         Division division = isPresentDivision(id);
         if (null == division) {
             throw new CustomException(ErrorCode.NOT_EXIST_DIVISION);
@@ -91,9 +108,9 @@ public class DivisionService {
 ////            return ResponseDto.fail(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.name(), ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.getMessage());
 //            throw new CustomException(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS);
 //        }
-        // 4. 팀 삭제
+        // 4. 상위부서 삭제
         divisionRepository.delete(division);
-        return ResponseDto.success("해당 팀이 삭제되었습니다.");
+        return ResponseDto.success("해당 상위부서가 삭제되었습니다.");
     }
 
 

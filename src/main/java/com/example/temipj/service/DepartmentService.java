@@ -34,7 +34,7 @@ public class DepartmentService {
 
     private final DivisionService divisionService;
 
-    // 부서 생성
+    // 하위부서 생성
     @Transactional
     public ResponseDto<?> createDepart(String divisionId, DepartmentRequestDto requestDto, HttpServletRequest request) {
         // 1.토큰 유효성 확인
@@ -60,7 +60,7 @@ public class DepartmentService {
                         .build());
     }
 
-    // 부서 전체 조회
+    // 하위부서 전체 조회
     @Transactional
     public ResponseDto<?> getDepartmentAll() {
 
@@ -77,21 +77,32 @@ public class DepartmentService {
         return ResponseDto.success(departmentResponseDtoList);
     }
 
-    // 부서 삭제
+    // 특정 하위부서 조회
+    @Transactional
+    public ResponseDto<?> getDepartment(Long id) {
+        // 하위부서 유무 확인
+        Department department = isPresentDepartment(id);
+        if (null == department) {
+            throw new CustomException(ErrorCode.NOT_EXIST_DEPARTMENT);
+        }
+        return ResponseDto.success(department);
+    }
+
+    // 하위부서 삭제
     public ResponseDto<?> deleteDepart(Long departmentId, HttpServletRequest request) {
 
         // 1. 토큰 유효성 확인
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
-        // 2. 부서 유무 확인
+        // 2. 하위부서 유무 확인
         Department department = isPresentDepartment(departmentId);
         if (null == department) {
             throw new CustomException(ErrorCode.NOT_EXIST_DEPARTMENT);
         }
-        // 3. 부서 삭제
+        // 3. 하위부서 삭제
         departmentRepository.delete(department);
-        return ResponseDto.success("해당 부서가 삭제되었습니다.");
+        return ResponseDto.success("해당 하위부서가 삭제되었습니다.");
     }
 
     @Transactional

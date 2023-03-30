@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class LeaderResponseDto {
 
-    private String department; // 부서
+    private String department; // 하위부서
 
     private String name; // 이름
 

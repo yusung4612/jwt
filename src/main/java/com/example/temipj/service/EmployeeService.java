@@ -1,13 +1,13 @@
 package com.example.temipj.service;
 
-
+import com.example.temipj.domain.UserDetailsImpl;
+import com.example.temipj.domain.admin.Admin;
 import com.example.temipj.domain.employee.Department;
 import com.example.temipj.domain.employee.Employee;
-import com.example.temipj.domain.admin.Admin;
-import com.example.temipj.domain.UserDetailsImpl;
 import com.example.temipj.dto.requestDto.EmployeeRequestDto;
 import com.example.temipj.dto.responseDto.EmpResponseDto;
 import com.example.temipj.dto.responseDto.EmployeeResponseDto;
+import com.example.temipj.dto.responseDto.LeaderResponseDto;
 import com.example.temipj.dto.responseDto.ResponseDto;
 import com.example.temipj.dto.responseDto.TestDto.MapperDto;
 import com.example.temipj.dto.responseDto.TestDto.ResponseFirstDto;
@@ -18,15 +18,21 @@ import com.example.temipj.exception.ErrorCode;
 import com.example.temipj.jwt.TokenProvider;
 import com.example.temipj.repository.DepartmentRepository;
 import com.example.temipj.repository.EmployeeRepository;
-import com.example.temipj.repository.LeaderRepository;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.Id;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.jsoup.select.Evaluator;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 
-//@Builder
+import static io.jsonwebtoken.Claims.ID;
+
 @RequiredArgsConstructor
 @Service
 public class EmployeeService {
@@ -37,7 +43,7 @@ public class EmployeeService {
 
     private final TokenProvider tokenProvider;
 
-    private final LeaderRepository leaderRepository;
+//    private final LeaderRepository leaderRepository;
 
     private final DepartmentRepository departmentRepository;
 
@@ -87,7 +93,7 @@ public class EmployeeService {
 
     //직원 등록 Service
     @Transactional
-    public EmpResponseDto createEmp(String departmentId  , EmployeeRequestDto requestDto, HttpServletRequest request) {
+    public EmpResponseDto createEmp(String departmentId, EmployeeRequestDto requestDto, HttpServletRequest request) {
 // 1. 토큰 유효성 확인
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
 // return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
@@ -137,14 +143,15 @@ public class EmployeeService {
 
     //직원별 enabled 체크
     @Transactional
-    public String enabledCheck(Employee employee, UserDetailsImpl userDetails) {
+    public String enabledCheck(UserDetailsImpl userDetails) {
         if (userDetails == null) {
             return "1";
         }
-        boolean isCheckedLeader = leaderRepository.existsByAdminAndEmployee(userDetails.getAdmin(), employee);
+//        boolean isCheckedLeader = leaderRepository.existsByAdminAndEmployee(userDetails.getAdmin(), employee);
+//        boolean isCheckedLeader = employeeRepository.existsByEmployee(employee);
 
 //        return isCheckedLeader ? "1" : "0"
-        return "1";
+        return "0";
     }
 
     //전체 직원 조회
@@ -163,7 +170,8 @@ public class EmployeeService {
                             .birth(employee.getBirth())
                             .extension_number(employee.getExtension_number())
                             .mobile_number(employee.getMobile_number())
-                            .enabled(enabledCheck(employee, userDetails))
+//                            .enabled(enabledCheck(employee, userDetails))
+                            .enabled(enabledCheck(userDetails))
                             .division(department.getDivision().getDivision())
                             .build());
         }
@@ -251,16 +259,60 @@ public class EmployeeService {
                             .birth(employee.getBirth())
                             .extension_number(employee.getExtension_number())
                             .mobile_number(employee.getMobile_number())
-                            .enabled(enabledCheck(employee, userDetails))
+//                            .enabled(enabledCheck(employee, userDetails))
+                            .enabled(enabledCheck(userDetails))
                             .build()
             );
         }
         return ResponseDto.success(employeeListResponseDtoList);
     }
 
+    //============================리더테스트 시작부분========================================================================
 
+    //리더 선택
+    @Transactional
+    public ResponseDto<?> LeaderSelect(Long id) {
+        // 1. 직원 확인
+        Employee employee = isPresentEmployee(id);
+        if (null == employee) {
+            throw new CustomException(ErrorCode.NOT_EXIST_EMPLOYEE);
+        }
+        if (employee.getLeader().contains("false")) {
+            employee.updateLeader(id);
+            return ResponseDto.success("리더 지정 완료");
+
+        } else {
+            employee.cancelLeader(id);
+        }
+        employeeRepository.save(employee);
+
+        return ResponseDto.success("리더 지정 해제");
+    }
+
+    // 선택한 리더 목록 조회
+    @Transactional
+    public ResponseDto<?> getLeaderAll() {
+
+        List<Employee> leaderList = employeeRepository.findAllByLeader();
+        List<LeaderResponseDto> LeaderResponseDtoList = new ArrayList<>();
+
+        for (Employee employee : leaderList) {
+            LeaderResponseDtoList.add(
+                    LeaderResponseDto.builder()
+                            .department(employee.getDepartment().getDepartment())
+                            .name(employee.getName())
+                            .mobile_number(employee.getMobile_number())
+                            .email(employee.getEmail())
+                            .build());
+        }
+        return ResponseDto.success(LeaderResponseDtoList);
+    }
+
+
+    //============================리더테스트 끝=========================================================================
     @Transactional
     public Employee isPresentEmployee(Long id) {
+//        Optional<Employee> optionalEmployee = employeeRepository.findById(id);
         Optional<Employee> optionalEmployee = employeeRepository.findById(id);
         return optionalEmployee.orElse(null);
     }
@@ -359,14 +411,13 @@ public class EmployeeService {
             responseSecondDtos.add(responseSecondDto);
         }
 
-        responseSecondDtoMap.put(paramDivision , responseSecondDtos);
+        responseSecondDtoMap.put(paramDivision, responseSecondDtos);
         ArrayList test1 = new ArrayList();
         test1.add(responseSecondDtoMap);
         responseFirstDto.setDivision(test1);
 //        return ResponseDto.success(responseFirstDto);
         return responseFirstDto;
     }
-
 
 }
 
@@ -384,7 +435,7 @@ public class EmployeeService {
 //       ResponseThirdDto contact;
 //  }
 //     {
-//     "department": "AI\uc735\ud569\uae30\uc220\uc5f0\uad6c\uc18c",
+//     "department": "AI융합기술연구소",
 //     "contact": {
 //     "name": "홍길동",
 //     "mobile_number": "010",
