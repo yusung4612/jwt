@@ -2,6 +2,7 @@ package com.example.temipj.controller;
 
 import com.example.temipj.dto.requestDto.DepartmentRequestDto;
 import com.example.temipj.dto.requestDto.DivisionRequestDto;
+import com.example.temipj.dto.requestDto.EmployeeRequestDto;
 import com.example.temipj.dto.responseDto.EmpResponseDto;
 import com.example.temipj.dto.responseDto.ResponseDto;
 import com.example.temipj.service.DivisionService;
@@ -33,6 +34,14 @@ public class DivisionController {
     @GetMapping(value = "/{id}")
     public ResponseDto<?> get(@PathVariable Long id) {
         return divisionService.getDivision(id);
+    }
+
+    // 상위부서 수정
+    @PutMapping(value = "/update/{id}")
+    public ResponseDto<?> update(@PathVariable Long id,
+                                    @RequestBody DivisionRequestDto divisionRequestDto,
+                                    HttpServletRequest request) {
+        return divisionService.updateDivision(id, divisionRequestDto, request);
     }
 
     // 상위부서 삭제

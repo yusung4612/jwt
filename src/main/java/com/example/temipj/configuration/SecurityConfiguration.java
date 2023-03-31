@@ -44,7 +44,7 @@ public class SecurityConfiguration {
     }
 
     private static final String[] AUTH_WHITELIST = {
-//            "/v1/members/**", "/v1/auth/**", "/v1/member/emailcheck",
+//            "/v1/admins/**", "/v1/auth/**", "/v1/admins/emailcheck",
             "/api/admins/**","/api/employees/**", "/" ,"/**"
     };
 
@@ -83,7 +83,7 @@ public class SecurityConfiguration {
 
         http.authorizeHttpRequests(authorize -> authorize //요청에 대한 사용권한 설정 //로그인, 회원가입 Api는 토큰이 없는 상태에서 요청이 들어오기 때문에 permitAll 설정
                         .requestMatchers(AUTH_WHITELIST).permitAll()
-                        .requestMatchers("/api/**").hasRole("ROLE_ADMIN")
+//                        .requestMatchers("/api/**").hasRole("ROLE_ADMIN")
                         .requestMatchers("/api/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/admins/**").permitAll()

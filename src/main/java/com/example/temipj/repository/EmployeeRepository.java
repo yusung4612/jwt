@@ -43,6 +43,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
 
     //============================리더테스트============================
+    // 리더 조회
     @Query( value = "select p from Employee p where p.leader = 'true'")
     List<Employee> findAllByLeader();
 }

@@ -9,10 +9,13 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChoiceNewsResponseDto {
+public class ChoiceNewsResponseDto<T> {
 
-    private String message;
+    private String version;
+    private T news;
 
-    private String author;
+    public static <T> ChoiceNewsResponseDto<T> version(T data) {
+        return new ChoiceNewsResponseDto("230331", data);
+    }
 
 }

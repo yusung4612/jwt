@@ -29,6 +29,7 @@ public class Employee extends Timestamped {
     private String extension_number; // 유선전화번호
 
     @Column(nullable = false, unique = true)
+
     private String mobile_number; // 모바일번호
 
     @Column(nullable = false, unique = true)

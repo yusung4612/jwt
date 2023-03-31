@@ -1,8 +1,7 @@
 package com.example.temipj.domain.employee;
 
 import com.example.temipj.domain.Timestamped;
-import com.example.temipj.domain.admin.Admin;
-import com.example.temipj.domain.news.Choice;
+import com.example.temipj.dto.requestDto.DepartmentRequestDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -33,5 +32,9 @@ public class Department extends Timestamped {
 
     @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Employee> employee;
+
+    public void update(DepartmentRequestDto requestDto) {
+        this.department = requestDto.getDepartment();
+    }
 
 }

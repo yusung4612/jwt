@@ -2,6 +2,7 @@ package com.example.temipj.controller;
 
 import com.example.temipj.domain.UserDetailsImpl;
 import com.example.temipj.dto.requestDto.DepartmentRequestDto;
+import com.example.temipj.dto.requestDto.DivisionRequestDto;
 import com.example.temipj.dto.requestDto.EmployeeRequestDto;
 import com.example.temipj.dto.responseDto.EmpResponseDto;
 import com.example.temipj.dto.responseDto.EmployeeResponseDto;
@@ -28,7 +29,7 @@ public class DepartmentController {
 
     // 하위부서 전체 조회
     @GetMapping(value = "/all")
-    public ResponseDto<?> getAll(){
+    public ResponseDto<?> getAll() {
         return departmentService.getDepartmentAll();
     }
 
@@ -38,10 +39,18 @@ public class DepartmentController {
         return departmentService.getDepartment(id);
     }
 
+    // 하위부서 수정
+    @PutMapping(value = "/update/{id}")
+    public ResponseDto<?> update(@PathVariable Long id,
+                                 @RequestBody DepartmentRequestDto departmentRequestDto,
+                                 HttpServletRequest request) {
+        return departmentService.updateDepartment(id, departmentRequestDto, request);
+    }
+
     // 하위부서 삭제
     @DeleteMapping("delete/{departmentId}")
-    public ResponseDto<?>delete(@PathVariable Long departmentId,HttpServletRequest request){
-        return departmentService.deleteDepart(departmentId,request);
+    public ResponseDto<?> delete(@PathVariable Long departmentId, HttpServletRequest request) {
+        return departmentService.deleteDepart(departmentId, request);
     }
 
 }

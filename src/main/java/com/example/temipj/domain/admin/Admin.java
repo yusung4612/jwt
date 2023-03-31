@@ -1,9 +1,7 @@
 package com.example.temipj.domain.admin;
 
 import com.example.temipj.domain.Timestamped;
-import com.example.temipj.domain.news.Choice;
 import com.example.temipj.domain.news.News;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,15 +40,12 @@ public class Admin extends Timestamped {
     @OneToMany(mappedBy = "admin", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<News> news;
 
-    @OneToMany(mappedBy = "admin", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Choice> choice;
-
-    public Admin(String emailId, String adminName, String encodedPassword, String encodePasswordConfirm) {
-        this.emailId = emailId;
-        this.adminName = adminName;
-        this.password = encodedPassword;
-        this.passwordConfirm = encodePasswordConfirm;
-    }
+//    public Admin(String emailId, String adminName, String encodedPassword, String encodePasswordConfirm) {
+//        this.emailId = emailId;
+//        this.adminName = adminName;
+//        this.password = encodedPassword;
+//        this.passwordConfirm = encodePasswordConfirm;
+//    }
 
     @Override
     public boolean equals(Object o) {
@@ -63,19 +58,6 @@ public class Admin extends Timestamped {
         Admin admin = (Admin) o;
         return id != null && Objects.equals(id, admin.id);
     }
-
-//    @Override
-//    public int hashCode() {
-//        return getClass().hashCode();
-//    }
-
-//    public void nameUpdate(String username) {
-//        this.adminName = adminName;
-//    }
-//
-//    public void passwordUpdate(String password) {
-//        this.password = password;
-//    }
 
     public boolean validatePassword(PasswordEncoder passwordEncoder, String password) {
         return passwordEncoder.matches(password, this.password);

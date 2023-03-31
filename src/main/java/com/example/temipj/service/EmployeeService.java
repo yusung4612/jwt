@@ -18,20 +18,15 @@ import com.example.temipj.exception.ErrorCode;
 import com.example.temipj.jwt.TokenProvider;
 import com.example.temipj.repository.DepartmentRepository;
 import com.example.temipj.repository.EmployeeRepository;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.Id;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.jsoup.select.Evaluator;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-
-import static io.jsonwebtoken.Claims.ID;
 
 @RequiredArgsConstructor
 @Service
@@ -55,7 +50,7 @@ public class EmployeeService {
 ////            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
 //            throw new CustomException(ErrorCode.INVALID_TOKEN);
 //        }
-//        // 2. tokenProvider Class의 SecurityContextHolder에 저장된 Member 정보 확인
+//        // 2. tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
 //        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
 //        if (null == admin) {
 ////            return ResponseDto.fail(ErrorCode.MEMBER_NOT_FOUND.name(), ErrorCode.MEMBER_NOT_FOUND.getMessage());
@@ -94,28 +89,31 @@ public class EmployeeService {
     //직원 등록 Service
     @Transactional
     public EmpResponseDto createEmp(String departmentId, EmployeeRequestDto requestDto, HttpServletRequest request) {
-// 1. 토큰 유효성 확인
+        // 1. 토큰 유효성 확인
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-// return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
-// 2. tokenProvider Class의 SecurityContextHolder에 저장된 Member 정보 확인
+        // 2. tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
         Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
         if (null == admin) {
-// return ResponseDto.fail(ErrorCode.MEMBER_NOT_FOUND.name(), ErrorCode.MEMBER_NOT_FOUND.getMessage());
             throw new CustomException(ErrorCode.ADMIN_NOT_FOUND);
         }
-// 3. 등록
+        // 3. 하위부서 유무 확인
+//        Department department = isPresentDepartment(id);
+        Department department = departmentRepository.findById(departmentId);
+        if (null == department) {
+            throw new CustomException(ErrorCode.NOT_EXIST_DEPARTMENT);
+        }
+        // 3. 등록
         if (requestDto.getName().isEmpty())
-// return ResponseDto.fail(ErrorCode.NOT_BLANK_NAME.name(), ErrorCode.NOT_BLANK_NAME.getMessage());
             throw new CustomException(ErrorCode.NOT_BLANK_NAME);
 
-//FIXME : 샘플코드 확인부1
-        Department department = departmentRepository.findById(departmentId);
+//        //FIXME : 샘플코드 확인부1
+//        Department department = departmentRepository.findById(departmentId); //위로 위치 변경
 
-//FIXME : 샘플코드 확인부2
+        //FIXME : 샘플코드 확인부2
         Employee employee = Employee.builder()
-// .admin(admin)
+             // .admin(admin)
                 .name(requestDto.getName())
                 .birth(requestDto.getBirth())
                 .extension_number(requestDto.getExtension_number())
@@ -128,16 +126,13 @@ public class EmployeeService {
 
         employeeRepository.save(employee);
 
-        return EmpResponseDto.version(
-                EmployeeResponseDto.builder()
-// .id(employee.getId())
-                        .name(employee.getName())
-                        .birth(employee.getBirth())
-                        .extension_number(employee.getExtension_number())
-                        .mobile_number(employee.getMobile_number())
-// .email(employee.getEmail())
-// .department(employee.getDepartment())
-                        .build());
+        return EmpResponseDto.version(EmployeeResponseDto.builder()
+             // .id(employee.getId())
+                .name(employee.getName())
+                .birth(employee.getBirth())
+                .extension_number(employee.getExtension_number())
+                .mobile_number(employee.getMobile_number())
+                .build());
     }
 
 
@@ -146,12 +141,13 @@ public class EmployeeService {
     public String enabledCheck(UserDetailsImpl userDetails) {
         if (userDetails == null) {
             return "1";
-        }
+        } else {
 //        boolean isCheckedLeader = leaderRepository.existsByAdminAndEmployee(userDetails.getAdmin(), employee);
 //        boolean isCheckedLeader = employeeRepository.existsByEmployee(employee);
 
 //        return isCheckedLeader ? "1" : "0"
-        return "0";
+            return "0";
+        }
     }
 
     //전체 직원 조회
@@ -164,16 +160,9 @@ public class EmployeeService {
         for (Employee employee : employeeList) {
             Department department = employee.getDepartment();
 
-            employeeResponseDtoList.add(
-                    EmployeeResponseDto.builder()
-                            .name(employee.getName())
-                            .birth(employee.getBirth())
-                            .extension_number(employee.getExtension_number())
-                            .mobile_number(employee.getMobile_number())
+            employeeResponseDtoList.add(EmployeeResponseDto.builder().name(employee.getName()).birth(employee.getBirth()).extension_number(employee.getExtension_number()).mobile_number(employee.getMobile_number())
 //                            .enabled(enabledCheck(employee, userDetails))
-                            .enabled(enabledCheck(userDetails))
-                            .division(department.getDivision().getDivision())
-                            .build());
+                    .enabled(enabledCheck(userDetails)).division(department.getDivision().getDivision()).build());
         }
         return EmpResponseDto.version(employeeResponseDtoList);
     }
@@ -205,12 +194,11 @@ public class EmployeeService {
 //            return ResponseDto.fail(ErrorCode.NOT_EXIST_EMPLOYEE.name(), ErrorCode.NOT_EXIST_EMPLOYEE.getMessage());
             throw new CustomException(ErrorCode.NOT_EXIST_EMPLOYEE);
         }
-        // 3. tokenProvider Class의 SecurityContextHolder에 저장된 Member 정보 확인
+        // 3. tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
         Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
-//        if (employee.validateAdmin(admin)) {
-////            return ResponseDto.fail(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.name(), ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.getMessage());
-//            throw new CustomException(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS);
-//        }
+        if (null == admin) {
+            throw new CustomException(ErrorCode.ADMIN_NOT_FOUND);
+        }
         // 4. 수정
         employee.update(requestDto);
 //        return ResponseDto.version(employee);
@@ -218,29 +206,24 @@ public class EmployeeService {
     }
 
     //직원 삭제
-//    public ResponseDto<?> deleteEmp(Long id, HttpServletRequest request) {
     public EmpResponseDto<?> deleteEmp(Long id, HttpServletRequest request) {
 
         // 1. 토큰 유효성 확인
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-//            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
         // 2. 직원 유무 확인
         Employee employee = isPresentEmployee(id);
         if (null == employee) {
-//            return ResponseDto.fail(ErrorCode.NOT_EXIST_EMPLOYEE.name(), ErrorCode.NOT_EXIST_EMPLOYEE.getMessage());
             throw new CustomException(ErrorCode.NOT_EXIST_EMPLOYEE);
         }
-        // 3. SecurityContextHolder에 저장된 Member 확인
+        // 3. SecurityContextHolder에 저장된 Admin 확인
         Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
 //        if (employee.validateAdmin(admin)) {
-////            return ResponseDto.fail(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.name(), ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.getMessage());
 //            throw new CustomException(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS);
 //        }
         // 4. 삭제
         employeeRepository.delete(employee);
-//        return ResponseDto.version("해당 직원이 삭제되었습니다.");
         return EmpResponseDto.version("해당 직원이 삭제되었습니다.");
     }
 
@@ -252,31 +235,26 @@ public class EmployeeService {
         List<EmployeeResponseDto> employeeListResponseDtoList = new ArrayList<>();
         //for문을 통해서 List에 담아주기
         for (Employee employee : employeeList) {
-            employeeListResponseDtoList.add(
-                    EmployeeResponseDto.builder()
+            employeeListResponseDtoList.add(EmployeeResponseDto.builder()
 //                            .id(employee.getId())
-                            .name(employee.getName())
-                            .birth(employee.getBirth())
-                            .extension_number(employee.getExtension_number())
-                            .mobile_number(employee.getMobile_number())
+                    .name(employee.getName()).birth(employee.getBirth()).extension_number(employee.getExtension_number()).mobile_number(employee.getMobile_number())
 //                            .enabled(enabledCheck(employee, userDetails))
-                            .enabled(enabledCheck(userDetails))
-                            .build()
-            );
+                    .enabled(enabledCheck(userDetails)).build());
         }
         return ResponseDto.success(employeeListResponseDtoList);
     }
 
     //============================리더테스트 시작부분========================================================================
 
-    //리더 선택
+    // 리더 선택
     @Transactional
     public ResponseDto<?> LeaderSelect(Long id) {
         // 1. 직원 확인
         Employee employee = isPresentEmployee(id);
         if (null == employee) {
-            throw new CustomException(ErrorCode.NOT_EXIST_EMPLOYEE);
+            return ResponseDto.fail(ErrorCode.NOT_EXIST_EMPLOYEE.name(), ErrorCode.NOT_EXIST_EMPLOYEE.getMessage());
         }
+
         if (employee.getLeader().contains("false")) {
             employee.updateLeader(id);
             return ResponseDto.success("리더 지정 완료");
@@ -312,7 +290,6 @@ public class EmployeeService {
     //============================리더테스트 끝=========================================================================
     @Transactional
     public Employee isPresentEmployee(Long id) {
-//        Optional<Employee> optionalEmployee = employeeRepository.findById(id);
         Optional<Employee> optionalEmployee = employeeRepository.findById(id);
         return optionalEmployee.orElse(null);
     }

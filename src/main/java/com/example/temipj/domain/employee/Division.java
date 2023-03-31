@@ -1,7 +1,7 @@
 package com.example.temipj.domain.employee;
 
 import com.example.temipj.domain.Timestamped;
-import com.example.temipj.domain.news.Choice;
+import com.example.temipj.dto.requestDto.DivisionRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,4 +27,8 @@ public class Division extends Timestamped {
     @OneToMany(mappedBy = "division", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Department> department;
 
+    // 상위부서 수정 메서드 생성
+    public void update(DivisionRequestDto requestDto) {
+        this.division = requestDto.getDivision();
+    }
 }

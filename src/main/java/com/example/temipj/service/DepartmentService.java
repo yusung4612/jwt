@@ -4,6 +4,7 @@ import com.example.temipj.domain.admin.Admin;
 import com.example.temipj.domain.employee.Department;
 import com.example.temipj.domain.employee.Division;
 import com.example.temipj.dto.requestDto.DepartmentRequestDto;
+import com.example.temipj.dto.requestDto.DivisionRequestDto;
 import com.example.temipj.dto.responseDto.DepartmentResponseDto;
 import com.example.temipj.dto.responseDto.ResponseDto;
 import com.example.temipj.exception.CustomException;
@@ -37,13 +38,14 @@ public class DepartmentService {
     // 하위부서 생성
     @Transactional
     public ResponseDto<?> createDepart(String divisionId, DepartmentRequestDto requestDto, HttpServletRequest request) {
-        // 1.토큰 유효성 확인
+        // 1토큰 유효성 확인
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-            throw new CustomException(ErrorCode.INVALID_TOKEN);
+            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
         }
-        // 2. 등록
+
+        // 2.등록
         if (requestDto.getDepartment().isEmpty())
-            throw new CustomException(ErrorCode.NOT_BLANK_NAME);
+            return ResponseDto.fail(ErrorCode.NOT_BLANK_NAME.name(), ErrorCode.NOT_BLANK_NAME.getMessage());
 
         Division division = divisionRepository.findById(divisionId);
 
@@ -83,24 +85,51 @@ public class DepartmentService {
         // 하위부서 유무 확인
         Department department = isPresentDepartment(id);
         if (null == department) {
-            throw new CustomException(ErrorCode.NOT_EXIST_DEPARTMENT);
+            return ResponseDto.fail(ErrorCode.NOT_EXIST_DEPARTMENT.name(), ErrorCode.NOT_EXIST_DEPARTMENT.getMessage());
         }
+        return ResponseDto.success(department);
+    }
+
+    // 하위부서 수정
+    @Transactional
+    public ResponseDto<?> updateDepartment(Long id, DepartmentRequestDto requestDto, HttpServletRequest request) {
+        // 1.토큰 유효성 확인
+        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
+        }
+        // 2.tokenProvider의 SecurityContextHolder에 저장된 Admin 정보 확인
+        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
+        if (null == admin) {
+            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(), ErrorCode.ADMIN_NOT_FOUND.getMessage());
+        }
+        // 3.하위부서 유무 확인
+        Department department = isPresentDepartment(id);
+        if (null == department) {
+            return ResponseDto.fail(ErrorCode.NOT_EXIST_DEPARTMENT.name(), ErrorCode.NOT_EXIST_DEPARTMENT.getMessage());
+        }
+        // 4.하위부서 수정
+        department.update(requestDto);
         return ResponseDto.success(department);
     }
 
     // 하위부서 삭제
     public ResponseDto<?> deleteDepart(Long departmentId, HttpServletRequest request) {
 
-        // 1. 토큰 유효성 확인
+        // 1.토큰 유효성 확인
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-            throw new CustomException(ErrorCode.INVALID_TOKEN);
+            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
         }
-        // 2. 하위부서 유무 확인
+        // 2.하위부서 유무 확인
         Department department = isPresentDepartment(departmentId);
         if (null == department) {
-            throw new CustomException(ErrorCode.NOT_EXIST_DEPARTMENT);
+            return ResponseDto.fail(ErrorCode.NOT_EXIST_DEPARTMENT.name(), ErrorCode.NOT_EXIST_DEPARTMENT.getMessage());
         }
-        // 3. 하위부서 삭제
+        // 3.tokenProvider의 SecurityContextHolder에 저장된 Admin 정보 확인
+        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
+        if (null == admin) {
+            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(), ErrorCode.ADMIN_NOT_FOUND.getMessage());
+        }
+        // 4.하위부서 삭제
         departmentRepository.delete(department);
         return ResponseDto.success("해당 하위부서가 삭제되었습니다.");
     }

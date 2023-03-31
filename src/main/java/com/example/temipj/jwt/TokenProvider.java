@@ -29,7 +29,7 @@ public class TokenProvider {
 
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_PREFIX = "Bearer ";
-    public static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24; // 우선 1일설정, access 재발급 이용가능하면 30분으로 수정예정
+    public static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24; // 1일
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7; // 기준: (1000 -> 1s) // Refresh Token 7일
     private final Key key;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -91,7 +91,7 @@ public class TokenProvider {
                 isAssignableFrom(authentication.getClass())) {
             return null;
         }
-        // authentication은 principal을 extends 받은 객체. getMember() 메서드를 통해 사용자의 이름을 넘겨줌
+        // authentication은 principal을 extends 받은 객체. getAdmin() 메서드를 통해 사용자의 이름을 넘겨줌
         return ((UserDetailsImpl) authentication.getPrincipal()).getAdmin();
     }
 
