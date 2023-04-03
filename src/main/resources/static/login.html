@@ -28,6 +28,7 @@
                     dataType: 'json',
                     success: function(response) {
                         if (response.success === true) {
+                            localStorage.setItem('Refresh_Token', response.token);
                             alert("로그인 성공!");
                             window.location.href = 'http://localhost:8080/main.html';
                         }
@@ -52,7 +53,7 @@
     <input type="password" id="password" name="password"><br>
     <button type="submit">Login</button>
 
-    <a href="register.html"><input type="button" value="Sign up"></a>
+    <a href="signUp.html"><input type="button" value="Sign up"></a>
 </form>
 
 

@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -34,5 +33,9 @@ public interface NewsRepository extends JpaRepository<News, Long> {
     // 선택한 뉴스 중에서 검색
 //    @Query(value = "SELECT p FROM News p WHERE p.choiceNews = 'true'")
 //    List <Choice> findAllByChoiceNews(@Param("keyword") String keyword);
+
+    News findTop1ByOrderByModifiedAtDesc();
+    News findById(String newsId);
+
 
 }

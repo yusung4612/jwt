@@ -37,8 +37,8 @@ public class Admin extends Timestamped {
     @Column(nullable = false)
     private String passwordConfirm; // 비밀번호 확인
 
-    @OneToMany(mappedBy = "admin", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<News> news;
+//    @OneToMany(mappedBy = "admin", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    private List<News> news;
 
 //    public Admin(String emailId, String adminName, String encodedPassword, String encodePasswordConfirm) {
 //        this.emailId = emailId;

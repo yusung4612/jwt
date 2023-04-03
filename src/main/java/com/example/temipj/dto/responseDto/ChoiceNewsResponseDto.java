@@ -14,8 +14,8 @@ public class ChoiceNewsResponseDto<T> {
     private String version;
     private T news;
 
-    public static <T> ChoiceNewsResponseDto<T> version(T data) {
-        return new ChoiceNewsResponseDto("230331", data);
+    public static <T> ChoiceNewsResponseDto<T> version(String version, T data) {
+        return new ChoiceNewsResponseDto(version, data);
     }
 
 }

@@ -1,16 +1,14 @@
 package com.example.temipj.domain.news;
 
 import com.example.temipj.domain.Timestamped;
-import com.example.temipj.domain.admin.Admin;
 import com.example.temipj.dto.requestDto.NewsRequestDto;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Builder
 @Getter
@@ -29,24 +27,25 @@ public class News extends Timestamped {
     @Column(nullable = false)
     private String author; // 작성자, 작성사이트
 
-    @JoinColumn
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Admin admin;
+//    @JoinColumn
+//    @JsonIgnore
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    private Admin admin;
 
-    @Column(nullable = false)
+    @Column
     private String choiceNews = "false";
 
-//    private LocalDateTime expirationDateTime; // expirationDateTime 속성 추가
+    @Column
+    private LocalDate end_date; // 만료 일자
 
     public void update(NewsRequestDto requestDto) {
         this.message = requestDto.getMessage();
         this.author = requestDto.getAuthor();
     }
 
-    public boolean validateAdmin(Admin admin) {
-        return !this.admin.equals(admin);
-    }
+//    public boolean validateAdmin(Admin admin) {
+//        return !this.admin.equals(admin);
+//    }
 
     public void updateChoiceNews(Long id) {
         this.choiceNews = "true";

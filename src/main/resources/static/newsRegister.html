@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <title>뉴스등록하기</title>
+
+    <script>
+
+        $(document).ready(function () {
+            // const token = localStorage.getItem("token"); // 토큰 가져오기
+            // if (!token) {
+            //     alert('로그인이 필요합니다.');
+            //     window.location.href = 'http://localhost:8080/login.html';
+            // }
+            //
+            // // jwt를 헤더에 포함시켜 요청 보내기
+            // $.ajaxSetup({
+            //     headers: { Refresh_Token : token }
+            // });
+
+            $("#newsForm").submit(function (event) {
+                event.preventDefault(); // 폼 전송 방지
+
+                const FormData = {
+                    news:'1',
+                    message: $("#message").val(),
+                    author: $("#author").val()
+                };
+
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    url: "http://localhost:8080/api/news/create",
+                    data: JSON.stringify(FormData),
+                    dataType: 'json',
+                    // beforeSend: function(xhr) { // 헤더에 토큰 추가
+                    //     xhr.setRequestHeader("Refresh_Token", token);
+                    // },
+                    success: function(response) {
+                        if (response.success === true) {
+                            alert("뉴스가 등록되었습니다.");
+                            window.location.href = 'http://localhost:8080/newsList.html';
+                        } else {
+                            alert('다시 시도해주세요.')
+                        }
+                    },
+                    error: function (e) {
+                        alert("Error: " + e.responseText);
+                    }
+                });
+            });
+        });
+
+    </script>
+</head>
+<body>
+
+<form id="newsForm" action="">
+    <label for="author">Author:</label>
+    <input type="text" id="author" name="author"><br>
+    <label for="message">Message:</label>
+    <input type="text" id="message" name="message"><br>
+
+    <button id="btn-save" class="btn btn-primary">Complete</button>
+    <a href="newsList.html"><input type="button" value="Back"></a>
+</form>
+
+</body>
+</html>

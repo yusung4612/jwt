@@ -39,6 +39,15 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
                     "        and c.division = :paramDivision ")
     List<Employee> test(@Param("paramDivision") String paramDivision);
 
+    // 전체 리더 조회
+    @Query(value = "SELECT a,b,c " +
+            "FROM Employee a " +
+            "INNER JOIN Department b " +
+            "ON a.department.id = b.id " +
+            "LEFT JOIN Division c ON c.id = b.division.id " +
+            "where a.leader = 'true'")
+    List<Employee> getAllLeaders();
+
 //    void delete(Optional<Employee> employee1);
 
 
@@ -46,4 +55,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     // 리더 조회
     @Query( value = "select p from Employee p where p.leader = 'true'")
     List<Employee> findAllByLeader();
+
+    Employee findTop1ByOrderByModifiedAtDesc();
+
 }

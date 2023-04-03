@@ -15,7 +15,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,15 +32,17 @@ public class NewsService {
     // 뉴스 등록
     @Transactional
     public ResponseDto<?> createNews(NewsRequestDto requestDto, HttpServletRequest request) {
+        LocalDate endTime = LocalDate.now().plusDays(7);
+
         // 1. 토큰 유효성 확인
-        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
-        }
+//        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+//            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
+//        }
         // 2. tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
         Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
-        if (null == admin) {
-            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(), ErrorCode.ADMIN_NOT_FOUND.getMessage());
-        }
+//        if (null == admin) {
+//            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(), ErrorCode.ADMIN_NOT_FOUND.getMessage());
+//        }
         // 3. 뉴스 등록
         if (requestDto.getMessage().isEmpty())
             return ResponseDto.fail(ErrorCode.NOT_BLANK_NAME.name(), ErrorCode.NOT_BLANK_NAME.getMessage());
@@ -47,8 +50,9 @@ public class NewsService {
         News news = News.builder()
                 .message(requestDto.getMessage())
                 .author(requestDto.getAuthor())
+                .end_date(endTime)
                 .choiceNews("false")
-                .admin(admin)
+//                .admin(admin)
                 .build();
         newsRepository.save(news);
 
@@ -56,6 +60,7 @@ public class NewsService {
                 NewsResponseDto.builder()
                         .message(requestDto.getMessage())
                         .author(requestDto.getAuthor())
+//                        .end_date(endTime)
                         .build());
     }
 
@@ -71,6 +76,7 @@ public class NewsService {
                     NewsResponseDto.builder()
                             .message(news.getMessage())
                             .author(news.getAuthor())
+                            .end_date(news.getEnd_date())
                             .build());
         }
         return ResponseDto.success(NewsResponseDtoList);
@@ -101,10 +107,10 @@ public class NewsService {
         }
         // 3. tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
         Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
-//        if (news.validateAdmin(admin)) {
-//            return ResponseDto.fail(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.name(), ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.getMessage());
-////            throw new CustomException(ErrorCode.ADMIN_UPDATE_WRONG_ACCESS);
-//        }
+        if (null == admin) {
+            return ResponseDto.fail(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.name(), ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.getMessage());
+//            throw new CustomException(ErrorCode.ADMIN_UPDATE_WRONG_ACCESS);
+        }
         // 4. 뉴스 수정
         news.update(requestDto);
         return ResponseDto.success(news);
@@ -124,7 +130,7 @@ public class NewsService {
         }
         // 3. tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
         Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
-        if (news.validateAdmin(admin)) {
+        if (null == admin) {
             return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(), ErrorCode.ADMIN_NOT_FOUND.getMessage());
         }
         // 4. 뉴스 삭제
@@ -144,6 +150,7 @@ public class NewsService {
                     NewsResponseDto.builder()
                             .message(news.getMessage())
                             .author(news.getAuthor())
+                            .end_date(news.getEnd_date())
                             .build()
             );
         }
@@ -193,9 +200,14 @@ public class NewsService {
                     NewsResponseDto.builder()
                             .message(news.getMessage())
                             .author(news.getAuthor())
+                            .end_date(news.getEnd_date())
                             .build());
         }
-        return ChoiceNewsResponseDto.version(NewsResponseDtoList);
+
+        News version = newsRepository.findTop1ByOrderByModifiedAtDesc();
+        String recentVersion = version.getModifiedAt().format((DateTimeFormatter.ofPattern("yyyyMMdd")));
+
+        return ChoiceNewsResponseDto.version(recentVersion, NewsResponseDtoList);
     }
 
     // 뉴스 유무 확인 메서드 생성

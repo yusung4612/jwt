@@ -19,6 +19,7 @@ public class DivisionController {
 
     // 상위부서 생성
     @PostMapping(value = "/create")
+    @ResponseBody
     private ResponseDto<?> create(@RequestBody DivisionRequestDto divisionRequestDto,
                                   HttpServletRequest request) {
         return divisionService.createDivision(divisionRequestDto, request);
@@ -26,12 +27,14 @@ public class DivisionController {
 
     // 상위부서 전체 조회
     @GetMapping(value = "/all")
+    @ResponseBody
     public ResponseDto<?> getAll(){
         return divisionService.getDivisionAll();
     }
 
     // 특정 상위부서 조회
     @GetMapping(value = "/{id}")
+    @ResponseBody
     public ResponseDto<?> get(@PathVariable Long id) {
         return divisionService.getDivision(id);
     }
