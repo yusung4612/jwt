@@ -33,7 +33,7 @@ public class News extends Timestamped {
 //    private Admin admin;
 
     @Column
-    private String choiceNews = "false";
+    private String choiceNews = "true";
 
     @Column
     private LocalDate end_date; // 만료 일자

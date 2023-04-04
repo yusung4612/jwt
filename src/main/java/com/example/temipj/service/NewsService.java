@@ -3,6 +3,7 @@ package com.example.temipj.service;
 import com.example.temipj.domain.admin.Admin;
 import com.example.temipj.domain.news.News;
 import com.example.temipj.dto.requestDto.NewsRequestDto;
+import com.example.temipj.dto.responseDto.ChoiceListResponseDto;
 import com.example.temipj.dto.responseDto.ChoiceNewsResponseDto;
 import com.example.temipj.dto.responseDto.NewsResponseDto;
 import com.example.temipj.dto.responseDto.ResponseDto;
@@ -48,6 +49,7 @@ public class NewsService {
             return ResponseDto.fail(ErrorCode.NOT_BLANK_NAME.name(), ErrorCode.NOT_BLANK_NAME.getMessage());
 
         News news = News.builder()
+                .id(requestDto.getId())
                 .message(requestDto.getMessage())
                 .author(requestDto.getAuthor())
                 .end_date(endTime)
@@ -58,6 +60,7 @@ public class NewsService {
 
         return ResponseDto.success(
                 NewsResponseDto.builder()
+                        .id(requestDto.getId())
                         .message(requestDto.getMessage())
                         .author(requestDto.getAuthor())
 //                        .end_date(endTime)
@@ -74,6 +77,7 @@ public class NewsService {
         for (News news : newsList) {
             NewsResponseDtoList.add(
                     NewsResponseDto.builder()
+                            .id(news.getId())
                             .message(news.getMessage())
                             .author(news.getAuthor())
                             .end_date(news.getEnd_date())
@@ -97,20 +101,20 @@ public class NewsService {
     @Transactional
     public ResponseDto<?> updateNews(Long id, NewsRequestDto requestDto, HttpServletRequest request) {
         // 1. 토큰 유효성 확인
-        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
-        }
-        // 2. 뉴스 유무 확인
+//        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+//            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
+//        }
+//        // 2. 뉴스 유무 확인
         News news = isPresentNews(id);
         if (null == news) {
             return ResponseDto.fail(ErrorCode.NOT_EXIST_NEWS.name(), ErrorCode.NOT_EXIST_NEWS.getMessage());
         }
-        // 3. tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
-        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
-        if (null == admin) {
-            return ResponseDto.fail(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.name(), ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.getMessage());
-//            throw new CustomException(ErrorCode.ADMIN_UPDATE_WRONG_ACCESS);
-        }
+//        // 3. tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
+//        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
+//        if (null == admin) {
+//            return ResponseDto.fail(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.name(), ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.getMessage());
+////            throw new CustomException(ErrorCode.ADMIN_UPDATE_WRONG_ACCESS);
+//        }
         // 4. 뉴스 수정
         news.update(requestDto);
         return ResponseDto.success(news);
@@ -120,19 +124,19 @@ public class NewsService {
     @Transactional
     public ResponseDto<?> deleteNews(Long id, HttpServletRequest request) {
         // 1. 토큰 유효성 확인
-        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
-        }
+//        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+//            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
+//        }
         // 2. 뉴스 유무 확인
         News news = isPresentNews(id);
         if (null == news) {
             return ResponseDto.fail(ErrorCode.NOT_EXIST_NEWS.name(), ErrorCode.NOT_EXIST_NEWS.getMessage());
         }
         // 3. tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
-        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
-        if (null == admin) {
-            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(), ErrorCode.ADMIN_NOT_FOUND.getMessage());
-        }
+//        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
+//        if (null == admin) {
+//            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(), ErrorCode.ADMIN_NOT_FOUND.getMessage());
+//        }
         // 4. 뉴스 삭제
         newsRepository.delete(news);
         return ResponseDto.success("해당 뉴스가 삭제되었습니다.");
@@ -161,14 +165,14 @@ public class NewsService {
     @Transactional
     public ResponseDto<?> choiceNews(Long id, HttpServletRequest request) {
         // 1.토큰 유효성 확인
-        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
-        }
+//        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+//            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
+//        }
         // 2.tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
-        Admin admin = tokenProvider.getAdminFromAuthentication();
-        if (null == admin) {
-            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(), ErrorCode.ADMIN_NOT_FOUND.getMessage());
-        }
+//        Admin admin = tokenProvider.getAdminFromAuthentication();
+//        if (null == admin) {
+//            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(), ErrorCode.ADMIN_NOT_FOUND.getMessage());
+//        }
         // 3.뉴스 유무 확인
 //        News news = newsService.isPresentNews(newsId);
         News news = isPresentNews(id);
@@ -193,11 +197,11 @@ public class NewsService {
     public ChoiceNewsResponseDto<?> getChoiceAll() {
 
         List<News> choiceList = newsRepository.findAllByChoiceNews();
-        List<NewsResponseDto> NewsResponseDtoList = new ArrayList<>();
+        List<ChoiceListResponseDto> NewsResponseDtoList = new ArrayList<>();
 
         for (News news : choiceList) {
             NewsResponseDtoList.add(
-                    NewsResponseDto.builder()
+                    ChoiceListResponseDto.builder()
                             .message(news.getMessage())
                             .author(news.getAuthor())
                             .end_date(news.getEnd_date())
@@ -216,13 +220,5 @@ public class NewsService {
         Optional<News> optionalNews = newsRepository.findById(id);
         return optionalNews.orElse(null);
     }
-
-    //================뉴스 만료시간 테스트===================
-//    @Scheduled(fixedRate = 10000) // 60초마다 실행
-//    public void deleteExpiredNews() {
-//        LocalDateTime currentTime = LocalDateTime.now();
-//        List<News> expiredNews = newsRepository.findByExpirationDateTimeBefore(currentTime);
-//        newsRepository.deleteAll(expiredNews);
-//    }
 
 }

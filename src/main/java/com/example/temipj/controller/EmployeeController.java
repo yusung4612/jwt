@@ -51,7 +51,7 @@ public class EmployeeController {
     }
 
     // 직원 수정
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/update/{id}")
     public EmpResponseDto<?> update(@PathVariable Long id,
                                     @RequestBody EmployeeRequestDto employeeRequestDto,
                                     HttpServletRequest request) {

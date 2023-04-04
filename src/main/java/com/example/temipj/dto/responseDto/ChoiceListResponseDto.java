@@ -11,9 +11,9 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class NewsResponseDto {
+public class ChoiceListResponseDto {
 
-    private Long id;
+//    private Long id;
     private String message;
 
     private String author;

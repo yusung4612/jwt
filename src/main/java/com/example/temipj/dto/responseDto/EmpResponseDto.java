@@ -9,7 +9,8 @@ import lombok.*;
 public class EmpResponseDto<T> {
 
     private String version;
-    private T member;
+
+    private T employee;
 
     public static <T> EmpResponseDto<T> version(String version,T data) {
         return new EmpResponseDto<>(version, data);

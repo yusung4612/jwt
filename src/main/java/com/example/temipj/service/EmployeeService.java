@@ -43,14 +43,14 @@ public class EmployeeService {
     @Transactional
     public EmpResponseDto createEmp(String departmentId, EmployeeRequestDto requestDto, HttpServletRequest request) {
         // 1. 토큰 유효성 확인
-        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-            throw new CustomException(ErrorCode.INVALID_TOKEN);
-        }
+//        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+//            throw new CustomException(ErrorCode.INVALID_TOKEN);
+//        }
         // 2. tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
-        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
-        if (null == admin) {
-            throw new CustomException(ErrorCode.ADMIN_NOT_FOUND);
-        }
+//        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
+//        if (null == admin) {
+//            throw new CustomException(ErrorCode.ADMIN_NOT_FOUND);
+//        }
         // 3. 하위부서 유무 확인
 //        Department department = isPresentDepartment(id);
         Department department = departmentRepository.findById(departmentId);
@@ -143,25 +143,22 @@ public class EmployeeService {
 
     //직원 정보 수정
     @Transactional
-//    public ResponseDto<?> updateEmp(Long id, EmployeeRequestDto requestDto, HttpServletRequest request) {
     public EmpResponseDto<?> updateEmp(Long id, EmployeeRequestDto requestDto, HttpServletRequest request) {
         // 1. 토큰 유효성 확인
-        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-//            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
-            throw new CustomException(ErrorCode.INVALID_TOKEN);
-        }
+//        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+//            throw new CustomException(ErrorCode.INVALID_TOKEN);
+//        }
 
         // 2. 직원 유무 확인
         Employee employee = isPresentEmployee(id);
         if (null == employee) {
-//            return ResponseDto.fail(ErrorCode.NOT_EXIST_EMPLOYEE.name(), ErrorCode.NOT_EXIST_EMPLOYEE.getMessage());
             throw new CustomException(ErrorCode.NOT_EXIST_EMPLOYEE);
         }
         // 3. tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
-        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
-        if (null == admin) {
-            throw new CustomException(ErrorCode.ADMIN_NOT_FOUND);
-        }
+//        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
+//        if (null == admin) {
+//            throw new CustomException(ErrorCode.ADMIN_NOT_FOUND);
+//        }
         // 4. 수정
         employee.update(requestDto);
 
@@ -175,19 +172,19 @@ public class EmployeeService {
     public EmpResponseDto<?> deleteEmp(Long id, HttpServletRequest request) {
 
         // 1. 토큰 유효성 확인
-        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-            throw new CustomException(ErrorCode.INVALID_TOKEN);
-        }
+//        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+//            throw new CustomException(ErrorCode.INVALID_TOKEN);
+//        }
         // 2. 직원 유무 확인
         Employee employee = isPresentEmployee(id);
         if (null == employee) {
             throw new CustomException(ErrorCode.NOT_EXIST_EMPLOYEE);
         }
         // 3. SecurityContextHolder에 저장된 Admin 확인
-        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
-        if (null == admin) {
-            throw new CustomException(ErrorCode.ADMIN_NOT_FOUND);
-        }
+//        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
+//        if (null == admin) {
+//            throw new CustomException(ErrorCode.ADMIN_NOT_FOUND);
+//        }
         // 4. 삭제
         employeeRepository.delete(employee);
 
