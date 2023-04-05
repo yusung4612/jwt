@@ -17,7 +17,7 @@ public enum ErrorCode {
     SIGNUP_WRONG_PASSWORD(400, "비밀번호 형식이 맞지 않습니다."),
     ALREADY_SAVED_ID(400, "중복된 아이디입니다."),
     ALREADY_SAVED_ADMIN_NAME(400, "중복된 이름입니다."),
-    PASSWORDS_NOT_MATCHED(400,"비밀번호와 비밀번호가 일치하지 않습니다."),
+    PASSWORDS_NOT_MATCHED(400,"비밀번호가 일치하지 않습니다."),
     ALREADY_SAVED_ADMIN(400, "중복된 이름입니다."),
 
     //=============================login=======================================

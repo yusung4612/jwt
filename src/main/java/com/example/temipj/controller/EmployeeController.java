@@ -46,7 +46,7 @@ public class EmployeeController {
 
     // 특정 직원 조회
     @GetMapping(value = "/{id}")
-    public EmpResponseDto<?> get(@PathVariable Long id) {
+    public ResponseDto<?> get(@PathVariable Long id) {
         return employeeService.getEmployee(id);
     }
 

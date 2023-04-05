@@ -129,16 +129,17 @@ public class EmployeeService {
 
     //특정 직원 조회
     @Transactional
-    public EmpResponseDto<?> getEmployee(Long id) {
+    public ResponseDto<?> getEmployee(Long id) {
         //직원 유무 확인
         Employee employee = isPresentEmployee(id);
         if (null == employee) {
             throw new CustomException(ErrorCode.NOT_EXIST_EMPLOYEE);
         }
-        Employee version = employeeRepository.findTop1ByOrderByModifiedAtDesc();
-        String recentVersion = version.getModifiedAt().format((DateTimeFormatter.ofPattern("yyyyMMdd")));
+//        Employee version = employeeRepository.findTop1ByOrderByModifiedAtDesc();
+//        String recentVersion = version.getModifiedAt().format((DateTimeFormatter.ofPattern("yyyyMMdd")));
 
-        return EmpResponseDto.version(recentVersion,employee);
+//        return ResponseDto.success(recentVersion,employee);
+        return ResponseDto.success(employee);
     }
 
     //직원 정보 수정
