@@ -18,8 +18,9 @@ public class AdminRequestDto {
     private String adminName;
 
     @NotBlank(message = "이메일을 입력해주세요.")
-    @Size(min=8,max=30, message= "8자리이상 30자리 미만 글자로 email를 만들어주세요")
-    @Pattern(regexp = "^[0-9a-zA-Z]+@[a-zA-Z]+\\.[a-zA-Z]+$" , message = "이메일 형식을 확인해 주세요.")
+    @Size(min=8,max=30, message= "8자리이상 30자리 미만 글자로 email을 만들어주세요")
+//    @Pattern(regexp = "^[0-9a-zA-Z]+@[a-zA-Z]+\\.[a-zA-Z]+$" , message = "이메일 형식을 확인해 주세요.")
+    @Pattern(regexp = "^[0-9a-zA-Z]+@[everybot]+\\.[net]+$" , message = "이메일 형식을 확인해 주세요.")
     private String emailId;
 
     @NotBlank(message = "비밀번호를 입력해주세요.")
@@ -28,7 +29,7 @@ public class AdminRequestDto {
             , message = "비밀번호에 영어소문자, 숫자, 특수문자를 모두 포함해주세요")
     private String password;
 
-    @NotBlank(message = "비밀번호를 입력해주세요.")
+    @NotBlank(message = "비밀번호를 다시 입력해주세요.")
     @Size(min=4,max=32, message= "비밀번호는 최소 4자이상 최대 32자미만으로 만들어주세요.")
     @Pattern(regexp = "^(?=.*[a-z])(?=.*\\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\\d~!@#$%^&*()+|=]{4,20}$"
             , message = "비밀번호에 영어소문자, 숫자, 특수문자를 모두 포함해주세요")

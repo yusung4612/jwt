@@ -1,5 +1,6 @@
 package com.example.temipj.dto.requestDto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,9 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LoginRequestDto {
 
-//    @NotBlank(message = "이메일과 비밀번호를 모두 입력해주세요.")
+    @NotBlank(message = "이메일과 비밀번호를 모두 입력해주세요.")
     private String emailId;
 
-//    @NotBlank(message = "이메일과 비밀번호를 모두 입력해주세요.")
+    @NotBlank(message = "이메일과 비밀번호를 모두 입력해주세요.")
     private String password;
 }

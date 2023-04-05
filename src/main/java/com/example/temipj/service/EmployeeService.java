@@ -1,16 +1,14 @@
 package com.example.temipj.service;
 
 import com.example.temipj.domain.UserDetailsImpl;
-import com.example.temipj.domain.admin.Admin;
 import com.example.temipj.domain.employee.Department;
 import com.example.temipj.domain.employee.Division;
 import com.example.temipj.domain.employee.Employee;
 import com.example.temipj.dto.requestDto.EmployeeRequestDto;
-import com.example.temipj.dto.responseDto.*;
-import com.example.temipj.dto.responseDto.TestDto.MapperDto;
-import com.example.temipj.dto.responseDto.TestDto.ResponseFirstDto;
-import com.example.temipj.dto.responseDto.TestDto.ResponseSecondDto;
-import com.example.temipj.dto.responseDto.TestDto.ResponseThirdDto;
+import com.example.temipj.dto.responseDto.EmpResponseDto;
+import com.example.temipj.dto.responseDto.EmployeeResponseDto;
+import com.example.temipj.dto.responseDto.ResponseDto;
+import com.example.temipj.dto.responseDto.TestResponse;
 import com.example.temipj.exception.CustomException;
 import com.example.temipj.exception.ErrorCode;
 import com.example.temipj.jwt.TokenProvider;
@@ -95,7 +93,6 @@ public class EmployeeService {
         } else {
 //        boolean isCheckedLeader = leaderRepository.existsByAdminAndEmployee(userDetails.getAdmin(), employee);
 //        boolean isCheckedLeader = employeeRepository.existsByEmployee(employee);
-
 //        return isCheckedLeader ? "1" : "0"
             return "0";
         }
@@ -116,7 +113,6 @@ public class EmployeeService {
                     .birth(employee.getBirth())
                     .extension_number(employee.getExtension_number())
                     .mobile_number(employee.getMobile_number())
-//                  .enabled(enabledCheck(employee, userDetails))
                     .enabled(enabledCheck(userDetails))
                     .division(department.getDivision().getDivision())
                     .build());
@@ -270,7 +266,7 @@ public class EmployeeService {
             for (int j = 0; j < empList.size(); j++) {
                 String empDivision = empList.get(j).getDivision();
 
-                if(divisionName.equals(empDivision)) {
+                if (divisionName.equals(empDivision)) {
 
                     Map contactObj = new LinkedHashMap();
                     contactObj.put("name", empList.get(j).getName());
@@ -297,144 +293,10 @@ public class EmployeeService {
     }
 
 
-
     //============================리더테스트 끝=========================================================================
     @Transactional
     public Employee isPresentEmployee(Long id) {
         Optional<Employee> optionalEmployee = employeeRepository.findById(id);
         return optionalEmployee.orElse(null);
     }
-
-//    @Transactional
-//    public Admin validateAdmin(HttpServletRequest request) {
-//        if (!tokenProvider.validateToken(request.getHeader("Refresh-Token"))) {
-//            return null;
-//        }
-//        return tokenProvider.getAdminFromAuthentication();
-//    }
-
-//    @Transactional
-////    public ResponseDto<?> mainBuisness(HttpServletRequest request) {
-//    public ResponseFirstDto mainBuisness() {
-//        //1
-//        ResponseFirstDto responseFirstDto = new ResponseFirstDto();
-//
-//        HashMap RnDMap = methodTester("R&D");
-//        HashMap salseMap = methodTester("영업");
-//
-//        ArrayList resultList = new ArrayList<>();
-//
-//        resultList.add(RnDMap);
-//        resultList.add(salseMap);
-//
-//        responseFirstDto.setDivision(resultList);
-//        return responseFirstDto;
-//    }
-//
-//    @Transactional
-//    public HashMap methodTester(String paramDivision) {
-//
-//        //2
-//        HashMap<String, List<ResponseSecondDto>> responseSecondDtoMap = new HashMap<>();
-//        //3
-//        ArrayList<ResponseSecondDto> responseSecondDtos = new ArrayList<>();
-//        //4
-//        ResponseSecondDto responseSecondDto = new ResponseSecondDto();
-//        //5
-//        ResponseThirdDto responseThirdDto = new ResponseThirdDto();
-//
-//        MapperDto mapperDto = new MapperDto();
-////        mapperDto = employeeRepository.test11("R&D");
-//
-//        List<Employee> test = employeeRepository.test(paramDivision);
-//
-//
-//        for (Employee employee : test) {
-//                // 1
-//                responseThirdDto.setEmail(employee.getEmail());
-//                responseThirdDto.setName(employee.getName());
-//                responseThirdDto.setMobile_number(employee.getMobile_number());
-//
-//                // 2
-//                responseSecondDto.setDepartment(employee.getDepartment().getDepartment());
-//                responseSecondDto.setContact(responseThirdDto);
-//                responseSecondDtos.add(responseSecondDto);
-//            }
-//
-//        responseSecondDtoMap.put(paramDivision , responseSecondDtos);
-//        return responseSecondDtoMap;
-//        }
-////        return responseSecondDtoMap;
-////    }
-
-    @Transactional
-//    public ResponseDto<?> test(String paramDivision) {
-    public ResponseFirstDto test(String paramDivision) {
-        ResponseFirstDto responseFirstDto = new ResponseFirstDto();
-
-        //2
-        HashMap<String, List<ResponseSecondDto>> responseSecondDtoMap = new HashMap<>();
-        //3\
-        ArrayList<ResponseSecondDto> responseSecondDtos = new ArrayList<>();
-        //4
-        ResponseSecondDto responseSecondDto = new ResponseSecondDto();
-        //5
-        ResponseThirdDto responseThirdDto = new ResponseThirdDto();
-
-        MapperDto mapperDto = new MapperDto();
-//        mapperDto = employeeRepository.test11("R&D");
-
-        List<Employee> test = employeeRepository.test(paramDivision);
-
-
-        for (Employee employee : test) {
-            // 1
-            responseThirdDto.setEmail(employee.getEmail());
-            responseThirdDto.setName(employee.getName());
-            responseThirdDto.setMobile_number(employee.getMobile_number());
-
-            // 2
-            responseSecondDto.setDepartment(employee.getDepartment().getDepartment());
-            responseSecondDto.setContact(responseThirdDto);
-            responseSecondDtos.add(responseSecondDto);
-        }
-
-        responseSecondDtoMap.put(paramDivision, responseSecondDtos);
-        ArrayList test1 = new ArrayList();
-        test1.add(responseSecondDtoMap);
-        responseFirstDto.setDivision(test1);
-//        return ResponseDto.success(responseFirstDto);
-        return responseFirstDto;
-    }
-
 }
-
-//    public class ResponseFirstDto {
-//        //    {
-//        //        "version": "20230331",
-//        //            "division": []
-//
-//        String version = "20230331";
-//        List<HashMap<String , List<ResponseSecondDto>>> division;
-//    }
-
-//  public class ResponseSecondDto {
-//       String department;
-//       ResponseThirdDto contact;
-//  }
-//     {
-//     "department": "AI융합기술연구소",
-//     "contact": {
-//     "name": "홍길동",
-//     "mobile_number": "010",
-//     "email": "yusung@everybot.net"
-//     }
-
-//    public class ResponseThirdDto {
-//        String name;
-//        String mobile_number;
-//        String email;
-//     "name": "홍길동",
-//     "mobile_number": "010",
-//     "email": "yusung@everybot.net"
-//    }

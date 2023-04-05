@@ -55,7 +55,7 @@ public class AdminService {
         }
 
         // 패스워드 일치 체크
-        if(!Objects.equals(requestDto.getPasswordConfirm(), requestDto.getPassword())){
+        if(!Objects.equals(requestDto.getPassword(), requestDto.getPasswordConfirm())){
             return ResponseDto.fail(ErrorCode.PASSWORDS_NOT_MATCHED.name(),
                     ErrorCode.PASSWORDS_NOT_MATCHED.getMessage());
         }
