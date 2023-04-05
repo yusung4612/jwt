@@ -41,11 +41,11 @@ public class DivisionService {
         if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
             return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
         }
-        // 3. tokenProvider의 SecurityContextHolder에 저장된 Admin 정보 확인
-        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
-        if (null == admin) {
-            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(), ErrorCode.ADMIN_NOT_FOUND.getMessage());
-        }
+        // 2. tokenProvider의 SecurityContextHolder에 저장된 Admin 정보 확인
+//        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
+//        if (null == admin) {
+//            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(), ErrorCode.ADMIN_NOT_FOUND.getMessage());
+//        }
         // 3. 등록
         if (requestDto.getDivision().isEmpty())
             return ResponseDto.fail(ErrorCode.NOT_BLANK_NAME.name(), ErrorCode.NOT_BLANK_NAME.getMessage());
@@ -103,10 +103,10 @@ public class DivisionService {
             return ResponseDto.fail(ErrorCode.NOT_EXIST_DIVISION.name(), ErrorCode.NOT_EXIST_DIVISION.getMessage());
         }
         // 3. tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
-        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
-        if (null == admin) {
-            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(), ErrorCode.ADMIN_NOT_FOUND.getMessage());
-        }
+//        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
+//        if (null == admin) {
+//            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(), ErrorCode.ADMIN_NOT_FOUND.getMessage());
+//        }
         // 4. 수정
         division.update(requestDto);
         return ResponseDto.success(division);
@@ -125,10 +125,10 @@ public class DivisionService {
             return ResponseDto.fail(ErrorCode.NOT_EXIST_DIVISION.name(), ErrorCode.NOT_EXIST_DIVISION.getMessage());
         }
         // 3. tokenProvider의 SecurityContextHolder에 저장된 Admin 정보 확인
-        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
-        if (null == admin) {
-            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(), ErrorCode.ADMIN_NOT_FOUND.getMessage());
-        }
+//        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
+//        if (null == admin) {
+//            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(), ErrorCode.ADMIN_NOT_FOUND.getMessage());
+//        }
         // 4. 상위부서 삭제
         divisionRepository.delete(division);
         return ResponseDto.success("해당 상위부서가 삭제되었습니다.");
