@@ -230,7 +230,7 @@ public class EmployeeService {
                     .extension_number(employee.getExtension_number())
                     .mobile_number(employee.getMobile_number())
                     .division(employee.getDepartment().getDivision().getDivision())
-                    .department(department.getDepartment())
+                    .department(employee.getDepartment().getDepartment())
                     .email(employee.getEmail())
 //                            .enabled(enabledCheck(employee, userDetails))
                     .enabled(enabledCheck(userDetails)).build());
