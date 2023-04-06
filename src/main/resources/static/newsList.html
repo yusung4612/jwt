@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -9,6 +10,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
     <title>Title</title>
 
     <style>
@@ -40,13 +42,18 @@
                     for (let i = 0, length = list.length; i < length; i++) {
                         let item = list[i];
                         let cnt = i + 1;
+                        // console.log(i, item.choiceNews)
                         htmlArr.push('<tr>');
                         htmlArr.push('<td>');
                         htmlArr.push('<label class="newsNumber" data-id="' + item.id + '">' + cnt + '</label><br>');
                         htmlArr.push('</td>');
 
                         htmlArr.push('<td>');
+                        // if(item.choiceNews){
+                        //     htmlArr.push('<input type="checkbox" checked class="choiceNews" id="choiceNews' + item.id + '" value="' + item.id + '"><br>');
+                        // }else {
                         htmlArr.push('<input type="checkbox" class="choiceNews" id="choiceNews' + item.id + '" value="' + item.id + '"><br>');
+                        // }
                         htmlArr.push('</td>');
 
                         htmlArr.push('<td>');
@@ -252,6 +259,6 @@
 
 
 </table>
-
+<a href="main.html"><input type="button" value="Back"></a>
 </body>
 </html>

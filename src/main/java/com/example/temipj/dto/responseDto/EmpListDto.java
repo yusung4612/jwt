@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmployeeResponseDto {
+public class EmpListDto {
 
 //    private Long id;
 
@@ -19,12 +19,12 @@ public class EmployeeResponseDto {
 
     private String division; // 상위부서
 
-//    private String department;
-//    private String email;
-
     private String extension_number; // 무선 전화 번호
 
     private String mobile_number; // 모바일번호
+
+//    private String email;
+//    private String department;
 
     private String enabled;
 

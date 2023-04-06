@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <title>직원 List</title>
+
+    <style>
+        tr {
+            border: 1px solid #444444;
+        }
+
+        th {
+            border: 1px solid #444444;
+        }
+
+        td {
+            border: 1px solid #444444;
+        }
+
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            // 전체 직원 조회
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: "http://localhost:8080/api/employees/all",
+                data: JSON.stringify,
+                dataType: 'json',
+                success: function (response) {
+                    let list = response.employee;
+                    let htmlArr = [];
+                    for (let i = 0, length = list.length; i < length; i++) {
+                        let item = list[i];
+                        let cnt = i + 1;
+                        htmlArr.push('<tr>');
+
+                        htmlArr.push('<td>');
+                        htmlArr.push('<label class="Number" data-id="' + item.id + '">' + cnt + '</label><br>');
+                        htmlArr.push('</td>');
+
+                        htmlArr.push('<td>');
+                        htmlArr.push('<label class="employee" data-id="' + item.id + '">' + item.name + '</label><br>');
+                        htmlArr.push('</td>');
+
+                        htmlArr.push('<td>');
+                        htmlArr.push('<label class="employee" data-id="' + item.id + '">' + item.division + '</label><br>');
+                        htmlArr.push('</td>');
+
+                        htmlArr.push('<td>');
+                        htmlArr.push('<label class="employee" data-id="' + item.id + '">' + item.department + '</label><br>');
+                        htmlArr.push('</td>');
+
+                        htmlArr.push('<td>');
+                        htmlArr.push('<label class="employee" data-id="' + item.id + '">' + item.birth + '</label><br>');
+                        htmlArr.push('</td>');
+                        htmlArr.push('<td>');
+                        htmlArr.push('<label class="employee" data-id="' + item.id + '">' + item.extension_number + '</label><br>');
+                        htmlArr.push('</td>');
+                        htmlArr.push('<td>');
+                        htmlArr.push('<label class="employee" data-id="' + item.id + '">' + item.mobile_number + '</label><br>');
+                        htmlArr.push('</td>');
+                        htmlArr.push('<td>');
+                        htmlArr.push('<label class="employee" data-id="' + item.id + '">' + item.email + '</label><br>');
+                        htmlArr.push('</td>');
+
+                        // htmlArr.push('<td>');
+                        // htmlArr.push('<button type="button" class="employeeUpdate" id="employeeUpdate' + item.id + '" value="' + item.id + '">수정<br>');
+                        // htmlArr.push('</td>');
+                        //
+                        // htmlArr.push('<td>');
+                        // htmlArr.push('<button type="button" class="employeeDelete" id="employeeDelete' + item.id + '" value="' + item.id + '">삭제<br>');
+                        // htmlArr.push('</td>');
+
+                        htmlArr.push('</tr>');
+                    }
+
+                    $('#tbodyEmployeeAll').html(htmlArr.join(''));
+                    console.log(response);
+
+                },
+                error: function (e) {
+                    alert("Error: " + e.responseText);
+                }
+            });
+
+            // 직원 검색
+            $(document).ready(function () {
+                $("#searchEmpForm").submit(function (event) {
+                    event.preventDefault(); // 폼 전송 방지
+
+                    let keyword = $("#keywordInput").val(); // 검색어 가져오기
+                    // var keyword = $("#searchKeyword").val(); // 검색어 가져오기
+
+                    $.ajax({
+                        type: "GET",
+                        contentType: "application/json; charset=utf-8",
+                        url: "http://localhost:8080/api/employees/search?keyword=" + keyword,
+                        data: JSON.stringify,
+                        // data: { keyword: keyword }, // 검색어를 URL parameter로 전달
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.success === true) {
+                                // 검색 결과를 출력하는 부분
+                                let searchResultTableBody = $("#searchResultTable tbody");
+                                searchResultTableBody.empty(); // 기존 검색 결과 삭제
+
+                                for (let i = 0; i < response.data.length; i++) {
+                                    let emp = response.data[i];
+                                    let row = $("<tr></tr>");
+
+                                    row.append($("<td></td>").text(emp.name));
+                                    row.append($("<td></td>").text(emp.division));
+                                    row.append($("<td></td>").text(emp.department));
+                                    row.append($("<td></td>").text(emp.birth));
+                                    row.append($("<td></td>").text(emp.extension_number));
+                                    row.append($("<td></td>").text(emp.mobile_number));
+                                    row.append($("<td></td>").text(emp.email));
+
+                                    searchResultTableBody.append(row);
+                                }
+                            } else {
+                                alert('다시 시도해주세요.')
+                            }
+                        },
+                        error: function (e) {
+                            alert("Error: " + e.responseText);
+                        }
+                    });
+                });
+            });
+        });
+
+
+        //                     if (response.success === true) {
+        //                         alert("검색 성공");
+        //                         // window.location.href = 'http://localhost:8080/login.html';
+        //                     } else {
+        //                         alert('다시 시도해주세요.')
+        //                     }
+        //                 },
+        //                 error: function (e) {
+        //                     alert("Error: " + e.responseText);
+        //                 }
+        //             });
+        //         });
+        //     });
+        // });
+
+    </script>
+
+</head>
+<body>
+
+<form id="searchEmpForm" action="">
+    <input type="text" name="searchKeyword" id="keywordInput"
+           style="border: 0px; margin-left: 30%; margin-top: 5%"
+           field="{keyword}" placeholder="검색어를 입력하세요"/>
+
+    <!--        검색 버튼-->
+    <button type="submit" style="border: 0; background-color: white">🔍</button>
+</form>
+
+<div id="searchResult"></div>
+
+<table id="searchResultTable">
+    <thead>
+    <tr>
+        <th>이름</th>
+        <th>상위부서</th>
+        <th>하위부서</th>
+        <th>생일</th>
+        <th>유선전화번호</th>
+        <th>모바일번호</th>
+        <th>이메일</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+
+<h1 style="margin-left: 25%; margin-top: 5%"> < 직원 전체 목록 > </h1>
+<table style="margin-left: 20%; margin-top: 2%">
+
+    <thead>
+    <td>
+    <th>이름</th>
+    <th>상위부서</th>
+    <th>하위부서</th>
+    <th>생일</th>
+    <th>유선전화번호</th>
+    <th>모바일번호</th>
+    <th>이메일</th>
+    </td>
+    </thead>
+    <tbody id="tbodyEmployeeAll">
+    </tbody>
+</table>
+<a href="main.html"><input type="button" value="Back"></a>
+
+</body>
+</html>

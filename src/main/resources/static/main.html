@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./main.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -116,19 +117,19 @@
                             // htmlArr.push('<label for="employee' + item.id + '">' + item.name + '</label>');
                             htmlArr.push('</td>');
 
-                            htmlArr.push('<td>');
+                            htmlArr.push('<td>이름');
                             htmlArr.push('<label class="employee" data-id="' + item.id + '">' + item.name + '</label><br>');
                             htmlArr.push('</td>');
-                            htmlArr.push('<td>');
+                            htmlArr.push('<td>생일');
                             htmlArr.push('<label class="employee" data-id="' + item.id + '">' + item.birth + '</label><br>');
                             htmlArr.push('</td>');
-                            htmlArr.push('<td>');
+                            htmlArr.push('<td>유선전화');
                             htmlArr.push('<label class="employee" data-id="' + item.id + '">' + item.extension_number + '</label><br>');
                             htmlArr.push('</td>');
-                            htmlArr.push('<td>');
+                            htmlArr.push('<td>모바일');
                             htmlArr.push('<label class="employee" data-id="' + item.id + '">' + item.mobile_number + '</label><br>');
                             htmlArr.push('</td>');
-                            htmlArr.push('<td>');
+                            htmlArr.push('<td>이메일');
                             htmlArr.push('<label class="employee" data-id="' + item.id + '">' + item.email + '</label><br>');
                             htmlArr.push('</td>');
 
@@ -140,17 +141,8 @@
                             htmlArr.push('<button type="button" class="employeeDelete" id="employeeDelete' + item.id + '" value="' + item.id + '">삭제<br>');
                             htmlArr.push('</td>');
 
-                            // htmlArr.push('<td>');
-                            // htmlArr.push('<button type="button" class="employeeRegister" id="employeeRegister">직원등록<br>');
-                            // htmlArr.push('</td>');
-
-                            // htmlArr.push('<td>' + item.employee + '</td>');
-
                             htmlArr.push('</tr>');
                         }
-                        // htmlArr.push('<td>');
-                        // htmlArr.push('<button type="button" class="employeeRegister" id="employeeRegister">직원등록<br>');
-                        // htmlArr.push('</td>');
 
                         $('#tbodyEmployee').html(htmlArr.join(''));
                         console.log(response);
@@ -162,7 +154,7 @@
                 });
 
 
-                // =========직원 등록 테스트===================================================
+                // 직원 등록
                 $(document).ready(function () {
                     $(document).on('click', '.employeeRegister', function () {
                         let departmentId = $(this).attr('data-id');
@@ -181,13 +173,9 @@
                         // modal 창 열기
                         $("#employeeRegisterModal").modal("show");
                     });
-                    // 직원 등록
+
                     $("#popupRegisterButton").on('click', function () {
-                        // let departmentId = $("#popupDepartmentId").val();
-                        // if (!departmentId) {
-                        //     alert("ID is undefined.");
-                        //     return;
-                        // }
+
                         let data = {
                             name: $("#popupName1").val(),
                             birth: $("#popupBirth1").val(),
@@ -220,10 +208,9 @@
                     });
 
                 });
-                // ============================================================
 
 
-                // 체크하면 직원 -> 리더
+                // 체크하면 리더 지정
                 $(document).on('click', '.choiceEmployee', function () {
                     let employeeId = $(this).val();
                     if (!employeeId) {
@@ -272,16 +259,16 @@
                                 if (response.success === true) {
                                     console.log(response);
                                     let employee = response.data;
-                                // 팝업창에 직원 정보 채우기
-                                $("#popupName").val(employee.name);
-                                $("#popupBirth").val(employee.birth);
-                                $("#popupExtension_number").val(employee.extension_number);
-                                $("#popupMobile_number").val(employee.mobile_number);
-                                $("#popupEmail").val(employee.email);
-                                // 직원 수정 버튼에 employeeId 저장
-                                $("#popupEmployeeId").val(employeeId);
-                                // 팝업창 열기
-                                $("#employeeUpdateModal").modal("show");
+                                    // 팝업창에 직원 정보 채우기
+                                    $("#popupName").val(employee.name);
+                                    $("#popupBirth").val(employee.birth);
+                                    $("#popupExtension_number").val(employee.extension_number);
+                                    $("#popupMobile_number").val(employee.mobile_number);
+                                    $("#popupEmail").val(employee.email);
+                                    // 직원 수정 버튼에 employeeId 저장
+                                    $("#popupEmployeeId").val(employeeId);
+                                    // 팝업창 열기
+                                    $("#employeeUpdateModal").modal("show");
                                 }
                             },
                             error: function (e) {
@@ -358,49 +345,8 @@
             });
 
 
-        // 5. 리더 리스트 불러오기
-        // $(document).ready(function () {
-        // $(document).on('click', '.employee', function () {
-        //     let selectedEmployeeIds = $('.employee:checked').map(function () {
-        //         return $(this).val();
-        //     }).get();
-        //
-        //     if (selectedEmployeeIds.length > 0) {
-        //         $.ajax({
-        //             type: "GET",
-        //             contentType: "application/json; charset=utf-8",
-        //             url: "http://localhost:8080/api/employees/leader/all",
-        //             dataType: 'json',
-        //             success: function (response) {
-        //
-        //                 let list = response.employee.filter(function (item) {
-        //                     return selectedEmployeeIds.includes(item.employeeId.toString());
-        //                 });
-        //
-        //                 // Retrieve all employees whose "leader" value is true
-        //                 let leaderList = response.employee.filter(function (item) {
-        //                     return item.leader === true;
-        //                 });
-        //
-        //                 let htmlArr = [];
-        //                 for (let i = 0, length = leaderList.length; i < length; i++) {
-        //                     let item = leaderList[i];
-        //                     htmlArr.push('<tr>');
-        //                     htmlArr.push('<td>' + item.leader + '</td>');
-        //                     htmlArr.push('</tr>');
-        //                 }
-        //
-        //                 $('#tbodyLeader').html(htmlArr.join(''));
-        //
-        //             },
-        //             error: function (e) {
-        //                 alert("Error: " + e.responseText);
-        //             }
-        //         });
-        //     } else {
-        //         $('#tbodyLeader').empty();
-        //     }
-        // });
+            // 5. 리더 리스트 불러오기
+
         });
 
 
@@ -409,20 +355,12 @@
 
             $("#deleteAdminForm").submit(function (event) {
                 event.preventDefault(); // 폼 전송 방지
-                // $('.employeeRegister').attr('data-id',departmentId);
-                // $('.deleteAdmin').attr('data-id',adminId);
                 // 관리자 ID 조회
                 let adminId = localStorage.getItem('adminId'); // 로컬 스토리지에서 adminId 가져오기
-                // let adminId = $(this).attr('data-id');
                 if (!adminId) {
                     alert("ID is undefined.");
                     return;
                 }
-
-                // const formData = {
-                //     adminId: $("#adminId").val(),
-                // };
-
                 $.ajax({
                     type: "DELETE",
                     contentType: "application/json; charset=utf-8",
@@ -437,7 +375,7 @@
                     success: function(response) {
                         if (response.success === true) {
                             alert("회원탈퇴가 완료되었습니다.");
-                            // window.location.href = 'http://localhost:8080/login.html';
+                            window.location.href = 'http://localhost:8080/login.html';
                         } else {
                             alert('다시 시도해주세요.')
                         }
@@ -449,20 +387,37 @@
             });
         });
 
+        // 로그아웃
+        $(document).ready(function () {
+
+            $("#logoutForm").submit(function (event) {
+                event.preventDefault(); // 폼 전송 방지
+                // 관리자 ID 조회
+                localStorage.removeItem('adminId'); // 로컬 스토리지에서 adminId 가져오기
+                window.location.href = 'http://localhost:8080/login.html';
+            });
+        });
+
 
     </script>
 </head>
 <body>
 <p>메인 화면</p>
-
+<!-- header -->
+<div class="main-image">
 <form id="deleteAdminForm" action="">
-<!--    <a href="login.html"><button id="deleteAdmin" class="deleteAdmin">회원탈퇴</button></a>-->
-    <button id="btn-save" class="deleteAdmin" id="deleteAdmin" >회원탈퇴</button>
+<!--    <button id="btn-save" class="deleteAdmin" id="deleteAdmin" >회원탈퇴</button>-->
+    <button class="deleteAdmin" id="deleteAdmin">회원탈퇴</button>
 </form>
 <form id="logoutForm">
-    <!--    <button id="btn-logout">로그아웃</button>-->
-    <a href="login.html"><input type="button" value="로그아웃"></a>
+<!--    <button id="btn-save1" class="logoutAdmin" id="logoutAdmin" >로그아웃</button>-->
+    <button class="logout" id="logout">로그아웃</button>
 </form>
+<!--    메인 이미지-->
+</div>
+
+<!-- content -->
+<div class="content-title"><h2>Department</h2></div>
 
 <table>
     <tr>
@@ -497,23 +452,22 @@
                 </thead>
                 <tbody id="tbodyEmployee">
                 </tbody>
-                                <tbody id="tbodyEmployeeRegister">
-                                <input type="button" class="employeeRegister" id="employeeRegister" value="직원 등록">
-                                </tbody>
+                <tbody id="tbodyEmployeeRegister">
+                <input type="button" class="employeeRegister" id="employeeRegister" value="직원 등록">
+                </tbody>
                 </td>
-                <td>
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>리더목록</th>
-                        </tr>
-                        </thead>
-                        <tbody id="tbodyLeader">
-                        </tbody>
-                    </table>
-                </td>
+<!--                <td>-->
+<!--                    <table>-->
+<!--                        <thead>-->
+<!--                        <tr>-->
+<!--                            <th>리더목록</th>-->
+<!--                        </tr>-->
+<!--                        </thead>-->
+<!--                        <tbody id="tbodyLeader">-->
+<!--                        </tbody>-->
+<!--                    </table>-->
+<!--                </td>-->
             </table>
-
 
             <!-- 모달 창 HTML 구조 -->
             <div class="modal fade" id="employeeUpdateModal" tabindex="-1" role="dialog"
@@ -604,8 +558,28 @@
 
 </table>
 
+<table>
+    <td>
+        <thead>
+        <tr>
+<!--            <th>전체 직원 목록</th>-->
+            < 전체 직원 목록 >
+        </tr>
+        </thead>
+        <tbody id="tbodyAllEmployee">
+        </tbody>
+    </td>
+</table>
+
 <form>
-    <a href="newsList.html"><input type="button" class="btn btn-primary" value="뉴스페이지"></a>
+
+<!--    <div class="goto-news">-->
+<!--        <button class="goto-news-botton" onclick="location.href='newsList.html'"><h4>뉴스페이지 바로가기</h4></button>-->
+<!--    </div>-->
+
+    <div class="goto-news">
+    <a href="newsList.html"><input type="button" class="goto-news-botton" value="뉴스페이지"></a>
+    </div>
 </form>
 
 </body>

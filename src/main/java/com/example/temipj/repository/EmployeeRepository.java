@@ -18,8 +18,13 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     // 직원 검색
     @Query(value = "SELECT p FROM Employee p WHERE p.name LIKE %:keyword% OR p.birth LIKE %:keyword% " +
             "OR p.extension_number LIKE %:keyword% OR p.mobile_number LIKE %:keyword% " +
-            "OR p.email LIKE %:keyword% ORDER BY p.createdAt desc")
+            "OR p.email LIKE %:keyword% OR p.department.division.division LIKE %:keyword% ORDER BY p.createdAt desc")
     List <Employee> searchEmp(@Param("keyword") String keyword);
+
+//    @Query(value = "SELECT p FROM Employee p WHERE p.name LIKE %:keyword% OR p.birth LIKE %:keyword% " +
+//            "OR p.extension_number LIKE %:keyword% OR p.mobile_number LIKE %:keyword% " +
+//            "OR p.email LIKE %:keyword% ORDER BY p.createdAt desc")
+//    List <Employee> searchEmp(@Param("keyword") String keyword);
 
 //    @Query(value = "SELECT p FROM Employee p WHERE p.leader = 'true'")
 //    List<Employee> findAllLeader();
@@ -29,15 +34,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
 //    @Query(value = "SELECT a FROM Employee a LEFT JOIN Leader b ON a.id = b.employee.id WHERE a.leader = 'true'")
 //    List<Employee> findAllLeader();
-
-    @Query( nativeQuery = true,
-            value = "select a.*  \n" +
-                    "      from Employee a \n" +
-                    "inner join department b on a.department_id = b.id \n" +
-                    "inner join division c on b.division_id = c.id \n" +
-                    "      where a.leader = 'true' \n" +
-                    "        and c.division = :paramDivision ")
-    List<Employee> test(@Param("paramDivision") String paramDivision);
 
     // 전체 리더 조회
     @Query(value = "SELECT a,b,c " +

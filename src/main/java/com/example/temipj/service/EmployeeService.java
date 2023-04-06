@@ -5,10 +5,7 @@ import com.example.temipj.domain.employee.Department;
 import com.example.temipj.domain.employee.Division;
 import com.example.temipj.domain.employee.Employee;
 import com.example.temipj.dto.requestDto.EmployeeRequestDto;
-import com.example.temipj.dto.responseDto.EmpResponseDto;
-import com.example.temipj.dto.responseDto.EmployeeResponseDto;
-import com.example.temipj.dto.responseDto.ResponseDto;
-import com.example.temipj.dto.responseDto.TestResponse;
+import com.example.temipj.dto.responseDto.*;
 import com.example.temipj.exception.CustomException;
 import com.example.temipj.exception.ErrorCode;
 import com.example.temipj.jwt.TokenProvider;
@@ -98,7 +95,7 @@ public class EmployeeService {
         }
     }
 
-    //전체 직원 조회
+    // 전체 직원 조회 화면용
     @Transactional
     public EmpResponseDto<?> getEmployeeAll(UserDetailsImpl userDetails) {
 
@@ -111,6 +108,33 @@ public class EmployeeService {
             employeeResponseDtoList.add(EmployeeResponseDto.builder()
                     .name(employee.getName())
                     .birth(employee.getBirth())
+//                    .department(employee.getDepartment().getDepartment())
+                    .extension_number(employee.getExtension_number())
+                    .mobile_number(employee.getMobile_number())
+                    .enabled(enabledCheck(userDetails))
+                    .division(department.getDivision().getDivision())
+//                    .email(employee.getEmail())
+                    .build());
+        }
+        Employee version = employeeRepository.findTop1ByOrderByModifiedAtDesc();
+        String recentVersion = version.getModifiedAt().format((DateTimeFormatter.ofPattern("yyyyMMdd")));
+
+        return EmpResponseDto.version(recentVersion, employeeResponseDtoList);
+    }
+
+    // 전체 직원 조회 Temi용
+    @Transactional
+    public EmpResponseDto<?> getEmployeeAllList(UserDetailsImpl userDetails) {
+
+        List<Employee> employeeList = employeeRepository.findAllByOrderByCreatedAtDesc();
+        List<EmpListDto> empListDtoList = new ArrayList<>();
+
+        for (Employee employee : employeeList) {
+            Department department = employee.getDepartment();
+
+            empListDtoList.add(EmpListDto.builder()
+                    .name(employee.getName())
+                    .birth(employee.getBirth())
                     .extension_number(employee.getExtension_number())
                     .mobile_number(employee.getMobile_number())
                     .enabled(enabledCheck(userDetails))
@@ -120,7 +144,7 @@ public class EmployeeService {
         Employee version = employeeRepository.findTop1ByOrderByModifiedAtDesc();
         String recentVersion = version.getModifiedAt().format((DateTimeFormatter.ofPattern("yyyyMMdd")));
 
-        return EmpResponseDto.version(recentVersion, employeeResponseDtoList);
+        return EmpResponseDto.version(recentVersion, empListDtoList);
     }
 
     //특정 직원 조회
@@ -196,12 +220,18 @@ public class EmployeeService {
     public ResponseDto<?> searchEmployee(String keyword, UserDetailsImpl userDetails) {
         List<Employee> employeeList = employeeRepository.searchEmp(keyword);
         // 검색된 항목 담아줄 리스트 생성
-        List<EmployeeResponseDto> employeeListResponseDtoList = new ArrayList<>();
+        List<EmpListDto> employeeListResponseDtoList = new ArrayList<>();
         //for문을 통해서 List에 담아주기
         for (Employee employee : employeeList) {
-            employeeListResponseDtoList.add(EmployeeResponseDto.builder()
+            employeeListResponseDtoList.add(EmpListDto.builder()
 //                            .id(employee.getId())
-                    .name(employee.getName()).birth(employee.getBirth()).extension_number(employee.getExtension_number()).mobile_number(employee.getMobile_number())
+                    .name(employee.getName())
+                    .birth(employee.getBirth())
+                    .extension_number(employee.getExtension_number())
+                    .mobile_number(employee.getMobile_number())
+                    .division(employee.getDepartment().getDivision().getDivision())
+                    .department(department.getDepartment())
+                    .email(employee.getEmail())
 //                            .enabled(enabledCheck(employee, userDetails))
                     .enabled(enabledCheck(userDetails)).build());
         }

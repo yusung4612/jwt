@@ -36,10 +36,16 @@ public class EmployeeController {
         return employeeService.createEmp(departmentId , employeeRequestDto, request);
     }
 
-    // 전체 직원 조회
+    // 전체 직원 조회 화면용
     @GetMapping(value = "/all")
     public EmpResponseDto<?> getAll(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return employeeService.getEmployeeAll(userDetails);
+    }
+
+    // 전체 직원 조회 temi용
+    @GetMapping(value = "/list/all")
+    public EmpResponseDto<?> getListAll(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return employeeService.getEmployeeAllList(userDetails);
     }
 
     // 특정 직원 조회
