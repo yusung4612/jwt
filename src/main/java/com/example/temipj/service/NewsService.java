@@ -81,6 +81,7 @@ public class NewsService {
                             .message(news.getMessage())
                             .author(news.getAuthor())
                             .end_date(news.getEnd_date())
+                            .choiceNews(news.getChoiceNews())
                             .build());
         }
         return ResponseDto.success(NewsResponseDtoList);

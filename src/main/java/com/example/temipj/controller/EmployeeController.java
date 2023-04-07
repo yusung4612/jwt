@@ -43,7 +43,7 @@ public class EmployeeController {
     }
 
     // 전체 직원 조회 temi용
-    @GetMapping(value = "/list/all")
+    @GetMapping(value = "/temi/list")
     public EmpResponseDto<?> getListAll(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return employeeService.getEmployeeAllList(userDetails);
     }

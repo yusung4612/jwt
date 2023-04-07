@@ -323,24 +323,26 @@
                         alert("ID is undefined.");
                         return;
                     }
-                    $.ajax({
-                        type: "DELETE",
-                        contentType: "application/json; charset=utf-8",
-                        url: "http://localhost:8080/api/employees/delete/" + employeeId,
-                        dataType: 'json',
-                        success: function (response) {
-                            if (null !== response) {
-                                console.log(response);
-                                alert('삭제되었습니다.');
-                                location.reload();
-                            } else {
-                                alert('삭제 실패');
+                    if (confirm("정말 삭제하시겠습니까?")) {
+                        $.ajax({
+                            type: "DELETE",
+                            contentType: "application/json; charset=utf-8",
+                            url: "http://localhost:8080/api/employees/delete/" + employeeId,
+                            dataType: 'json',
+                            success: function (response) {
+                                if (null !== response) {
+                                    console.log(response);
+                                    alert('삭제되었습니다.');
+                                    location.reload();
+                                } else {
+                                    alert('삭제 실패');
+                                }
+                            },
+                            error: function (e) {
+                                alert("Error: " + e.responseText);
                             }
-                        },
-                        error: function (e) {
-                            alert("Error: " + e.responseText);
-                        }
-                    });
+                        });
+                    }
                 });
             });
 
@@ -469,7 +471,7 @@
 <!--                </td>-->
             </table>
 
-            <!-- 모달 창 HTML 구조 -->
+            <!-- 직원 수정 모달 창 HTML 구조 -->
             <div class="modal fade" id="employeeUpdateModal" tabindex="-1" role="dialog"
                  aria-labelledby="employeeUpdateModalLabel"
                  aria-hidden="true">

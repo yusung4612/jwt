@@ -31,8 +31,10 @@
                         if (response.success === true) {
                             // localStorage.setItem('Refresh_Token', response.token);
                             localStorage.setItem('adminId', response.adminId); // adminId 저장
-                            alert("로그인 되었습니다.");
+                            // alert("로그인 되었습니다.");
                             window.location.href = 'http://localhost:8080/main.html';
+                        } else {
+                            alert("비밀번호가 일치하지 않습니다.");
                         }
                     },
                     error: function(e) {
@@ -40,7 +42,21 @@
                     }
                 });
             });
+
+            // password 입력 시 * 모양으로 뜨도록 수정
+            $("#password").on("keyup", function() {
+                const passwordInput = $("#password");
+                const passwordValue = passwordInput.val();
+                let maskedPassword = "";
+
+                for (let i = 0; i < passwordValue.length; i++) {
+                    maskedPassword += "*";
+                }
+
+                passwordInput.val(maskedPassword);
+            });
         });
+
 
     </script>
 

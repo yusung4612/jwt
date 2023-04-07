@@ -20,4 +20,6 @@ public class NewsResponseDto {
 
     private LocalDate end_date;
 
+    private String choiceNews;
+
 }

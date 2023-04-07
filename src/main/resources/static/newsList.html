@@ -5,13 +5,14 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./main.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
-    <title>Title</title>
+    <title>뉴스</title>
 
     <style>
         tr {
@@ -29,6 +30,7 @@
     </style>
     <script>
         $(document).ready(function () {
+            let selectedNews = []; // 선택된 뉴스 ID를 저장하는 배열
             // 1. 뉴스 전체 리스트 조회
             $.ajax({
                 type: "GET",
@@ -42,17 +44,25 @@
                     for (let i = 0, length = list.length; i < length; i++) {
                         let item = list[i];
                         let cnt = i + 1;
-                        // console.log(i, item.choiceNews)
+
                         htmlArr.push('<tr>');
                         htmlArr.push('<td>');
                         htmlArr.push('<label class="newsNumber" data-id="' + item.id + '">' + cnt + '</label><br>');
                         htmlArr.push('</td>');
 
+                        // htmlArr.push('<td>');
+                        // htmlArr.push('<button class="choiceNews" id="choiceNews' + item.id + '" value="' + item.id + '">' +
+                        //     '<label class="news" data-id="' + item.id + '">' + item.choiceNews + '</label></button><br>');
+                        // htmlArr.push('</td>');
+
                         htmlArr.push('<td>');
-                        // if(item.choiceNews){
-                        //     htmlArr.push('<input type="checkbox" checked class="choiceNews" id="choiceNews' + item.id + '" value="' + item.id + '"><br>');
-                        // }else {
-                        htmlArr.push('<input type="checkbox" class="choiceNews" id="choiceNews' + item.id + '" value="' + item.id + '"><br>');
+                        if (item.choiceNews) {
+                            htmlArr.push('<button class="choiceNews" id="choiceNews' + item.id + '" value="' + item.id + '" style="background-color:black;color:blue;">' +
+                                '<label class="news" data-id="' + item.id + '">' + item.choiceNews + '</label></button><br>');
+                        }
+                        // else {
+                        //     htmlArr.push('<button class="choiceNews" id="choiceNews' + item.id + '" value="' + item.id + '" style="background-color:black;color:blue;">' +
+                        //         '<label class="news" data-id="' + item.id + '">' + item.choiceNews + '</label></button><br>');
                         // }
                         htmlArr.push('</td>');
 
@@ -75,7 +85,6 @@
                         htmlArr.push('</tr>');
                     }
 
-
                     $('#tbodyNews').html(htmlArr.join(''));
                     console.log(response);
 
@@ -84,24 +93,61 @@
                     alert("Error: " + e.responseText);
                 }
             });
+        });
+
+        // 선택하면 노출될 뉴스로 지정
+        $(document).on('click', '.choiceNews', function () {
+            let newsId = $(this).val();
+            if (!newsId) {
+                alert("ID is undefined.");
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "http://localhost:8080/api/news/choice/" + newsId,
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success === true) {
+                        location.reload();
+                        console.log(response);
+
+                    }
+                },
+                error: function (e) {
+                    alert("Error: " + e.responseText);
+                }
+            });
+        });
 
 
-            // 체크하면 노출될 뉴스로 지정
-            // $(document).ready(function () {
-            $(document).on('click', '.choiceNews', function () {
+        // 뉴스 수정
+        $(document).ready(function () {
+            // newsUpdate 버튼 클릭 시 팝업창 띄우기
+            $(document).on('click', '.newsUpdate', function () {
                 let newsId = $(this).val();
                 if (!newsId) {
                     alert("ID is undefined.");
                     return;
                 }
+                // 뉴스 정보를 가져와서 팝업창에 노출
                 $.ajax({
-                    type: "POST",
+                    type: "GET",
                     contentType: "application/json; charset=utf-8",
-                    url: "http://localhost:8080/api/news/choice/" + newsId,
+                    url: "http://localhost:8080/api/news/" + newsId,
                     dataType: 'json',
                     success: function (response) {
                         if (response.success === true) {
                             console.log(response);
+                            let news = response.data;
+                            // 팝업창에 뉴스 정보 채우기
+                            $("#popupMessage").val(news.message);
+                            $("#popupAuthor").val(news.author);
+                            // 뉴스 수정 버튼에 newsId 저장
+                            $("#popupNewsId").val(newsId);
+                            // 팝업창 열기
+                            $("#newsUpdateModal").modal("show");
                         }
                     },
                     error: function (e) {
@@ -110,83 +156,52 @@
                 });
             });
 
-
-            $(document).ready(function () {
-                // newsUpdate 버튼 클릭 시 팝업창 띄우기
-                $(document).on('click', '.newsUpdate', function () {
-                    let newsId = $(this).val();
-                    if (!newsId) {
-                        alert("ID is undefined.");
-                        return;
-                    }
-                    // 뉴스 정보를 가져와서 팝업창에 노출
-                    $.ajax({
-                        type: "GET",
-                        contentType: "application/json; charset=utf-8",
-                        url: "http://localhost:8080/api/news/" + newsId,
-                        dataType: 'json',
-                        success: function (response) {
-                            if (response.success === true) {
-                                console.log(response);
-                                let news = response.data;
-                                // 팝업창에 뉴스 정보 채우기
-                                $("#popupMessage").val(news.message);
-                                $("#popupAuthor").val(news.author);
-                                // 뉴스 수정 버튼에 newsId 저장
-                                $("#popupNewsId").val(newsId);
-                                // 팝업창 열기
-                                $("#newsUpdateModal").modal("show");
-                            }
-                        },
-                        error: function (e) {
-                            alert("Error: " + e.responseText);
-                        }
-                    });
-                });
-
-                // 뉴스 수정
-                $("#popupUpdateButton").on('click', function () {
-                    let newsId = $("#popupNewsId").val();
-                    if (!newsId) {
-                        alert("ID is undefined.");
-                        return;
-                    }
-                    let data = {
-                        message: $("#popupMessage").val(),
-                        author: $("#popupAuthor").val(),
-                    };
-                    $.ajax({
-                        type: "PUT",
-                        contentType: "application/json; charset=utf-8",
-                        url: "http://localhost:8080/api/news/update/" + newsId,
-                        data: JSON.stringify(data),
-                        dataType: 'json',
-                        success: function (response) {
-                            if (response.success === true) {
-                                console.log(response);
-                                alert('수정이 완료되었습니다.');
-                                // 팝업창 닫기
-                                $("#newsUpdateModal").modal("hide");
-                                // 화면 새로고침
-                                location.reload();
-                            } else {
-                                alert('실패');
-                            }
-                        },
-                        error: function (e) {
-                            alert("Error: " + e.responseText);
-                        }
-                    });
-                });
-            });
-
-            // 뉴스 삭제
-            $(document).on('click', '.newsDelete', function () {
-                let newsId = $(this).val();
+            // 뉴스 수정
+            $("#popupUpdateButton").on('click', function () {
+                let newsId = $("#popupNewsId").val();
                 if (!newsId) {
                     alert("ID is undefined.");
                     return;
                 }
+                let data = {
+                    message: $("#popupMessage").val(),
+                    author: $("#popupAuthor").val(),
+                };
+                $.ajax({
+                    type: "PUT",
+                    contentType: "application/json; charset=utf-8",
+                    url: "http://localhost:8080/api/news/update/" + newsId,
+                    data: JSON.stringify(data),
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success === true) {
+                            console.log(response);
+                            alert('수정이 완료되었습니다.');
+                            // 팝업창 닫기
+                            $("#newsUpdateModal").modal("hide");
+                            // 화면 새로고침
+                            location.reload();
+                        } else {
+                            alert('실패');
+                        }
+                    },
+                    error: function (e) {
+                        alert("Error: " + e.responseText);
+                    }
+                });
+            });
+        });
+
+        // 뉴스 삭제
+        $(document).on('click', '.newsDelete', function () {
+
+            let newsId = $(this).val();
+            if (!newsId) {
+                alert("ID is undefined.");
+                return;
+            }
+
+            if (confirm('정말 삭제하시겠습니까?')) {
                 $.ajax({
                     type: "DELETE",
                     contentType: "application/json; charset=utf-8",
@@ -195,7 +210,7 @@
                     success: function (response) {
                         if (response.success === true) {
                             console.log(response);
-                            alert('삭제되었습니다.');
+                            // alert('삭제되었습니다.');
                             location.reload();
                         } else {
                             alert('삭제 실패');
@@ -205,20 +220,101 @@
                         alert("Error: " + e.responseText);
                     }
                 });
-            });
+            }
+
 
         });
+
+        // 뉴스 검색
+        $(document).ready(function () {
+
+            $("#searchResultTable").hide();
+
+            $("#searchNewsForm").submit(function (event) {
+                event.preventDefault(); // 폼 전송 방지
+
+                let keyword = $("#keywordInput").val(); // 검색어 가져오기
+                // var keyword = $("#searchKeyword").val(); // 검색어 가져오기
+
+                $.ajax({
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    url: "http://localhost:8080/api/news/search?keyword=" + keyword,
+                    data: JSON.stringify,
+                    // data: { keyword: keyword }, // 검색어를 URL parameter로 전달
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success === true) {
+                            // 검색 결과를 출력하는 부분
+                            let searchResultTableBody = $("#searchResultTable tbody");
+                            searchResultTableBody.empty(); // 기존 검색 결과 삭제
+
+                            if (response.data.length > 0) {
+                                for (let i = 0; i < response.data.length; i++) {
+                                    let news = response.data[i];
+                                    let row = $("<tr></tr>");
+
+                                    row.append($("<td></td>").text(i + 1));
+                                    row.append($("<td></td>").text(news.message));
+                                    row.append($("<td></td>").text(news.author));
+
+                                    searchResultTableBody.append(row);
+                                }
+                                // 검색결과를 보이기
+                                $("#searchResultTable").show();
+                            } else {
+                                alert('검색 결과가 없습니다.');
+                            }
+                        } else {
+                            alert('다시 시도해주세요.')
+                        }
+                    },
+                    error: function (e) {
+                        alert("Error: " + e.responseText);
+                    }
+                });
+            });
+        });
+
 
     </script>
 
 </head>
 <body>
 
-<table>
+<form id="searchNewsForm" action="">
+    <input type="text" name="searchKeyword" id="keywordInput"
+           style="border: 0px; margin-left: 30%; margin-top: 5%"
+           field="{keyword}" placeholder="검색어를 입력하세요"/>
+    <!--검색 버튼-->
+    <button type="submit" style="border: 0; background-color: white">🔍</button>
+</form>
+
+<div id="searchResult"></div>
+
+<table id="searchResultTable" style="margin-left: 20%">
     <thead>
     <tr>
-        <th>뉴스게시판</th>
+        <td>
+        <th>뉴스 Message</th>
+        <th>출처&작성자</th>
+        </td>
     </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+
+<h1 style="margin-left: 25%; margin-top: 5%"> < News List > </h1>
+<table style="margin-left: 20%; margin-top: 2%">
+    <thead>
+    <td>
+    <th>체크</th>
+    <th>true만 노출</th>
+    <th>Message</th>
+    <th>출처&작성자</th>
+    </td>
     </thead>
     <tbody id="tbodyNews">
     <a href="newsRegister.html"><input type="button" value="뉴스 등록하기"></a>

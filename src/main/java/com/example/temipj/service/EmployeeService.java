@@ -100,20 +100,20 @@ public class EmployeeService {
     public EmpResponseDto<?> getEmployeeAll(UserDetailsImpl userDetails) {
 
         List<Employee> employeeList = employeeRepository.findAllByOrderByCreatedAtDesc();
-        List<EmployeeResponseDto> employeeResponseDtoList = new ArrayList<>();
+        List<EmpListDto> employeeResponseDtoList = new ArrayList<>();
 
         for (Employee employee : employeeList) {
             Department department = employee.getDepartment();
 
-            employeeResponseDtoList.add(EmployeeResponseDto.builder()
+            employeeResponseDtoList.add(EmpListDto.builder()
                     .name(employee.getName())
                     .birth(employee.getBirth())
-//                    .department(employee.getDepartment().getDepartment())
+                    .department(employee.getDepartment().getDepartment())
                     .extension_number(employee.getExtension_number())
                     .mobile_number(employee.getMobile_number())
                     .enabled(enabledCheck(userDetails))
                     .division(department.getDivision().getDivision())
-//                    .email(employee.getEmail())
+                    .email(employee.getEmail())
                     .build());
         }
         Employee version = employeeRepository.findTop1ByOrderByModifiedAtDesc();
@@ -122,17 +122,17 @@ public class EmployeeService {
         return EmpResponseDto.version(recentVersion, employeeResponseDtoList);
     }
 
-    // 전체 직원 조회 Temi용
+    // 전체 직원 조회 Temi reponse 용
     @Transactional
     public EmpResponseDto<?> getEmployeeAllList(UserDetailsImpl userDetails) {
 
         List<Employee> employeeList = employeeRepository.findAllByOrderByCreatedAtDesc();
-        List<EmpListDto> empListDtoList = new ArrayList<>();
+        List<EmployeeResponseDto> empListDtoList = new ArrayList<>();
 
         for (Employee employee : employeeList) {
             Department department = employee.getDepartment();
 
-            empListDtoList.add(EmpListDto.builder()
+            empListDtoList.add(EmployeeResponseDto.builder()
                     .name(employee.getName())
                     .birth(employee.getBirth())
                     .extension_number(employee.getExtension_number())

@@ -30,6 +30,7 @@
 
     <script>
         $(document).ready(function () {
+
             // 전체 직원 조회
             $.ajax({
                 type: "GET",
@@ -96,6 +97,8 @@
 
             // 직원 검색
             $(document).ready(function () {
+                $("#searchResultTable").hide();
+
                 $("#searchEmpForm").submit(function (event) {
                     event.preventDefault(); // 폼 전송 방지
 
@@ -115,19 +118,26 @@
                                 let searchResultTableBody = $("#searchResultTable tbody");
                                 searchResultTableBody.empty(); // 기존 검색 결과 삭제
 
-                                for (let i = 0; i < response.data.length; i++) {
-                                    let emp = response.data[i];
-                                    let row = $("<tr></tr>");
+                                if (response.data.length > 0) {
+                                    for (let i = 0; i < response.data.length; i++) {
+                                        let emp = response.data[i];
+                                        let row = $("<tr></tr>");
 
-                                    row.append($("<td></td>").text(emp.name));
-                                    row.append($("<td></td>").text(emp.division));
-                                    row.append($("<td></td>").text(emp.department));
-                                    row.append($("<td></td>").text(emp.birth));
-                                    row.append($("<td></td>").text(emp.extension_number));
-                                    row.append($("<td></td>").text(emp.mobile_number));
-                                    row.append($("<td></td>").text(emp.email));
+                                        row.append($("<td></td>").text(i+1));
+                                        row.append($("<td></td>").text(emp.name));
+                                        row.append($("<td></td>").text(emp.division));
+                                        row.append($("<td></td>").text(emp.department));
+                                        row.append($("<td></td>").text(emp.birth));
+                                        row.append($("<td></td>").text(emp.extension_number));
+                                        row.append($("<td></td>").text(emp.mobile_number));
+                                        row.append($("<td></td>").text(emp.email));
 
-                                    searchResultTableBody.append(row);
+                                        searchResultTableBody.append(row);
+                                    }
+                                    // 검색결과를 보이기
+                                    $("#searchResultTable").show();
+                                } else {
+                                    alert('검색 결과가 없습니다.');
                                 }
                             } else {
                                 alert('다시 시도해주세요.')
@@ -142,21 +152,6 @@
         });
 
 
-        //                     if (response.success === true) {
-        //                         alert("검색 성공");
-        //                         // window.location.href = 'http://localhost:8080/login.html';
-        //                     } else {
-        //                         alert('다시 시도해주세요.')
-        //                     }
-        //                 },
-        //                 error: function (e) {
-        //                     alert("Error: " + e.responseText);
-        //                 }
-        //             });
-        //         });
-        //     });
-        // });
-
     </script>
 
 </head>
@@ -167,15 +162,16 @@
            style="border: 0px; margin-left: 30%; margin-top: 5%"
            field="{keyword}" placeholder="검색어를 입력하세요"/>
 
-    <!--        검색 버튼-->
+    <!--검색 버튼-->
     <button type="submit" style="border: 0; background-color: white">🔍</button>
 </form>
 
 <div id="searchResult"></div>
 
-<table id="searchResultTable">
+<table id="searchResultTable" style="margin-left: 25%">
     <thead>
     <tr>
+        <td>
         <th>이름</th>
         <th>상위부서</th>
         <th>하위부서</th>
@@ -183,6 +179,7 @@
         <th>유선전화번호</th>
         <th>모바일번호</th>
         <th>이메일</th>
+        </td>
     </tr>
     </thead>
     <tbody>
@@ -208,6 +205,58 @@
     </tbody>
 </table>
 <a href="main.html"><input type="button" value="Back"></a>
+
+<!--&lt;!&ndash; 직원 수정 모달 창 HTML 구조 &ndash;&gt;-->
+<!--<div class="modal fade" id="employeeUpdateModal" tabindex="-1" role="dialog"-->
+<!--     aria-labelledby="employeeUpdateModalLabel"-->
+<!--     aria-hidden="true">-->
+<!--    <div class="modal-dialog" role="document">-->
+<!--        <div class="modal-content">-->
+<!--            <div class="modal-header">-->
+<!--                <h5 class="modal-title" id="employeeUpdateModalLabel">직원 수정</h5>-->
+<!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                    <span aria-hidden="true">&times;</span>-->
+<!--                </button>-->
+<!--            </div>-->
+<!--            <div class="modal-body">-->
+<!--                <div class="form-group">-->
+<!--                    <label for="popupName">이름</label>-->
+<!--                    <input type="text" class="form-control" id="popupName" placeholder="ex) 홍길동">-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <label for="popupBirth">생일</label>-->
+<!--                    <input type="text" class="form-control" id="popupBirth" placeholder="ex) 0304">-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <label for="popupDivision">상위부서</label>-->
+<!--                    <input type="text" class="form-control" id="popupDivision" placeholder="ex) R&D">-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <label for="popupDepartment">하위부서</label>-->
+<!--                    <input type="text" class="form-control" id="popupDepartment" placeholder="ex) R&D">-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <label for="popupExtension_number">유선 전화 번호</label>-->
+<!--                    <input type="text" class="form-control" id="popupExtension_number" placeholder="ex) 07022223333">-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <label for="popupMobile_number">모바일 번호</label>-->
+<!--                    <input type="text" class="form-control" id="popupMobile_number" placeholder="ex) 01022223333">-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <label for="popupEmail">이메일</label>-->
+<!--                    <input type="text" class="form-control" id="popupEmail" placeholder="ex) gildong@everybot.net">-->
+<!--                </div>-->
+<!--                <input type="hidden" id="popupEmployeeId">-->
+<!--            </div>-->
+<!--            <div class="modal-footer">-->
+<!--                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>-->
+<!--                <button type="button" class="btn btn-primary" id="popupUpdateButton">수정</button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
 
 </body>
 </html>

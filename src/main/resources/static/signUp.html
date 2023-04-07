@@ -44,6 +44,31 @@
                     }
                 });
             });
+
+            // password 입력 시 * 모양으로 뜨도록 수정
+            // $("#password").on("keyup", function() {
+            //     const passwordInput = $("#password");
+            //     const passwordValue = passwordInput.val();
+            //     let maskedPassword = "";
+            //
+            //     for (let i = 0; i < passwordValue.length; i++) {
+            //         maskedPassword += "*";
+            //     }
+            //
+            //     passwordInput.val(maskedPassword);
+            // });
+            //
+            // $("#passwordConfirm").on("keyup", function() {
+            //     const passwordInput = $("#passwordConfirm");
+            //     const passwordValue = passwordInput.val();
+            //     let maskedPassword = "";
+            //
+            //     for (let i = 0; i < passwordValue.length; i++) {
+            //         maskedPassword += "*";
+            //     }
+            //
+            //     passwordInput.val(maskedPassword);
+            // });
         });
 
     </script>
@@ -59,10 +84,10 @@
     <input type="text" id="emailId" name="emailId" placeholder="ex) gildong@everybot.net"><br>
 
     <label for="password">Password:</label>
-    <input type="text" id="password" name="password" placeholder="ex) abc123@" ><br>
+    <input type="password" id="password" name="password" placeholder="ex) abc123@" ><br>
 
     <label for="passwordConfirm">Password Confirm:</label>
-    <input type="text" id="passwordConfirm" name="passwordConfirm" placeholder="ex) abc123@"><br>
+    <input type="password" id="passwordConfirm" name="passwordConfirm" placeholder="ex) abc123@"><br>
 
     <button id="btn-save" class="btn btn-primary">Sign up</button>
     <a href="login.html"><input type="button" value="Back"></a>
