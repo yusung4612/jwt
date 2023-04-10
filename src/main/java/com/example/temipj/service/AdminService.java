@@ -112,9 +112,10 @@ public class AdminService {
     // 로그아웃
     @Transactional
     public ResponseDto<?> logout(HttpServletRequest request) {
-        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-            return ResponseDto.fail(ErrorCode.INVALID_ADMIN.name(), ErrorCode.INVALID_ADMIN.getMessage());
-        }
+//        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+            //        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
+//            return ResponseDto.fail(ErrorCode.INVALID_ADMIN.name(), ErrorCode.INVALID_ADMIN.getMessage());
+//        }
         Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
 
         if (null == admin) {

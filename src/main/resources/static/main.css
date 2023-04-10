@@ -46,18 +46,18 @@
     margin-bottom: 50px;
 }
 
-.high-dep, .low-dep, .employee, .leader-list {
-    background-color: #E0E5E5;
-    width: 200px;
-    height: 300px;
+/*.high-dep, .low-dep, .employee, .leader-list {*/
+/*    !*background-color: #E0E5E5;*!*/
+/*    width: 200px;*/
+/*    height: 30px;*/
 
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
+/*    display: flex;*/
+/*    align-items: flex-start;*/
+/*    justify-content: center;*/
 
-    border-radius: 30px;
-    padding: 10px;
-}
+/*    border-radius: 30px;*/
+/*    padding: 10px;*/
+/*}*/
 
 .goto-news {
     display: flex;
@@ -70,4 +70,11 @@
     padding: 40px 180px;
     border-radius: 20px;
     border: none;
+}
+
+/* 클릭 시 배경색과 글자색이 변하는 CSS 코드 */
+button.leader:focus,
+button.leader:active {
+    background-color: blue;
+    color: white;
 }

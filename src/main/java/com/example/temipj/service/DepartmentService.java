@@ -39,9 +39,10 @@ public class DepartmentService {
     @Transactional
     public ResponseDto<?> createDepart(String divisionId, DepartmentRequestDto requestDto, HttpServletRequest request) {
         // 1토큰 유효성 확인
-        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
-        }
+//        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+//        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
+//            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
+//        }
         // 2.등록
         if (requestDto.getDepartment().isEmpty())
             return ResponseDto.fail(ErrorCode.NOT_BLANK_NAME.name(), ErrorCode.NOT_BLANK_NAME.getMessage());
@@ -93,9 +94,10 @@ public class DepartmentService {
     @Transactional
     public ResponseDto<?> updateDepartment(Long id, DepartmentRequestDto requestDto, HttpServletRequest request) {
         // 1.토큰 유효성 확인
-        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
-        }
+        //        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+//        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
+//            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
+//        }
         // 2.tokenProvider의 SecurityContextHolder에 저장된 Admin 정보 확인
         Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
         if (null == admin) {
@@ -115,9 +117,10 @@ public class DepartmentService {
     public ResponseDto<?> deleteDepart(Long departmentId, HttpServletRequest request) {
 
         // 1.토큰 유효성 확인
-        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
-        }
+        //        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+//        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
+//            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
+//        }
         // 2.하위부서 유무 확인
         Department department = isPresentDepartment(departmentId);
         if (null == department) {

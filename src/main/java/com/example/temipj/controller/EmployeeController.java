@@ -78,7 +78,7 @@ public class EmployeeController {
     // 리더 선택
     @PostMapping("/choice/{id}")
     public ResponseDto<?> selectLeader(@PathVariable Long id) {
-        return employeeService.LeaderSelect(id);
+        return employeeService.leaderSelect(id);
     }
 
     // 선택한 리더 목록 조회

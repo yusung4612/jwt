@@ -46,26 +46,19 @@
                         let cnt = i + 1;
 
                         htmlArr.push('<tr>');
+
                         htmlArr.push('<td>');
                         htmlArr.push('<label class="newsNumber" data-id="' + item.id + '">' + cnt + '</label><br>');
                         htmlArr.push('</td>');
 
-                        // htmlArr.push('<td>');
-                        // htmlArr.push('<button class="choiceNews" id="choiceNews' + item.id + '" value="' + item.id + '">' +
-                        //     '<label class="news" data-id="' + item.id + '">' + item.choiceNews + '</label></button><br>');
-                        // htmlArr.push('</td>');
 
                         htmlArr.push('<td>');
                         if (item.choiceNews) {
-                            htmlArr.push('<button class="choiceNews" id="choiceNews' + item.id + '" value="' + item.id + '" style="background-color:black;color:blue;">' +
+                            htmlArr.push('<button class="choiceNews" id="choiceNews' + item.id + '" value="' + item.id + '" style="background-color:white;color:blue;">' +
                                 '<label class="news" data-id="' + item.id + '">' + item.choiceNews + '</label></button><br>');
                         }
-                        // else {
-                        //     htmlArr.push('<button class="choiceNews" id="choiceNews' + item.id + '" value="' + item.id + '" style="background-color:black;color:blue;">' +
-                        //         '<label class="news" data-id="' + item.id + '">' + item.choiceNews + '</label></button><br>');
-                        // }
                         htmlArr.push('</td>');
-
+                        ``
                         htmlArr.push('<td>');
                         htmlArr.push('<label class="news" data-id="' + item.id + '">' + item.message + '</label><br>');
                         htmlArr.push('</td>');
@@ -93,6 +86,50 @@
                     alert("Error: " + e.responseText);
                 }
             });
+
+            // 뉴스 등록
+            $(document).ready(function () {
+                $(document).on('click', '.newsRegister', function () {
+
+                    // Reset the form fields
+                    $("#popupMessage1").val("");
+                    $("#popupAuthor1").val("");
+                    // modal 창 열기
+                    $("#newsRegisterModal").modal("show");
+                });
+
+                $("#popupRegisterButton").on('click', function () {
+
+                    let data = {
+                        message: $("#popupMessage1").val(),
+                        author: $("#popupAuthor1").val(),
+                    };
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: "http://localhost:8080/api/news/create",
+                        data: JSON.stringify(data),
+                        dataType: 'json',
+                        success: function (response) {
+                            // if (response.success === true) {
+                            if (null !== response) {
+                                // console.log(response);
+                                alert('뉴스가 등록되었습니다.');
+                                // Close the register news modal
+                                $("#newsRegisterModal").modal("hide");
+                                // Refresh the page
+                                location.reload();
+                            } else {
+                                alert('등록 실패');
+                            }
+                        },
+                        error: function (e) {
+                            alert("Error: " + e.responseText);
+                        }
+                    });
+                });
+
+            });
         });
 
         // 선택하면 노출될 뉴스로 지정
@@ -112,7 +149,6 @@
                     if (response.success === true) {
                         location.reload();
                         console.log(response);
-
                     }
                 },
                 error: function (e) {
@@ -138,6 +174,7 @@
                     url: "http://localhost:8080/api/news/" + newsId,
                     dataType: 'json',
                     success: function (response) {
+
                         if (response.success === true) {
                             console.log(response);
                             let news = response.data;
@@ -221,8 +258,6 @@
                     }
                 });
             }
-
-
         });
 
         // 뉴스 검색
@@ -235,6 +270,11 @@
 
                 let keyword = $("#keywordInput").val(); // 검색어 가져오기
                 // var keyword = $("#searchKeyword").val(); // 검색어 가져오기
+
+                if (keyword.trim() === '') { // 검색어가 비어있는 경우
+                    alert('검색어를 입력해주세요.');
+                    return; // 함수 종료
+                }
 
                 $.ajax({
                     type: "GET",
@@ -307,52 +347,87 @@
 
 
 <h1 style="margin-left: 25%; margin-top: 5%"> < News List > </h1>
-<table style="margin-left: 20%; margin-top: 2%">
-    <thead>
-    <td>
-    <th>체크</th>
-    <th>true만 노출</th>
-    <th>Message</th>
-    <th>출처&작성자</th>
-    </td>
-    </thead>
-    <tbody id="tbodyNews">
-    <a href="newsRegister.html"><input type="button" value="뉴스 등록하기"></a>
-    </tbody>
 
-    <!-- 모달 창 HTML 구조 -->
-    <div class="modal fade" id="newsUpdateModal" tabindex="-1" role="dialog" aria-labelledby="newsUpdateModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="newsUpdateModalLabel">뉴스 수정</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="popupMessage">메시지</label>
-                        <input type="text" class="form-control" id="popupMessage" placeholder="메시지">
+<table style="margin-left: 20%; margin-top: 2%">
+    <td>
+        <table>
+            <thead>
+            <tr>
+                <th>번호</th>
+                <th>뉴스 선택</th>
+                <th>Message</th>
+                <th>출처&작성자</th>
+            </tr>
+            </thead>
+            <tbody id="tbodyNews">
+            <!--    <a href="newsRegister.html"><input type="button" value="뉴스 등록하기"></a>-->
+            </tbody>
+            <tbody id="tbodyNewsRegister">
+            <input type="button" class="newsRegister" id="newsRegister" value="뉴스 등록">
+            </tbody>
+            </td>
+        </table>
+
+        <!-- 모달 창 HTML 구조 -->
+        <div class="modal fade" id="newsUpdateModal" tabindex="-1" role="dialog" aria-labelledby="newsUpdateModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="newsUpdateModalLabel">뉴스 수정</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <div class="form-group">
-                        <label for="popupAuthor">작성자</label>
-                        <input type="text" class="form-control" id="popupAuthor" placeholder="작성자">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="popupMessage">메시지</label>
+                            <input type="text" class="form-control" id="popupMessage" placeholder="메시지">
+                        </div>
+                        <div class="form-group">
+                            <label for="popupAuthor">작성자</label>
+                            <input type="text" class="form-control" id="popupAuthor" placeholder="작성자">
+                        </div>
+                        <input type="hidden" id="popupNewsId">
                     </div>
-                    <input type="hidden" id="popupNewsId">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                    <button type="button" class="btn btn-primary" id="popupUpdateButton">수정</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                        <button type="button" class="btn btn-primary" id="popupUpdateButton">수정</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- 뉴스 수정 버튼 -->
-    <!--    <button type="button" class="btn btn-primary newsUpdate" value="{{news.id}}">수정</button>-->
-
+        <!--뉴스 등록 modal-->
+        <div class="modal fade" id="newsRegisterModal" tabindex="-1" role="dialog"
+             aria-labelledby="newsRegisterModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="newsRegisterModalLabel">뉴스 등록</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="popupMessage">메세지</label>
+                            <input type="text" class="form-control" id="popupMessage1">
+                        </div>
+                        <div class="form-group">
+                            <label for="popupAuthor">작성자</label>
+                            <input type="text" class="form-control" id="popupAuthor1">
+                        </div>
+                        <input type="hidden" id="popupNewsId1">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                        <button type="button" class="btn btn-primary" id="popupRegisterButton">등록</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 </table>
 <a href="main.html"><input type="button" value="Back"></a>

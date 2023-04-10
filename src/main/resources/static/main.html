@@ -89,7 +89,8 @@
             // 3. 하위부서 클릭 시 직원 리스트 조회
             $(document).on('click', '.department', function () {
                 let departmentId = $(this).attr('data-id');
-                $('.employeeRegister').attr('data-id',departmentId);
+                let selectedEmployee = [];
+                $('.employeeRegister').attr('data-id', departmentId);
                 if (!departmentId) {
                     alert("ID is undefined.");
                     return;
@@ -105,32 +106,48 @@
                         for (let i = 0, length = list.employee.length; i < length; i++) {
                             let item = list.employee[i];
                             let cnt = i + 1;
+
                             htmlArr.push('<tr>');
 
                             htmlArr.push('<td>');
-                            htmlArr.push('<label class="Number" data-id="' + item.id + '">' + cnt + '</label><br>');
+                            htmlArr.push('<label class="employeeNumber" data-id="' + item.id + '">' + cnt + '</label><br>');
                             htmlArr.push('</td>');
 
-                            // htmlArr.push('<td class="employee" data-id="' + item.id + '">');
+                            // htmlArr.push('<td>');
+                            // if (item.leader) {
+                            //     htmlArr.push('<button class="leader" id="leader' + item.id + '" value="' + item.id + '" style="background-color:black;color:blue;">' +
+                            //         '<label class="employee" data-id="' + item.id + '">' + item.leader + '</label></button><br>');
+                            // }
+                            // htmlArr.push('</td>');
+
                             htmlArr.push('<td>');
-                            htmlArr.push('<input type="checkbox" class="choiceEmployee" id="choiceEmployee' + item.id + '" value="' + item.id + '">');
-                            // htmlArr.push('<label for="employee' + item.id + '">' + item.name + '</label>');
+                            if (item.leader) {
+                                htmlArr.push('<button class="leader" id="leader' + item.id + '" value="' + item.id + '" style="background-color:white;color:black;">' +
+                                    '<label class="employee" data-id="' + item.id + '">' + item.leader + '</label></button><br>');
+                            } else {
+                                htmlArr.push('<button class="leader" id="leader' + item.id + '" value="' + item.id + '">Leader</button><br>');
+                            }
                             htmlArr.push('</td>');
 
-                            htmlArr.push('<td>이름');
+
+                            htmlArr.push('<td>');
                             htmlArr.push('<label class="employee" data-id="' + item.id + '">' + item.name + '</label><br>');
                             htmlArr.push('</td>');
-                            htmlArr.push('<td>생일');
+
+                            htmlArr.push('<td>');
                             htmlArr.push('<label class="employee" data-id="' + item.id + '">' + item.birth + '</label><br>');
                             htmlArr.push('</td>');
-                            htmlArr.push('<td>유선전화');
+
+                            htmlArr.push('<td>');
                             htmlArr.push('<label class="employee" data-id="' + item.id + '">' + item.extension_number + '</label><br>');
                             htmlArr.push('</td>');
-                            htmlArr.push('<td>모바일');
+
+                            htmlArr.push('<td>');
                             htmlArr.push('<label class="employee" data-id="' + item.id + '">' + item.mobile_number + '</label><br>');
                             htmlArr.push('</td>');
-                            htmlArr.push('<td>이메일');
-                            htmlArr.push('<label class="employee" data-id="' + item.id + '">' + item.email + '</label><br>');
+
+                            htmlArr.push('<td>');
+                            htmlArr.push('<label class="employee" data-id="' + item.id + '">' + item.email + '</label>');
                             htmlArr.push('</td>');
 
                             htmlArr.push('<td>');
@@ -190,9 +207,10 @@
                             data: JSON.stringify(data),
                             dataType: 'json',
                             success: function (response) {
+                                // if (response.success === true) {
                                 if (null !== response) {
-                                    console.log(response);
-                                    alert('등록이 완료되었습니다.');
+                                    // console.log(response);
+                                    alert('직원이 등록되었습니다.');
                                     // Close the register employee modal
                                     $("#employeeRegisterModal").modal("hide");
                                     // Refresh the page
@@ -208,178 +226,31 @@
                     });
 
                 });
-
-
-                // 체크하면 리더 지정
-                $(document).on('click', '.choiceEmployee', function () {
-                    let employeeId = $(this).val();
-                    if (!employeeId) {
-                        alert("ID is undefined.");
-                        return;
-                    }
-                    $.ajax({
-                        type: "POST",
-                        contentType: "application/json; charset=utf-8",
-                        url: "http://localhost:8080/api/employees/choice/" + employeeId,
-                        dataType: 'json',
-                        success: function (response) {
-                            if (response.success === true) {
-                                console.log(response);
-                            }
-                        },
-                        error: function (e) {
-                            alert("Error: " + e.responseText);
-                        }
-                    });
-                });
-                // }).prop('checked', function () {
-                // return this.getAttribute('checked') !== null;
-                // });
-
-
-
-                $(document).ready(function () {
-                    // employeeUpdate 버튼 클릭 시 팝업창 띄우기
-                    $(document).on('click', '.employeeUpdate', function () {
-                        let employeeId = $(this).val();
-                        // let employeeId = $(this).attr('data-id');
-                        if (!employeeId) {
-                            alert("ID is undefined.");
-                            return;
-                        }
-                        // 직원 정보를 가져와서 팝업창에 노출
-                        $.ajax({
-                            type: "GET",
-                            contentType: "application/json; charset=utf-8",
-                            url: "http://localhost:8080/api/employees/" + employeeId,
-                            dataType: 'json',
-                            // success: function (data) {
-                            //     let employee = data;
-                            success: function (response) {
-                                if (response.success === true) {
-                                    console.log(response);
-                                    let employee = response.data;
-                                    // 팝업창에 직원 정보 채우기
-                                    $("#popupName").val(employee.name);
-                                    $("#popupBirth").val(employee.birth);
-                                    $("#popupExtension_number").val(employee.extension_number);
-                                    $("#popupMobile_number").val(employee.mobile_number);
-                                    $("#popupEmail").val(employee.email);
-                                    // 직원 수정 버튼에 employeeId 저장
-                                    $("#popupEmployeeId").val(employeeId);
-                                    // 팝업창 열기
-                                    $("#employeeUpdateModal").modal("show");
-                                }
-                            },
-                            error: function (e) {
-                                alert("Error: " + e.responseText);
-                            }
-                        });
-                    });
-
-                    // 직원 수정
-                    $("#popupUpdateButton").on('click', function () {
-                        let employeeId = $("#popupEmployeeId").val();
-                        if (!employeeId) {
-                            alert("ID is undefined.");
-                            return;
-                        }
-                        let data = {
-                            name: $("#popupName").val(),
-                            birth: $("#popupBirth").val(),
-                            extension_number: $("#popupExtension_number").val(),
-                            mobile_number: $("#popupMobile_number").val(),
-                            email: $("#popupEmail").val(),
-                        };
-                        $.ajax({
-                            type: "PUT",
-                            contentType: "application/json; charset=utf-8",
-                            url: "http://localhost:8080/api/employees/update/" + employeeId,
-                            data: JSON.stringify(data),
-                            dataType: 'json',
-                            success: function (response) {
-                                if (null !== response) {
-                                    console.log(response);
-                                    alert('수정이 완료되었습니다.');
-                                    // 팝업창 닫기
-                                    $("#employeeUpdateModal").modal("hide");
-                                    // 화면 새로고침
-                                    location.reload();
-                                } else {
-                                    alert('실패');
-                                }
-                            },
-                            error: function (e) {
-                                alert("Error: " + e.responseText);
-                            }
-                        });
-                    });
-                });
-
-                // 직원 삭제
-                $(document).on('click', '.employeeDelete', function () {
-                    let employeeId = $(this).val();
-                    if (!employeeId) {
-                        alert("ID is undefined.");
-                        return;
-                    }
-                    if (confirm("정말 삭제하시겠습니까?")) {
-                        $.ajax({
-                            type: "DELETE",
-                            contentType: "application/json; charset=utf-8",
-                            url: "http://localhost:8080/api/employees/delete/" + employeeId,
-                            dataType: 'json',
-                            success: function (response) {
-                                if (null !== response) {
-                                    console.log(response);
-                                    alert('삭제되었습니다.');
-                                    location.reload();
-                                } else {
-                                    alert('삭제 실패');
-                                }
-                            },
-                            error: function (e) {
-                                alert("Error: " + e.responseText);
-                            }
-                        });
-                    }
-                });
             });
 
-
-            // 5. 리더 리스트 불러오기
-
-        });
-
-
-        // 회원 탈퇴
-        $(document).ready(function () {
-
-            $("#deleteAdminForm").submit(function (event) {
-                event.preventDefault(); // 폼 전송 방지
-                // 관리자 ID 조회
-                let adminId = localStorage.getItem('adminId'); // 로컬 스토리지에서 adminId 가져오기
-                if (!adminId) {
+            // 클릭하면 리더 지정
+            $(document).on('click', '.leader', function () {
+                let employeeId = $(this).val();
+                if (!employeeId) {
                     alert("ID is undefined.");
                     return;
                 }
                 $.ajax({
-                    type: "DELETE",
+                    type: "POST",
                     contentType: "application/json; charset=utf-8",
-                    // url: "http://localhost:8080/api/admins/delete/" + $(this).attr('data-id'),
-                    url: "http://localhost:8080/api/admins/delete/" + adminId,
-                    // data: JSON.stringify({adminId: adminId}),
-                    data: JSON.stringify,
+                    url: "http://localhost:8080/api/employees/choice/" + employeeId,
                     dataType: 'json',
-                    // beforeSend: function(xhr) { // 헤더에 토큰 추가
-                    //     xhr.setRequestHeader("Refresh_Token", token);
-                    // },
-                    success: function(response) {
+                    success: function (response) {
                         if (response.success === true) {
-                            alert("회원탈퇴가 완료되었습니다.");
-                            window.location.href = 'http://localhost:8080/login.html';
-                        } else {
-                            alert('다시 시도해주세요.')
+                            console.log(response);
+
+
+                            $('.leader').css('background-color', '');
+                            $('.leader').css('color', '');
+                            $(this).css('background-color', 'white');
+                            $(this).css('color', 'black');
+
+                            location.reload();
                         }
                     },
                     error: function (e) {
@@ -387,16 +258,161 @@
                     }
                 });
             });
-        });
 
-        // 로그아웃
-        $(document).ready(function () {
+            $(document).ready(function () {
+                // employeeUpdate 버튼 클릭 시 팝업창 띄우기
+                $(document).on('click', '.employeeUpdate', function () {
+                    let employeeId = $(this).val();
+                    // let employeeId = $(this).attr('data-id');
+                    if (!employeeId) {
+                        alert("ID is undefined.");
+                        return;
+                    }
+                    // 직원 정보를 가져와서 팝업창에 노출
+                    $.ajax({
+                        type: "GET",
+                        contentType: "application/json; charset=utf-8",
+                        url: "http://localhost:8080/api/employees/" + employeeId,
+                        dataType: 'json',
+                        // success: function (data) {
+                        //     let employee = data;
+                        success: function (response) {
+                            if (response.success === true) {
+                                console.log(response);
+                                let employee = response.data;
+                                // 팝업창에 직원 정보 채우기
+                                $("#popupName").val(employee.name);
+                                $("#popupBirth").val(employee.birth);
+                                $("#popupExtension_number").val(employee.extension_number);
+                                $("#popupMobile_number").val(employee.mobile_number);
+                                $("#popupEmail").val(employee.email);
+                                // 직원 수정 버튼에 employeeId 저장
+                                $("#popupEmployeeId").val(employeeId);
+                                // 팝업창 열기
+                                $("#employeeUpdateModal").modal("show");
+                            }
+                        },
+                        error: function (e) {
+                            alert("Error: " + e.responseText);
+                        }
+                    });
+                });
 
-            $("#logoutForm").submit(function (event) {
-                event.preventDefault(); // 폼 전송 방지
-                // 관리자 ID 조회
-                localStorage.removeItem('adminId'); // 로컬 스토리지에서 adminId 가져오기
-                window.location.href = 'http://localhost:8080/login.html';
+                // 직원 수정
+                $("#popupUpdateButton").on('click', function () {
+                    let employeeId = $("#popupEmployeeId").val();
+                    if (!employeeId) {
+                        alert("ID is undefined.");
+                        return;
+                    }
+                    let data = {
+                        name: $("#popupName").val(),
+                        birth: $("#popupBirth").val(),
+                        extension_number: $("#popupExtension_number").val(),
+                        mobile_number: $("#popupMobile_number").val(),
+                        email: $("#popupEmail").val(),
+                    };
+                    $.ajax({
+                        type: "PUT",
+                        contentType: "application/json; charset=utf-8",
+                        url: "http://localhost:8080/api/employees/update/" + employeeId,
+                        data: JSON.stringify(data),
+                        dataType: 'json',
+                        success: function (response) {
+                            if (null !== response) {
+                                console.log(response);
+                                alert('수정이 완료되었습니다.');
+                                // 팝업창 닫기
+                                $("#employeeUpdateModal").modal("hide");
+                                // 화면 새로고침
+                                location.reload();
+                            } else {
+                                alert('실패');
+                            }
+                        },
+                        error: function (e) {
+                            alert("Error: " + e.responseText);
+                        }
+                    });
+                });
+            });
+
+            // 직원 삭제
+            $(document).on('click', '.employeeDelete', function () {
+                let employeeId = $(this).val();
+                if (!employeeId) {
+                    alert("ID is undefined.");
+                    return;
+                }
+                if (confirm("정말 삭제하시겠습니까?")) {
+                    $.ajax({
+                        type: "DELETE",
+                        contentType: "application/json; charset=utf-8",
+                        url: "http://localhost:8080/api/employees/delete/" + employeeId,
+                        dataType: 'json',
+                        success: function (response) {
+                            if (null !== response) {
+                                console.log(response);
+                                alert('삭제되었습니다.');
+                                location.reload();
+                            } else {
+                                alert('삭제 실패');
+                            }
+                        },
+                        error: function (e) {
+                            alert("Error: " + e.responseText);
+                        }
+                    });
+                }
+            });
+
+
+            // 5. 리더 리스트 불러오기
+
+
+            // 회원 탈퇴
+            $(document).ready(function () {
+                // 로그인한 사용자의 adminId를 로컬스토리지에서 가져옴
+                let adminId = localStorage.getItem('adminId');
+                if (!adminId) {
+                    alert("ID is undefined.");
+                    return;
+                }
+
+                $("#deleteAdminForm").submit(function (event) {
+                    event.preventDefault(); // 폼 전송 방지
+                    $.ajax({
+                        type: "DELETE",
+                        contentType: "application/json; charset=utf-8",
+                        url: "http://localhost:8080/api/admins/delete/" + adminId,
+                        data: JSON.stringify,
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.success === true) {
+                                alert("회원탈퇴가 완료되었습니다.");
+                                // 로컬스토리지에서 adminId 제거
+                                localStorage.removeItem('adminId');
+                                window.location.href = 'http://localhost:8080/login.html';
+                            } else {
+                                alert('다시 시도해주세요.')
+                            }
+                        },
+                        error: function (e) {
+                            alert("Error: " + e.responseText);
+                        }
+                    });
+                });
+            });
+
+            // 로그아웃
+            $(document).ready(function () {
+
+                $("#logoutForm").submit(function (event) {
+                    event.preventDefault(); // 폼 전송 방지
+                    // 관리자 ID 조회
+                    localStorage.removeItem('adminId'); // 로컬 스토리지에서 adminId 삭제
+                    window.location.href = 'http://localhost:8080/login.html';
+                });
             });
         });
 
@@ -407,22 +423,22 @@
 <p>메인 화면</p>
 <!-- header -->
 <div class="main-image">
-<form id="deleteAdminForm" action="">
-<!--    <button id="btn-save" class="deleteAdmin" id="deleteAdmin" >회원탈퇴</button>-->
-    <button class="deleteAdmin" id="deleteAdmin">회원탈퇴</button>
-</form>
-<form id="logoutForm">
-<!--    <button id="btn-save1" class="logoutAdmin" id="logoutAdmin" >로그아웃</button>-->
-    <button class="logout" id="logout">로그아웃</button>
-</form>
-<!--    메인 이미지-->
+    <form id="deleteAdminForm" action="">
+        <!--    <button id="btn-save" class="deleteAdmin" id="deleteAdmin" >회원탈퇴</button>-->
+        <button class="deleteAdmin" id="deleteAdmin">회원탈퇴</button>
+    </form>
+    <form id="logoutForm">
+        <!--    <button id="btn-save1" class="logoutAdmin" id="logoutAdmin" >로그아웃</button>-->
+        <button class="logout" id="logout">로그아웃</button>
+    </form>
+    <!--    메인 이미지-->
 </div>
 
 <!-- content -->
 <div class="content-title"><h2>Department</h2></div>
 
 <table>
-    <tr>
+
         <td>
             <table>
                 <thead>
@@ -450,6 +466,12 @@
                 <thead>
                 <tr>
                     <th>직원</th>
+                    <th>리더 지정</th>
+                    <th>이름</th>
+                    <th>생일</th>
+                    <th>유선전화번호</th>
+                    <th>모바일번호</th>
+                    <th>이메일</th>
                 </tr>
                 </thead>
                 <tbody id="tbodyEmployee">
@@ -458,18 +480,8 @@
                 <input type="button" class="employeeRegister" id="employeeRegister" value="직원 등록">
                 </tbody>
                 </td>
-<!--                <td>-->
-<!--                    <table>-->
-<!--                        <thead>-->
-<!--                        <tr>-->
-<!--                            <th>리더목록</th>-->
-<!--                        </tr>-->
-<!--                        </thead>-->
-<!--                        <tbody id="tbodyLeader">-->
-<!--                        </tbody>-->
-<!--                    </table>-->
-<!--                </td>-->
             </table>
+
 
             <!-- 직원 수정 모달 창 HTML 구조 -->
             <div class="modal fade" id="employeeUpdateModal" tabindex="-1" role="dialog"
@@ -494,15 +506,18 @@
                             </div>
                             <div class="form-group">
                                 <label for="popupExtension_number">유선 전화 번호</label>
-                                <input type="text" class="form-control" id="popupExtension_number" placeholder="ex) 07022223333">
+                                <input type="text" class="form-control" id="popupExtension_number"
+                                       placeholder="ex) 07022223333">
                             </div>
                             <div class="form-group">
                                 <label for="popupMobile_number">모바일 번호</label>
-                                <input type="text" class="form-control" id="popupMobile_number" placeholder="ex) 01022223333">
+                                <input type="text" class="form-control" id="popupMobile_number"
+                                       placeholder="ex) 01022223333">
                             </div>
                             <div class="form-group">
                                 <label for="popupEmail">이메일</label>
-                                <input type="text" class="form-control" id="popupEmail" placeholder="ex) gildong@everybot.net">
+                                <input type="text" class="form-control" id="popupEmail"
+                                       placeholder="ex) gildong@everybot.net">
                             </div>
                             <input type="hidden" id="popupEmployeeId">
                         </div>
@@ -538,15 +553,18 @@
                             </div>
                             <div class="form-group">
                                 <label for="popupExtension_number">유선전화번호</label>
-                                <input type="text" class="form-control" id="popupExtension_number1" placeholder="ex) 07022223333">
+                                <input type="text" class="form-control" id="popupExtension_number1"
+                                       placeholder="ex) 07022223333">
                             </div>
                             <div class="form-group">
                                 <label for="popupMobile_number">모바일번호</label>
-                                <input type="text" class="form-control" id="popupMobile_number1" placeholder="ex) 01022223333">
+                                <input type="text" class="form-control" id="popupMobile_number1"
+                                       placeholder="ex) 01022223333">
                             </div>
                             <div class="form-group">
                                 <label for="popupEmail">이메일</label>
-                                <input type="text" class="form-control" id="popupEmail1" placeholder="ex) gildong@everybot.net">
+                                <input type="text" class="form-control" id="popupEmail1"
+                                       placeholder="ex) gildong@everybot.net">
                             </div>
                             <input type="hidden" id="popupEmployeeId1">
                         </div>
@@ -560,27 +578,29 @@
 
 </table>
 
-<table>
-    <td>
-        <thead>
-        <tr>
+<!--<table>-->
+<!--    <td>-->
+<!--        <thead>-->
+<!--        <tr>-->
 <!--            <th>전체 직원 목록</th>-->
-            < 전체 직원 목록 >
-        </tr>
-        </thead>
-        <tbody id="tbodyAllEmployee">
-        </tbody>
-    </td>
-</table>
+<!--        </tr>-->
+<!--        </thead>-->
+<!--        <tbody id="tbodyAllEmployee">-->
+<!--        </tbody>-->
+<!--    </td>-->
+<!--</table>-->
+<div class="goto-emp">
+    <a href="empList.html"><input type="button" class="goto-news-botton" value="전체 직원 목록"></a>
+</div>
 
 <form>
 
-<!--    <div class="goto-news">-->
-<!--        <button class="goto-news-botton" onclick="location.href='newsList.html'"><h4>뉴스페이지 바로가기</h4></button>-->
-<!--    </div>-->
+    <!--    <div class="goto-news">-->
+    <!--        <button class="goto-news-botton" onclick="location.href='newsList.html'"><h4>뉴스페이지 바로가기</h4></button>-->
+    <!--    </div>-->
 
     <div class="goto-news">
-    <a href="newsList.html"><input type="button" class="goto-news-botton" value="뉴스페이지"></a>
+        <a href="newsList.html"><input type="button" class="goto-news-botton" value="뉴스페이지"></a>
     </div>
 </form>
 

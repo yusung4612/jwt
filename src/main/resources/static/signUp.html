@@ -7,6 +7,15 @@
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
           crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./main.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
     <title>회원가입</title>
 
     <script>
@@ -45,37 +54,13 @@
                 });
             });
 
-            // password 입력 시 * 모양으로 뜨도록 수정
-            // $("#password").on("keyup", function() {
-            //     const passwordInput = $("#password");
-            //     const passwordValue = passwordInput.val();
-            //     let maskedPassword = "";
-            //
-            //     for (let i = 0; i < passwordValue.length; i++) {
-            //         maskedPassword += "*";
-            //     }
-            //
-            //     passwordInput.val(maskedPassword);
-            // });
-            //
-            // $("#passwordConfirm").on("keyup", function() {
-            //     const passwordInput = $("#passwordConfirm");
-            //     const passwordValue = passwordInput.val();
-            //     let maskedPassword = "";
-            //
-            //     for (let i = 0; i < passwordValue.length; i++) {
-            //         maskedPassword += "*";
-            //     }
-            //
-            //     passwordInput.val(maskedPassword);
-            // });
         });
 
     </script>
 
 </head>
 <body>
-
+<td>
 <form id="signupForm">
     <label for="adminName">Name:</label>
     <input type="text" id="adminName" name="adminName" placeholder="ex) 홍길동"><br>
@@ -90,8 +75,10 @@
     <input type="password" id="passwordConfirm" name="passwordConfirm" placeholder="ex) abc123@"><br>
 
     <button id="btn-save" class="btn btn-primary">Sign up</button>
-    <a href="login.html"><input type="button" value="Back"></a>
-</form>
 
+<!--    <a href="login.html"><input type="button" value="Back"></a>-->
+</form>
+<a href="login.html"><button id="btn-back" class="btn btn-primary" >Back</button></a>
+</td>
 </body>
 </html>

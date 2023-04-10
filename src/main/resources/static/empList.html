@@ -39,7 +39,7 @@
                 data: JSON.stringify,
                 dataType: 'json',
                 success: function (response) {
-                    let list = response.employee;
+                    let list = response.member;
                     let htmlArr = [];
                     for (let i = 0, length = list.length; i < length; i++) {
                         let item = list[i];
@@ -75,14 +75,6 @@
                         htmlArr.push('<label class="employee" data-id="' + item.id + '">' + item.email + '</label><br>');
                         htmlArr.push('</td>');
 
-                        // htmlArr.push('<td>');
-                        // htmlArr.push('<button type="button" class="employeeUpdate" id="employeeUpdate' + item.id + '" value="' + item.id + '">수정<br>');
-                        // htmlArr.push('</td>');
-                        //
-                        // htmlArr.push('<td>');
-                        // htmlArr.push('<button type="button" class="employeeDelete" id="employeeDelete' + item.id + '" value="' + item.id + '">삭제<br>');
-                        // htmlArr.push('</td>');
-
                         htmlArr.push('</tr>');
                     }
 
@@ -104,6 +96,11 @@
 
                     let keyword = $("#keywordInput").val(); // 검색어 가져오기
                     // var keyword = $("#searchKeyword").val(); // 검색어 가져오기
+
+                    if (keyword.trim() === '') { // 검색어가 비어있는 경우
+                        alert('검색어를 입력해주세요.');
+                        return; // 함수 종료
+                    }
 
                     $.ajax({
                         type: "GET",
@@ -205,57 +202,6 @@
     </tbody>
 </table>
 <a href="main.html"><input type="button" value="Back"></a>
-
-<!--&lt;!&ndash; 직원 수정 모달 창 HTML 구조 &ndash;&gt;-->
-<!--<div class="modal fade" id="employeeUpdateModal" tabindex="-1" role="dialog"-->
-<!--     aria-labelledby="employeeUpdateModalLabel"-->
-<!--     aria-hidden="true">-->
-<!--    <div class="modal-dialog" role="document">-->
-<!--        <div class="modal-content">-->
-<!--            <div class="modal-header">-->
-<!--                <h5 class="modal-title" id="employeeUpdateModalLabel">직원 수정</h5>-->
-<!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-<!--                    <span aria-hidden="true">&times;</span>-->
-<!--                </button>-->
-<!--            </div>-->
-<!--            <div class="modal-body">-->
-<!--                <div class="form-group">-->
-<!--                    <label for="popupName">이름</label>-->
-<!--                    <input type="text" class="form-control" id="popupName" placeholder="ex) 홍길동">-->
-<!--                </div>-->
-<!--                <div class="form-group">-->
-<!--                    <label for="popupBirth">생일</label>-->
-<!--                    <input type="text" class="form-control" id="popupBirth" placeholder="ex) 0304">-->
-<!--                </div>-->
-<!--                <div class="form-group">-->
-<!--                    <label for="popupDivision">상위부서</label>-->
-<!--                    <input type="text" class="form-control" id="popupDivision" placeholder="ex) R&D">-->
-<!--                </div>-->
-<!--                <div class="form-group">-->
-<!--                    <label for="popupDepartment">하위부서</label>-->
-<!--                    <input type="text" class="form-control" id="popupDepartment" placeholder="ex) R&D">-->
-<!--                </div>-->
-<!--                <div class="form-group">-->
-<!--                    <label for="popupExtension_number">유선 전화 번호</label>-->
-<!--                    <input type="text" class="form-control" id="popupExtension_number" placeholder="ex) 07022223333">-->
-<!--                </div>-->
-<!--                <div class="form-group">-->
-<!--                    <label for="popupMobile_number">모바일 번호</label>-->
-<!--                    <input type="text" class="form-control" id="popupMobile_number" placeholder="ex) 01022223333">-->
-<!--                </div>-->
-<!--                <div class="form-group">-->
-<!--                    <label for="popupEmail">이메일</label>-->
-<!--                    <input type="text" class="form-control" id="popupEmail" placeholder="ex) gildong@everybot.net">-->
-<!--                </div>-->
-<!--                <input type="hidden" id="popupEmployeeId">-->
-<!--            </div>-->
-<!--            <div class="modal-footer">-->
-<!--                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>-->
-<!--                <button type="button" class="btn btn-primary" id="popupUpdateButton">수정</button>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
 
 
 </body>

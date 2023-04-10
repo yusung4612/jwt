@@ -36,7 +36,8 @@ public class NewsService {
         LocalDate endTime = LocalDate.now().plusDays(7);
 
         // 1. 토큰 유효성 확인
-//        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+        //        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+//        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
 //            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
 //        }
         // 2. tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
@@ -103,6 +104,7 @@ public class NewsService {
     public ResponseDto<?> updateNews(Long id, NewsRequestDto requestDto, HttpServletRequest request) {
         // 1. 토큰 유효성 확인
 //        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+        //        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
 //            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
 //        }
 //        // 2. 뉴스 유무 확인
@@ -126,6 +128,7 @@ public class NewsService {
     public ResponseDto<?> deleteNews(Long id, HttpServletRequest request) {
         // 1. 토큰 유효성 확인
 //        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+        //        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
 //            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
 //        }
         // 2. 뉴스 유무 확인
@@ -167,6 +170,7 @@ public class NewsService {
     public ResponseDto<?> choiceNews(Long id, HttpServletRequest request) {
         // 1.토큰 유효성 확인
 //        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+        //        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
 //            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
 //        }
         // 2.tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인

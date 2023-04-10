@@ -38,9 +38,10 @@ public class DivisionService {
     @Transactional
     public ResponseDto<?> createDivision(DivisionRequestDto requestDto, HttpServletRequest request) {
         // 1. 토큰 유효성 확인
-        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
-        }
+        //        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+//        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
+//            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
+//        }
         // 2. tokenProvider의 SecurityContextHolder에 저장된 Admin 정보 확인
 //        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
 //        if (null == admin) {
@@ -94,9 +95,10 @@ public class DivisionService {
     @Transactional
     public ResponseDto<?> updateDivision(Long id, DivisionRequestDto requestDto, HttpServletRequest request) {
         // 1. 토큰 유효성 확인
-        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
-        }
+        //        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+//        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
+//            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
+//        }
         // 2. 상위부서 유무 확인
         Division division = isPresentDivision(id);
         if (null == division) {
@@ -116,9 +118,10 @@ public class DivisionService {
     public ResponseDto<?> deleteDivision(Long id, HttpServletRequest request) {
 
         // 1. 토큰 유효성 확인
-        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
-        }
+        //        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+//        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
+//            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
+//        }
         // 2. 상위부서 유무 확인
         Division division = isPresentDivision(id);
         if (null == division) {

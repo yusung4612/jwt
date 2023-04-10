@@ -7,6 +7,15 @@
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
           crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./main.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
     <title>로그인</title>
 
     <script>
@@ -27,11 +36,10 @@
                     data: JSON.stringify(formData),
                     dataType: 'json',
                     success: function(response) {
-
                         if (response.success === true) {
-                            // localStorage.setItem('Refresh_Token', response.token);
-                            localStorage.setItem('adminId', response.adminId); // adminId 저장
-                            // alert("로그인 되었습니다.");
+                            // 로컬 스토리지에 adminId 저장
+                            localStorage.setItem('adminId', response.adminId);
+                            alert("로그인 되었습니다.");
                             window.location.href = 'http://localhost:8080/main.html';
                         } else {
                             alert("비밀번호가 일치하지 않습니다.");
@@ -43,18 +51,6 @@
                 });
             });
 
-            // password 입력 시 * 모양으로 뜨도록 수정
-            $("#password").on("keyup", function() {
-                const passwordInput = $("#password");
-                const passwordValue = passwordInput.val();
-                let maskedPassword = "";
-
-                for (let i = 0; i < passwordValue.length; i++) {
-                    maskedPassword += "*";
-                }
-
-                passwordInput.val(maskedPassword);
-            });
         });
 
 
@@ -68,7 +64,7 @@
     <label for="emailId">Email:</label>
     <input type="text" id="emailId" name="emailId"><br>
     <label for="password">Password:</label>
-    <input type="text" id="password" name="password"><br>
+    <input type="password" id="password" name="password"><br>
     <button type="submit">Login</button>
 
     <a href="signUp.html"><input type="button" value="Sign up"></a>

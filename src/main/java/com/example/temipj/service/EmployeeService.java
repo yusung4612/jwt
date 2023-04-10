@@ -39,6 +39,7 @@ public class EmployeeService {
     public EmpResponseDto createEmp(String departmentId, EmployeeRequestDto requestDto, HttpServletRequest request) {
         // 1. 토큰 유효성 확인
 //        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+//        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
 //            throw new CustomException(ErrorCode.INVALID_TOKEN);
 //        }
         // 2. tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
@@ -167,9 +168,9 @@ public class EmployeeService {
     public EmpResponseDto<?> updateEmp(Long id, EmployeeRequestDto requestDto, HttpServletRequest request) {
         // 1. 토큰 유효성 확인
 //        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+//        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
 //            throw new CustomException(ErrorCode.INVALID_TOKEN);
 //        }
-
         // 2. 직원 유무 확인
         Employee employee = isPresentEmployee(id);
         if (null == employee) {
@@ -193,7 +194,8 @@ public class EmployeeService {
     public EmpResponseDto<?> deleteEmp(Long id, HttpServletRequest request) {
 
         // 1. 토큰 유효성 확인
-//        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+        //        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+//        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
 //            throw new CustomException(ErrorCode.INVALID_TOKEN);
 //        }
         // 2. 직원 유무 확인
@@ -242,7 +244,7 @@ public class EmployeeService {
 
     // 리더 선택
     @Transactional
-    public ResponseDto<?> LeaderSelect(Long id) {
+    public ResponseDto<?> leaderSelect(Long id) {
         // 1. 직원 확인
         Employee employee = isPresentEmployee(id);
         if (null == employee) {
