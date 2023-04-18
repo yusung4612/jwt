@@ -29,7 +29,8 @@ public class SchedulerService {
     }
 
     // 초, 분, 시, 일, 월, 주 순서
-    @Scheduled(cron = "0 22 14 * * *")
+//    @Scheduled(cron = "0 0 0 31 12 *")
+    @Scheduled(cron = "0 10 17 * * *")
     public void selectNews() {
         System.out.println("[JopTime] : " + getNowDateTime24());
         System.out.println("뉴스 조회");

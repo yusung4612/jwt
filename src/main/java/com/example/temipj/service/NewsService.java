@@ -33,18 +33,18 @@ public class NewsService {
     // 뉴스 등록
     @Transactional
     public ResponseDto<?> createNews(NewsRequestDto requestDto, HttpServletRequest request) {
-        LocalDate endTime = LocalDate.now().plusDays(7);
+        LocalDate endTime = LocalDate.now().plusDays(365);
 
         // 1. 토큰 유효성 확인
         //        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-//        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
-//            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
-//        }
+        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
+            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
+        }
         // 2. tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
         Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
-//        if (null == admin) {
-//            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(), ErrorCode.ADMIN_NOT_FOUND.getMessage());
-//        }
+        if (null == admin) {
+            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(), ErrorCode.ADMIN_NOT_FOUND.getMessage());
+        }
         // 3. 뉴스 등록
         if (requestDto.getMessage().isEmpty())
             return ResponseDto.fail(ErrorCode.NOT_BLANK_NAME.name(), ErrorCode.NOT_BLANK_NAME.getMessage());
@@ -104,20 +104,20 @@ public class NewsService {
     public ResponseDto<?> updateNews(Long id, NewsRequestDto requestDto, HttpServletRequest request) {
         // 1. 토큰 유효성 확인
 //        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-        //        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
-//            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
-//        }
+                if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
+            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
+        }
 //        // 2. 뉴스 유무 확인
         News news = isPresentNews(id);
         if (null == news) {
             return ResponseDto.fail(ErrorCode.NOT_EXIST_NEWS.name(), ErrorCode.NOT_EXIST_NEWS.getMessage());
         }
 //        // 3. tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
-//        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
-//        if (null == admin) {
-//            return ResponseDto.fail(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.name(), ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.getMessage());
-////            throw new CustomException(ErrorCode.ADMIN_UPDATE_WRONG_ACCESS);
-//        }
+        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
+        if (null == admin) {
+            return ResponseDto.fail(ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.name(), ErrorCode.EMPLOYEE_UPDATE_WRONG_ACCESS.getMessage());
+//            throw new CustomException(ErrorCode.ADMIN_UPDATE_WRONG_ACCESS);
+        }
         // 4. 뉴스 수정
         news.update(requestDto);
         return ResponseDto.success(news);
@@ -128,19 +128,19 @@ public class NewsService {
     public ResponseDto<?> deleteNews(Long id, HttpServletRequest request) {
         // 1. 토큰 유효성 확인
 //        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-        //        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
-//            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
-//        }
+                if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
+            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
+        }
         // 2. 뉴스 유무 확인
         News news = isPresentNews(id);
         if (null == news) {
             return ResponseDto.fail(ErrorCode.NOT_EXIST_NEWS.name(), ErrorCode.NOT_EXIST_NEWS.getMessage());
         }
         // 3. tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
-//        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
-//        if (null == admin) {
-//            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(), ErrorCode.ADMIN_NOT_FOUND.getMessage());
-//        }
+        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
+        if (null == admin) {
+            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(), ErrorCode.ADMIN_NOT_FOUND.getMessage());
+        }
         // 4. 뉴스 삭제
         newsRepository.delete(news);
         return ResponseDto.success("해당 뉴스가 삭제되었습니다.");

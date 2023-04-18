@@ -83,7 +83,6 @@ public class SecurityConfiguration {
 
         http.authorizeHttpRequests(authorize -> authorize //요청에 대한 사용권한 설정 //로그인, 회원가입 Api는 토큰이 없는 상태에서 요청이 들어오기 때문에 permitAll 설정
                         .requestMatchers(AUTH_WHITELIST).permitAll()
-//                        .requestMatchers("/api/**").hasRole("ROLE_ADMIN")
                         .requestMatchers("/api/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/admins/**").permitAll()
@@ -97,8 +96,9 @@ public class SecurityConfiguration {
                                 "/**",
                                 "login.html",
                                 "signUp.html",
-                                "newsRegister.html",
-                                "news.html","main.html",
+                                "newsList.html",
+                                "empList.html",
+                                "main.html",
                                 "/api/employees/**",
                                 "/api/**",
                                 "/webjars/**",

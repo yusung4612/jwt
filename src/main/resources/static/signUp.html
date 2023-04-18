@@ -1,27 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <meta charset="UTF-8">
-    <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-          crossorigin="anonymous">
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Jquery-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!--css-->
+    <link rel="stylesheet" type="text/css" href="/css/login.css">
+
+    <style>
+        header {
+            display: flex;
+            justify-content: center;
+        }
+
+        #flex {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .submit-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        form {
+            padding: 10px;
+            width: 500px;
+        }
+
+        .input-box {
+            position: relative;
+            margin: 10px 0;
+        }
+
+        .input-box > input {
+            background: transparent;
+            border: none;
+            border-bottom: solid 1px #ccc;
+            padding: 20px 0px 5px 0px;
+            font-size: 14pt;
+            width: 100%;
+        }
+
+        .submit-box {
+
+        }
+
+        input::placeholder {
+            color: transparent;
+        }
+
+        input:placeholder-shown + label {
+            color: #aaa;
+            font-size: 14pt;
+            top: 15px;
+
+        }
+
+        input:focus + label, label {
+            color: #8aa1a1;
+            font-size: 10pt;
+            pointer-events: none;
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            transition: all 0.2s ease;
+            -webkit-transition: all 0.2s ease;
+            -moz-transition: all 0.2s ease;
+            -o-transition: all 0.2s ease;
+        }
+
+        input:focus, input:not(:placeholder-shown) {
+            border-bottom: solid 1px #8aa1a1;
+            outline: none;
+        }
+
+        input[type=submit] {
+            display: inline-block;
+            text-align: center;
+            background-color: #8aa1a1;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            height: 35px;
+            font-size: 14pt;
+            margin-top: 100px;
+            width: 100px;
+        }
+
+        input[type=button] {
+            display: inline-block;
+            text-align: center;
+            background-color: #8aa1a1;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            height: 35px;
+            font-size: 14pt;
+            margin-top: 100px;
+            margin-left: 30px;
+            width: 100px;
+        }
+    </style>
 
     <title>회원가입</title>
-
     <script>
-
-        $(document).ready(function() {
-            $("#signupForm").submit(function(event) {
+        $(document).ready(function () {
+            $("#signupForm").submit(function (event) {
                 event.preventDefault(); // 폼 전송 방지
 
                 const formData = {
@@ -38,7 +127,7 @@
                     url: "http://localhost:8080/api/admins/signup",
                     data: JSON.stringify(formData),
                     dataType: 'json',
-                    success: function(response) {
+                    success: function (response) {
                         if (response.success === true) {
                             alert('회원가입이 완료되었습니다.');
                             // localStorage.setItem('jwtToken', data.token);
@@ -48,7 +137,7 @@
                             alert('이메일 또는 비밀번호가 일치하지 않습니다. 다시 시도해 주세요.');
                         }
                     },
-                    error: function(e) {
+                    error: function (e) {
                         alert("Error: " + e.responseText);
                     }
                 });
@@ -60,25 +149,60 @@
 
 </head>
 <body>
-<td>
-<form id="signupForm">
-    <label for="adminName">Name:</label>
-    <input type="text" id="adminName" name="adminName" placeholder="ex) 홍길동"><br>
+<header>
+    <h2>Sign Up</h2>
+</header>
+<div id="flex">
+    <form id="signupForm" action="" method="POST">
+        <div class="input-box">
+            <input type="text" name="adminName" id="adminName" placeholder="ex) 홍길동">
+            <label for="adminName">이름</label>
+        </div>
 
-    <label for="emailId">Email:</label>
-    <input type="text" id="emailId" name="emailId" placeholder="ex) gildong@everybot.net"><br>
+        <div class="input-box">
+            <input type="text" name="emailId" id="emailId" placeholder="ex) gildong@everybot.net">
+            <label for="emailId">이메일</label>
+        </div>
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" placeholder="ex) abc123@" ><br>
+        <div class="input-box">
+            <input type="password" name="password" id="password" placeholder="ex) abc123@">
+            <label for="password">비밀번호</label>
+        </div>
 
-    <label for="passwordConfirm">Password Confirm:</label>
-    <input type="password" id="passwordConfirm" name="passwordConfirm" placeholder="ex) abc123@"><br>
+        <div class="input-box">
+            <input type="password" name="passwordConfirm" id="passwordConfirm" placeholder="ex) abc123@">
+            <label for="passwordConfirm">비밀번호 확인</label>
+        </div>
 
-    <button id="btn-save" class="btn btn-primary">Sign up</button>
+        <div class="submit-box">
+            <input type="submit" value="회원가입">
+            <input type="button" onclick="location.href='login.html'" value="로그인">
+        </div>
+    </form>
+</div>
 
-<!--    <a href="login.html"><input type="button" value="Back"></a>-->
-</form>
-<a href="login.html"><button id="btn-back" class="btn btn-primary" >Back</button></a>
-</td>
+
+<!--<td>-->
+<!--    <form id="signupForm">-->
+<!--        <label for="adminName">Name:</label>-->
+<!--        <input type="text" id="adminName" name="adminName" placeholder="ex) 홍길동"><br>-->
+
+<!--        <label for="emailId">Email:</label>-->
+<!--        <input type="text" id="emailId" name="emailId" placeholder="ex) gildong@everybot.net"><br>-->
+
+<!--        <label for="password">Password:</label>-->
+<!--        <input type="password" id="password" name="password" placeholder="ex) abc123@"><br>-->
+
+<!--        <label for="passwordConfirm">Password Confirm:</label>-->
+<!--        <input type="password" id="passwordConfirm" name="passwordConfirm" placeholder="ex) abc123@"><br>-->
+
+<!--        <button id="btn-save" class="btn btn-primary">Sign up</button>-->
+
+<!--        &lt;!&ndash;    <a href="login.html"><input type="button" value="Back"></a>&ndash;&gt;-->
+<!--    </form>-->
+<!--    <a href="login.html">-->
+<!--        <button id="btn-back" class="btn btn-primary">Back</button>-->
+<!--    </a>-->
+<!--</td>-->
 </body>
 </html>

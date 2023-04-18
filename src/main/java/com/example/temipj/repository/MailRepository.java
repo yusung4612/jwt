@@ -1,4 +1,4 @@
-package com.example.temipj.repository;
-
-public interface MailRepository {
-}
+//package com.example.temipj.repository;
+//
+//public interface MailRepository {
+//}

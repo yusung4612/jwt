@@ -19,9 +19,6 @@ public class EmployeeResponseDto {
 
     private String division; // 상위부서
 
-//    private String department;
-//    private String email;
-
     private String extension_number; // 무선 전화 번호
 
     private String mobile_number; // 모바일번호

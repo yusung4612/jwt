@@ -25,7 +25,6 @@ public interface NewsRepository extends JpaRepository<News, Long> {
     // 만료된 뉴스 삭제
 //    List<News> findByExpirationDateTimeBefore(LocalDateTime currentTime);
 
-
 //    News findByNewsIdAndAdminId(Long newsId, Long adminId);
 //
 //    List<News> findAllByAdmin(Admin admin);

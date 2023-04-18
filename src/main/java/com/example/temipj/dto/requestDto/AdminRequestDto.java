@@ -21,6 +21,7 @@ public class AdminRequestDto {
     @Size(min=8,max=30, message= "8자리이상 30자리 미만 글자로 email을 만들어주세요")
 //    @Pattern(regexp = "^[0-9a-zA-Z]+@[a-zA-Z]+\\.[a-zA-Z]+$" , message = "이메일 형식을 확인해 주세요.")
     @Pattern(regexp = "^[0-9a-zA-Z]+@everybot{1}+\\.net{1}$" , message = "이메일 형식을 확인해 주세요.")
+
     private String emailId;
 
     @NotBlank(message = "비밀번호를 입력해주세요.")

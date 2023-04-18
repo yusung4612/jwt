@@ -24,7 +24,8 @@ public class EmpListDto {
     private String mobile_number; // 모바일번호
 
     private String email;
-    private String department;
+
+    private String department; // 하위부서
 
     private String enabled;
 

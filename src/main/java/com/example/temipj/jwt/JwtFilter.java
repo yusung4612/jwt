@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.security.Key;
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -97,8 +98,11 @@ public class JwtFilter extends OncePerRequestFilter { // OncePerRequestFilter �
     // Token을 사용하기 위해 Request의 Header에서 Token 값을 가져옴 (Authorization 필드에서 토큰을 추출하는 메소드)
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
-            return bearerToken.substring(7);
+//        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+//            return bearerToken.substring(7);
+//        }
+        if (StringUtils.hasText(bearerToken)) {
+            return bearerToken;
         }
         return null;
     }

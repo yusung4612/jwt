@@ -30,7 +30,8 @@ public class EmployeeController {
 
     //직원 생성
     @PostMapping(value = "/create/{departmentId}")
-    private EmpResponseDto<EmployeeResponseDto> create(@PathVariable String departmentId,
+//    private EmpResponseDto<EmployeeResponseDto> create(@PathVariable String departmentId,
+    private EmpResponseDto<EmployeeResponseDto> create(@PathVariable Long departmentId,
                                                        @RequestBody EmployeeRequestDto employeeRequestDto,
                                                        HttpServletRequest request) {
         return employeeService.createEmp(departmentId , employeeRequestDto, request);

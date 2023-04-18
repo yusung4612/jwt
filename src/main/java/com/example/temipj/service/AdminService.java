@@ -105,6 +105,7 @@ public class AdminService {
                         .createdAt(admin.getCreatedAt())
                         .modifiedAt(admin.getModifiedAt())
                         .emailId(admin.getEmailId())
+                        .accessToken(tokenDto.getAccessToken())
                         .build()
         );
     }
@@ -113,7 +114,7 @@ public class AdminService {
     @Transactional
     public ResponseDto<?> logout(HttpServletRequest request) {
 //        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-            //        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
+        //        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
 //            return ResponseDto.fail(ErrorCode.INVALID_ADMIN.name(), ErrorCode.INVALID_ADMIN.getMessage());
 //        }
         Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();

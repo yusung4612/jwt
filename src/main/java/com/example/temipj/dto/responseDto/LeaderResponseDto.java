@@ -22,6 +22,4 @@ public class LeaderResponseDto {
 
     private String email; // 이메일
 
-//    private List<EmployeeResponseDto> leaderCheck;
-
 }

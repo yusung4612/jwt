@@ -22,4 +22,6 @@ public class AdminResponseDto {
     private LocalDateTime createdAt; // 생성시간
 
     private LocalDateTime modifiedAt; // 수정시간
+
+    private String accessToken; //accessToken
 }
