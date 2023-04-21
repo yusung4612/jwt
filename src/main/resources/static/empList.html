@@ -35,6 +35,9 @@
                 url: "http://localhost:8080/api/employees/all",
                 data: JSON.stringify,
                 dataType: 'json',
+                headers: {
+                    "Authorization": localStorage.getItem("accessToken")
+                },
                 success: function (response) {
                     let list = response.member;
                     let htmlArr = [];

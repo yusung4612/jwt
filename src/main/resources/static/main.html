@@ -34,6 +34,9 @@
                 url: "http://localhost:8080/api/divisions/all",
                 data: JSON.stringify,
                 dataType: 'json',
+                headers: {
+                    "Authorization": localStorage.getItem("accessToken")
+                },
                 success: function (response) {
                     console.log(response);
                     let list = response.data;
@@ -61,6 +64,9 @@
                     url: "http://localhost:8080/api/divisions/" + divisionValue,
                     data: JSON.stringify,
                     dataType: 'json',
+                    headers: {
+                        "Authorization": localStorage.getItem("accessToken")
+                    },
                     success: function (response) {
                         console.log(response);
                         let list = response.data;
@@ -97,6 +103,9 @@
                     contentType: "application/json; charset=utf-8",
                     url: "http://localhost:8080/api/departments/" + departmentId,
                     dataType: 'json',
+                    headers: {
+                        "Authorization": localStorage.getItem("accessToken")
+                    },
                     success: function (response) {
                         let list = response.data;
                         let htmlArr = [];
@@ -194,6 +203,7 @@
             $(document).ready(function () {
                 $(document).on('click', '.employeeRegister', function () {
                     var departmentId = $('#selectDepartment2').val();
+
                     console.log("departmentId *****");
                     console.log(departmentId);
                     console.log("모달")
@@ -228,7 +238,7 @@
                                 // Close the register employee modal
                                 $("#employeeRegisterModal").modal("hide");
                                 // Refresh the page
-                                location.reload();
+                                searchEmployees(departmentId);
                             } else {
                                 alert('등록 실패');
                             }
@@ -254,6 +264,9 @@
                     contentType: "application/json; charset=utf-8",
                     url: "http://localhost:8080/api/employees/choice/" + employeeId,
                     dataType: 'json',
+                    headers: {
+                        "Authorization": localStorage.getItem("accessToken")
+                    },
                     success: function (response) {
                         if (response.success === true) {
                             console.log(response);
@@ -304,6 +317,9 @@
                         contentType: "application/json; charset=utf-8",
                         url: "http://localhost:8080/api/employees/" + employeeId,
                         dataType: 'json',
+                        headers: {
+                            "Authorization": localStorage.getItem("accessToken")
+                        },
                         // success: function (data) {
                         //     let employee = data;
                         success: function (response) {
@@ -331,6 +347,7 @@
                 // 직원 수정
                 $("#popupUpdateButton").on('click', function () {
                     let employeeId = $("#popupEmployeeId").val();
+                    var departmentId = $('#selectDepartment').val();
                     if (!employeeId) {
                         alert("ID is undefined.");
                         return;
@@ -358,7 +375,10 @@
                                 // 팝업창 닫기
                                 $("#employeeUpdateModal").modal("hide");
                                 // 화면 새로고침
-                                location.reload();
+                                // location.reload();
+                                searchEmployees(departmentId);
+
+
                             } else {
                                 alert('실패');
                             }
@@ -373,6 +393,7 @@
             // 직원 삭제
             $(document).on('click', '.employeeDelete', function () {
                 let employeeId = $(this).val();
+                var departmentId = $('#selectDepartment').val();
                 if (!employeeId) {
                     alert("ID is undefined.");
                     return;
@@ -390,7 +411,8 @@
                             if (null !== response) {
                                 console.log(response);
                                 alert('삭제되었습니다.');
-                                location.reload();
+                                searchEmployees(departmentId);
+                                // location.reload();
                             } else {
                                 alert('삭제 실패');
                             }

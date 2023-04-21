@@ -37,6 +37,9 @@
                 url: "http://localhost:8080/api/news/all",
                 data: JSON.stringify,
                 dataType: 'json',
+                headers: {
+                    "Authorization": localStorage.getItem("accessToken")
+                },
                 success: function (response) {
                     let list = response.data;
                     let htmlArr = [];
@@ -155,6 +158,9 @@
                 contentType: "application/json; charset=utf-8",
                 url: "http://localhost:8080/api/news/choice/" + newsId,
                 dataType: 'json',
+                headers: {
+                    "Authorization": localStorage.getItem("accessToken")
+                },
                 success: function (response) {
                     if (response.success === true) {
                         location.reload();
@@ -183,6 +189,9 @@
                     contentType: "application/json; charset=utf-8",
                     url: "http://localhost:8080/api/news/" + newsId,
                     dataType: 'json',
+                    headers: {
+                        "Authorization": localStorage.getItem("accessToken")
+                    },
                     success: function (response) {
 
                         if (response.success === true) {
