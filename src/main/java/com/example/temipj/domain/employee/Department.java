@@ -23,12 +23,12 @@ public class Department extends Timestamped {
     private Long id;
 
     @Column(nullable = false)
-    private String department; // 하위부서 이름
+    private String department; // 하위부서
 
     @JoinColumn
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    private Division division;
+    private Division division; // 상위부서
 
     @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Employee> employee;

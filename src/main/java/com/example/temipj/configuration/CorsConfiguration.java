@@ -21,7 +21,6 @@ public class CorsConfiguration {
         config.addAllowedMethod("*"); //모든 get, post, put, delete, patch 요청을 허용
         config.addExposedHeader("*");
         config.addExposedHeader("Authorization");
-//        source.registerCorsConfiguration("/v1/admins/**",config);
         source.registerCorsConfiguration("/api/admins/**",config);
         source.registerCorsConfiguration("/api/**",config);
         source.registerCorsConfiguration("/**",config);

@@ -1,13 +1,13 @@
 package com.example.temipj.service;
 
 
-import com.example.temipj.domain.admin.Admin;
 import com.example.temipj.domain.UserDetailsImpl;
-import com.example.temipj.dto.requestDto.LoginRequestDto;
+import com.example.temipj.domain.admin.Admin;
 import com.example.temipj.dto.requestDto.AdminRequestDto;
+import com.example.temipj.dto.requestDto.LoginRequestDto;
 import com.example.temipj.dto.requestDto.TokenDto;
-import com.example.temipj.dto.responseDto.ResponseDto;
 import com.example.temipj.dto.responseDto.AdminResponseDto;
+import com.example.temipj.dto.responseDto.ResponseDto;
 import com.example.temipj.exception.ErrorCode;
 import com.example.temipj.jwt.TokenProvider;
 import com.example.temipj.repository.AdminRepository;
@@ -16,7 +16,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -113,15 +112,11 @@ public class AdminService {
     // 로그아웃
     @Transactional
     public ResponseDto<?> logout(HttpServletRequest request) {
-//        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-        //        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
-//            return ResponseDto.fail(ErrorCode.INVALID_ADMIN.name(), ErrorCode.INVALID_ADMIN.getMessage());
-//        }
-        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
 
+        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
         if (null == admin) {
             return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(),
-                    ErrorCode.ADMIN_NOT_FOUND.getMessage());
+                                    ErrorCode.ADMIN_NOT_FOUND.getMessage());
         }
         return tokenProvider.deleteRefreshToken(admin);
     }

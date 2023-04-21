@@ -15,7 +15,7 @@ import java.util.NoSuchElementException;
 @RestControllerAdvice
 public class CustomExceptionHandler {
 
-    //바인드 에러
+    // 바인드 에러
     @ExceptionHandler({BindException.class})
     protected ResponseEntity<Object> handleServerException(BindException ex) {
         RestApiException error = new RestApiException(ErrorCode.BIND_FAILS.name(), ErrorCode.BIND_FAILS.getMessage());
@@ -24,7 +24,7 @@ public class CustomExceptionHandler {
                 .body(error);
     }
 
-    //회원가입 정보 확인
+    // 회원가입 정보 확인
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleApiRequestException(MethodArgumentNotValidException ex) {
         List<RestApiException> errors = new ArrayList<>();
@@ -38,7 +38,7 @@ public class CustomExceptionHandler {
                 .body(errors);
     }
 
-    //Null일 때
+    // Null일 때
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<Object> handleNullPointException(NullPointerException ex){
         RestApiException error = new RestApiException(ErrorCode.NOT_VALUE_AT.name(),ErrorCode.NOT_VALUE_AT.getMessage());
@@ -47,7 +47,7 @@ public class CustomExceptionHandler {
                 .body(error);
     }
 
-    //Element 없을 때
+    // Element 없을 때
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<Object> handleNoSuchElementException(NoSuchElementException ex){
         RestApiException error = new RestApiException(ErrorCode.NOT_VALUE_AT.name(),ErrorCode.NOT_VALUE_AT.getMessage());
