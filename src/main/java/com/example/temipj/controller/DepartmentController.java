@@ -1,16 +1,10 @@
 package com.example.temipj.controller;
 
-import com.example.temipj.domain.UserDetailsImpl;
 import com.example.temipj.dto.requestDto.DepartmentRequestDto;
-import com.example.temipj.dto.requestDto.DivisionRequestDto;
-import com.example.temipj.dto.requestDto.EmployeeRequestDto;
-import com.example.temipj.dto.responseDto.EmpResponseDto;
-import com.example.temipj.dto.responseDto.EmployeeResponseDto;
 import com.example.temipj.dto.responseDto.ResponseDto;
 import com.example.temipj.service.DepartmentService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -29,14 +23,14 @@ public class DepartmentController {
 
     // 하위부서 전체 조회
     @GetMapping(value = "/all")
-    public ResponseDto<?> getAll() {
-        return departmentService.getDepartmentAll();
+    public ResponseDto<?> getAll(HttpServletRequest request) {
+        return departmentService.getDepartmentAll(request);
     }
 
     // 특정 하위부터 조회
-    @GetMapping(value = "/{id}")
-    public ResponseDto<?> get(@PathVariable Long id) {
-        return departmentService.getDepartment(id);
+    @GetMapping(value = "/{departmentId}")
+    public ResponseDto<?> get(@PathVariable Long departmentId, HttpServletRequest request) {
+        return departmentService.getDepartment(departmentId, request);
     }
 
     // 하위부서 수정
