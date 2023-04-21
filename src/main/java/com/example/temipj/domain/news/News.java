@@ -3,15 +3,13 @@ package com.example.temipj.domain.news;
 import com.example.temipj.domain.Timestamped;
 import com.example.temipj.dto.requestDto.NewsRequestDto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Builder
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -22,10 +20,10 @@ public class News extends Timestamped {
     private Long id;
 
     @Column(nullable = false)
-    private String message; //뉴스 제목 메세지
+    private String message; // 뉴스 제목 or 메세지
 
     @Column(nullable = false)
-    private String author; // 작성자, 작성사이트
+    private String author; // 작성자 or 출처
 
 //    @JoinColumn
 //    @JsonIgnore

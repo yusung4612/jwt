@@ -14,7 +14,6 @@ public class EmployeeRequestDto {
 
     @NotBlank(message = "이름을 입력해주세요.")
     @Size(min = 1, max = 10, message = "이름은 최소 1자이상 최대 10자미만으로 입력해주세요.")
-//    @Pattern(regexp = "[a-zA-Zㄱ-ㅎ가-힣]*${1,10}", message = "이름 형식을 확인해 주세요.")
     @Pattern(regexp = "[a-zA-Zㄱ-ㅎ가-힣]{1,10}", message = "이름 형식을 확인해 주세요.")
     private String name; // 직원 이름
 
@@ -25,7 +24,6 @@ public class EmployeeRequestDto {
 
     @NotBlank(message = "유선 전화번호를 입력해주세요.")
     @Size(min = 9, max = 11, message = "이름은 최소 9자이상 최대 10자미만으로 입력해주세요.")
-//    @Pattern(regexp = "[0-9]*${9,11}", message = "유선 전화번호 형식을 확인해 주세요.")
     @Pattern(regexp = "^[0-9]{9,11}$", message = "유선 전화번호 형식을 확인해 주세요.")
     private String extension_number; // 유선 전화번호
 

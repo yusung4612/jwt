@@ -22,19 +22,6 @@ public interface NewsRepository extends JpaRepository<News, Long> {
     @Query( value = "select p from News p where p.choiceNews = 'true'")
     List<News> findAllByChoiceNews();
 
-    // 만료된 뉴스 삭제
-//    List<News> findByExpirationDateTimeBefore(LocalDateTime currentTime);
-
-//    News findByNewsIdAndAdminId(Long newsId, Long adminId);
-//
-//    List<News> findAllByAdmin(Admin admin);
-
-    // 선택한 뉴스 중에서 검색
-//    @Query(value = "SELECT p FROM News p WHERE p.choiceNews = 'true'")
-//    List <Choice> findAllByChoiceNews(@Param("keyword") String keyword);
-
     News findTop1ByOrderByModifiedAtDesc();
-    News findById(String newsId);
-
 
 }

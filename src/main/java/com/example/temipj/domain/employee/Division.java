@@ -22,7 +22,7 @@ public class Division extends Timestamped {
     private Long id ;
 
     @Column(nullable = false)
-    private String division; // 상위부서 이름
+    private String division; // 상위부서
 
     @OneToMany(mappedBy = "division", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Department> department;

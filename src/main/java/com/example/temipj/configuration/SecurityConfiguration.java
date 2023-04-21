@@ -48,14 +48,6 @@ public class SecurityConfiguration {
             "/api/admins/**","/api/employees/**", "/" ,"/**"
     };
 
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer() {
-//        return (web) -> web.ignoring()
-//                .requestMatchers("/h2-console/**", "/favicon.ico") // h2 database 테스트가 원활하도록 관련 API 들은 전부 무시
-//                .requestMatchers(String.valueOf(PathRequest.toStaticResources().atCommonLocations())) //정적 파일(css, 이미지, ... 등)
-//                ;
-//    }
-
     @Bean
     @Order(SecurityProperties.BASIC_AUTH_ORDER)
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -71,17 +63,17 @@ public class SecurityConfiguration {
                         .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
                 )
 
-                //exception handling 할 때 직접 만든 class를 추가
+                // exception handling 할 때 직접 만든 class를 추가
                 .exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPointException)
                 .accessDeniedHandler(accessDeniedHandlerException)
 
-                //Security는 기본적으로 세션을 사용
+                // Security는 기본적으로 세션을 사용
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS); // Token 기반 인증이므로 세션 설정을 Stateless로 설정
 
-        http.authorizeHttpRequests(authorize -> authorize //요청에 대한 사용권한 설정 //로그인, 회원가입 Api는 토큰이 없는 상태에서 요청이 들어오기 때문에 permitAll 설정
+        http.authorizeHttpRequests(authorize -> authorize // 요청에 대한 사용권한 설정 //로그인, 회원가입 Api는 토큰이 없는 상태에서 요청이 들어오기 때문에 permitAll 설정
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .requestMatchers("/api/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
@@ -107,7 +99,7 @@ public class SecurityConfiguration {
 
                         .anyRequest().authenticated() // 나머지 API는 전부 인증 필요
 
-                        //JwtFilter를 addFilterBefore로 등록 했던 JwtSecurityConfig 클래스를 적용
+                        // JwtFilter를 addFilterBefore로 등록 했던 JwtSecurityConfig 클래스를 적용
                         .and()
                         .addFilter(corsConfiguration.corsFilter()))
 

@@ -16,11 +16,11 @@ import java.util.Collection;
 @AllArgsConstructor
 
 // Spring security에서 인증(Authentication)에 사용되는 인터페이스, 사용자 정보를 담고있는 객체
-// 1. UserDetails 인터페이스를 구현하여 사용자 정보를 제공합니다.
-// 2. 인증 시 사용자가 입력한 아이디와 비밀번호를 검증합니다.
-// 3. 사용자의 권한 정보를 제공합니다.
-// 4. 사용자의 계정이 만료되었거나 잠겨있는지 검증합니다.
-// 5. 사용자 계정 정보와 권한 정보를 DB에서 조회하여 제공합니다.
+// 1. UserDetails 인터페이스를 구현하여 사용자 정보를 제공한다.
+// 2. 인증 시 사용자가 입력한 아이디와 비밀번호를 검증한다.
+// 3. 사용자의 권한 정보를 제공한다.
+// 4. 사용자의 계정이 만료되었거나 잠겨있는지 검증한다.
+// 5. 사용자 계정 정보와 권한 정보를 DB에서 조회하여 제공한다.
 public class UserDetailsImpl implements UserDetails {
 
     private Admin admin;

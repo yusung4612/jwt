@@ -53,7 +53,7 @@ public class TokenProvider {
         String accessToken = Jwts.builder()
 
                 .setSubject(admin.getAdminName()) // payload "sub": "name"
-                .claim(AUTHORITIES_KEY, Authority.ROLE_ADMIN.name()) // payload "auth": "ROLE_ADMIN" //auth,role설정
+                .claim(AUTHORITIES_KEY, Authority.ROLE_ADMIN.name()) // payload "auth": "ROLE_ADMIN" // auth,role설정
                 .setExpiration(accessTokenExpiresIn) // 만료시간 토큰에 담기
                 .signWith(key, SignatureAlgorithm.HS256) // 사용할 암호화 알고리즘과 signature에 들어갈 secret값 세팅
                 .compact();
