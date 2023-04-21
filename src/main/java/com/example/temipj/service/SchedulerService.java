@@ -8,7 +8,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -29,8 +29,7 @@ public class SchedulerService {
     }
 
     // 초, 분, 시, 일, 월, 주 순서
-//    @Scheduled(cron = "0 0 0 31 12 *")
-    @Scheduled(cron = "0 10 17 * * *")
+    @Scheduled(cron = "0 56 9 20 4 *")
     public void selectNews() {
         System.out.println("[JopTime] : " + getNowDateTime24());
         System.out.println("뉴스 조회");
@@ -39,9 +38,12 @@ public class SchedulerService {
         List<News> newsList = newsRepository.findAll();
 
         for (int i = 0; i < newsList.size(); i++) {
-            if(newsList.get(i).getEnd_date().equals(LocalDate.now())) {
-                System.out.println("삭제*******************************");
-                newsRepository.deleteById(newsList.get(i).getId());
+//            if(newsList.get(i).getEnd_date().equals(LocalDate.now())) {
+            if(newsList.get(i).getEnd_date().atStartOfDay().isBefore(LocalDateTime.now())) {
+                System.out.println("뉴스 업데이트************************");
+//                newsRepository.deleteById(newsList.get(i).getId());
+                newsList.get(i).setChoiceNews("false"); // 상태 업데이트
+                newsRepository.save(newsList.get(i)); // 업데이트된 상태를 저장
             }
         }
     }
