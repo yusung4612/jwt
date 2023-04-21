@@ -38,15 +38,23 @@ public class DivisionService {
     @Transactional
     public ResponseDto<?> createDivision(DivisionRequestDto requestDto, HttpServletRequest request) {
         // 1. 토큰 유효성 확인
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer " 부분 제외하고 토큰만 추출
+        }
+        if (!tokenProvider.validateToken(token)) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
+
         //        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
 //        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
 //            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
 //        }
         // 2. tokenProvider의 SecurityContextHolder에 저장된 Admin 정보 확인
-//        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
-//        if (null == admin) {
-//            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(), ErrorCode.ADMIN_NOT_FOUND.getMessage());
-//        }
+        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
+        if (null == admin) {
+            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(), ErrorCode.ADMIN_NOT_FOUND.getMessage());
+        }
         // 3. 등록
         if (requestDto.getDivision().isEmpty())
             return ResponseDto.fail(ErrorCode.NOT_BLANK_NAME.name(), ErrorCode.NOT_BLANK_NAME.getMessage());
@@ -65,7 +73,15 @@ public class DivisionService {
 
     // 상위부서 전체 조회
     @Transactional
-    public ResponseDto<?> getDivisionAll() {
+    public ResponseDto<?> getDivisionAll(HttpServletRequest request) {
+        // 토큰 유효성 확인
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer " 부분 제외하고 토큰만 추출
+        }
+        if (!tokenProvider.validateToken(token)) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
 
         List<Division> divisionList = divisionRepository.findAllByOrderByCreatedAtDesc();
         List<DivisionResponseDto> divisionResponseDtoList = new ArrayList<>();
@@ -82,8 +98,17 @@ public class DivisionService {
 
     // 특정 상위부서 조회
     @Transactional
-    public ResponseDto<?> getDivision(Long id) {
-        // 상위부서 유무 확인
+    public ResponseDto<?> getDivision(Long id, HttpServletRequest request) {
+        // 1.토큰 유효성 확인
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer " 부분 제외하고 토큰만 추출
+        }
+        if (!tokenProvider.validateToken(token)) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
+
+        // 2.상위부서 유무 확인
         Division division = isPresentDivision(id);
         if (null == division) {
             return ResponseDto.fail(ErrorCode.NOT_EXIST_DIVISION.name(), ErrorCode.NOT_EXIST_DIVISION.getMessage());
@@ -95,7 +120,15 @@ public class DivisionService {
     @Transactional
     public ResponseDto<?> updateDivision(Long id, DivisionRequestDto requestDto, HttpServletRequest request) {
         // 1. 토큰 유효성 확인
-        //        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer " 부분 제외하고 토큰만 추출
+        }
+        if (!tokenProvider.validateToken(token)) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
+
+//        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
 //        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
 //            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
 //        }
@@ -105,10 +138,10 @@ public class DivisionService {
             return ResponseDto.fail(ErrorCode.NOT_EXIST_DIVISION.name(), ErrorCode.NOT_EXIST_DIVISION.getMessage());
         }
         // 3. tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
-//        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
-//        if (null == admin) {
-//            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(), ErrorCode.ADMIN_NOT_FOUND.getMessage());
-//        }
+        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
+        if (null == admin) {
+            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(), ErrorCode.ADMIN_NOT_FOUND.getMessage());
+        }
         // 4. 수정
         division.update(requestDto);
         return ResponseDto.success(division);
@@ -118,7 +151,14 @@ public class DivisionService {
     public ResponseDto<?> deleteDivision(Long id, HttpServletRequest request) {
 
         // 1. 토큰 유효성 확인
-        //        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer " 부분 제외하고 토큰만 추출
+        }
+        if (!tokenProvider.validateToken(token)) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
+
 //        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
 //            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
 //        }
@@ -128,10 +168,10 @@ public class DivisionService {
             return ResponseDto.fail(ErrorCode.NOT_EXIST_DIVISION.name(), ErrorCode.NOT_EXIST_DIVISION.getMessage());
         }
         // 3. tokenProvider의 SecurityContextHolder에 저장된 Admin 정보 확인
-//        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
-//        if (null == admin) {
-//            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(), ErrorCode.ADMIN_NOT_FOUND.getMessage());
-//        }
+        Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
+        if (null == admin) {
+            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(), ErrorCode.ADMIN_NOT_FOUND.getMessage());
+        }
         // 4. 상위부서 삭제
         divisionRepository.delete(division);
         return ResponseDto.success("해당 상위부서가 삭제되었습니다.");

@@ -25,8 +25,6 @@ import java.util.*;
 @Service
 public class EmployeeService {
 
-//    Map<Long, Employee> map = new HashMap<>();
-
     private final EmployeeRepository employeeRepository;
 
     private final TokenProvider tokenProvider;
@@ -38,26 +36,26 @@ public class EmployeeService {
     // 직원 등록
     @Transactional
     public EmpResponseDto createEmp(Long departmentId, EmployeeRequestDto requestDto, HttpServletRequest request) {
-        // 추가
-        request.getHeader("Authorization ***************** ");
-        System.out.println(request.getHeader("Authorization"));
 
         // 1. 토큰 유효성 확인
-//        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer " 부분 제외하고 토큰만 추출
+        }
+        if (!tokenProvider.validateToken(token)) {
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
+
+//        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+//        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
+//            throw new CustomException(ErrorCode.INVALID_TOKEN);
+//        }
+
         // 2. tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
         Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
         if (null == admin) {
             throw new CustomException(ErrorCode.ADMIN_NOT_FOUND);
         }
-
-        // 2. Admin 유효성 확인
-//        Admin admin = validateAdmin(request);
-//        if (null == admin) {
-//            throw new CustomException(ErrorCode.ADMIN_NOT_FOUND);
-//        }
 
         System.out.println("admin ************************");
         System.out.println(admin.getEmailId());
@@ -68,7 +66,7 @@ public class EmployeeService {
         if (null == department) {
             throw new CustomException(ErrorCode.NOT_EXIST_DEPARTMENT);
         }
-        // 3. 등록
+        // 4. 등록
         if (requestDto.getName().isEmpty())
             throw new CustomException(ErrorCode.NOT_BLANK_NAME);
 
@@ -89,7 +87,6 @@ public class EmployeeService {
         String recentVersion = version.getModifiedAt().format((DateTimeFormatter.ofPattern("yyyyMMdd")));
 
         return EmpResponseDto.version(recentVersion, EmployeeResponseDto.builder()
-                // .id(employee.getId())
                 .name(employee.getName())
                 .birth(employee.getBirth())
                 .extension_number(employee.getExtension_number())
@@ -97,8 +94,7 @@ public class EmployeeService {
                 .build());
     }
 
-
-    //직원별 enabled 체크
+    // 직원별 enabled 체크
     @Transactional
     public String enabledCheck(UserDetailsImpl userDetails) {
         if (userDetails == null) {
@@ -111,9 +107,17 @@ public class EmployeeService {
         }
     }
 
-    // 전체 직원 조회 화면용
+    // 전체 직원 조회(Web)
     @Transactional
-    public EmpResponseDto<?> getEmployeeAll(UserDetailsImpl userDetails) {
+    public EmpResponseDto<?> getEmployeeAll(UserDetailsImpl userDetails, HttpServletRequest request) {
+        // 토큰 유효성 확인
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer " 부분 제외하고 토큰만 추출
+        }
+        if (!tokenProvider.validateToken(token)) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
 
         List<Employee> employeeList = employeeRepository.findAllByOrderByCreatedAtDesc();
         List<EmpListDto> employeeResponseDtoList = new ArrayList<>();
@@ -138,9 +142,17 @@ public class EmployeeService {
         return EmpResponseDto.version(recentVersion, employeeResponseDtoList);
     }
 
-    // 전체 직원 조회 Temi reponse 용
+    // 전체 직원 조회(Temi reponse)
     @Transactional
-    public EmpResponseDto<?> getEmployeeAllList(UserDetailsImpl userDetails) {
+    public EmpResponseDto<?> getEmployeeAllList(UserDetailsImpl userDetails, HttpServletRequest request) {
+        // 토큰 유효성 확인
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer " 부분 제외하고 토큰만 추출
+        }
+        if (!tokenProvider.validateToken(token)) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
 
         List<Employee> employeeList = employeeRepository.findAllByOrderByCreatedAtDesc();
         List<EmployeeResponseDto> empListDtoList = new ArrayList<>();
@@ -163,10 +175,18 @@ public class EmployeeService {
         return EmpResponseDto.version(recentVersion, empListDtoList);
     }
 
-    //특정 직원 조회
+    // 특정 직원 조회
     @Transactional
-    public ResponseDto<?> getEmployee(Long id) {
-        //직원 유무 확인
+    public ResponseDto<?> getEmployee(Long id, HttpServletRequest request) {
+        // 토큰 유효성 확인
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer " 부분 제외하고 토큰만 추출
+        }
+        if (!tokenProvider.validateToken(token)) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
+        // 직원 유무 확인
         Employee employee = isPresentEmployee(id);
         if (null == employee) {
             throw new CustomException(ErrorCode.NOT_EXIST_EMPLOYEE);
@@ -182,10 +202,18 @@ public class EmployeeService {
     @Transactional
     public EmpResponseDto<?> updateEmp(Long id, EmployeeRequestDto requestDto, HttpServletRequest request) {
         // 1. 토큰 유효성 확인
-//        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer " 부분 제외하고 토큰만 추출
+        }
+        if (!tokenProvider.validateToken(token)) {
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
+
+//        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+//        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
+//            throw new CustomException(ErrorCode.INVALID_TOKEN);
+//        }
         // 2. 직원 유무 확인
         Employee employee = isPresentEmployee(id);
         if (null == employee) {
@@ -207,12 +235,19 @@ public class EmployeeService {
 
     //직원 삭제
     public EmpResponseDto<?> deleteEmp(Long id, HttpServletRequest request) {
-
         // 1. 토큰 유효성 확인
-        //        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer " 부분 제외하고 토큰만 추출
+        }
+        if (!tokenProvider.validateToken(token)) {
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
+
+//        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+//        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
+//            throw new CustomException(ErrorCode.INVALID_TOKEN);
+//        }
         // 2. 직원 유무 확인
         Employee employee = isPresentEmployee(id);
         if (null == employee) {
@@ -257,8 +292,16 @@ public class EmployeeService {
 
     // 리더 선택
     @Transactional
-    public ResponseDto<?> leaderSelect(Long id) {
-        // 1. 직원 확인
+    public ResponseDto<?> leaderSelect(Long id, HttpServletRequest request) {
+        // 1.토큰 유효성 확인
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer " 부분 제외하고 토큰만 추출
+        }
+        if (!tokenProvider.validateToken(token)) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
+        // 2. 직원 확인
         Employee employee = isPresentEmployee(id);
         if (null == employee) {
             return ResponseDto.fail(ErrorCode.NOT_EXIST_EMPLOYEE.name(), ErrorCode.NOT_EXIST_EMPLOYEE.getMessage());

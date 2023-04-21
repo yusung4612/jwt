@@ -34,12 +34,18 @@ public class NewsService {
     @Transactional
     public ResponseDto<?> createNews(NewsRequestDto requestDto, HttpServletRequest request) {
         LocalDate endTime = LocalDate.now().plusDays(365);
-
         // 1. 토큰 유효성 확인
-        //        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
-            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer " 부분 제외하고 토큰만 추출
         }
+        if (!tokenProvider.validateToken(token)) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
+//        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+//        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
+//            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
+//        }
         // 2. tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
         Admin admin = (Admin) tokenProvider.getAdminFromAuthentication();
         if (null == admin) {
@@ -70,7 +76,15 @@ public class NewsService {
 
     // 전체 뉴스 조회
     @Transactional
-    public ResponseDto<?> getNewsAll(){
+    public ResponseDto<?> getNewsAll(HttpServletRequest request) {
+        // 토큰 유효성 확인
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer " 부분 제외하고 토큰만 추출
+        }
+        if (!tokenProvider.validateToken(token)) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
 
         List<News> newsList = newsRepository.findAllByOrderByCreatedAtDesc();
         List<NewsResponseDto> NewsResponseDtoList = new ArrayList<>();
@@ -90,8 +104,16 @@ public class NewsService {
 
     // 특정 뉴스 조회
     @Transactional
-    public ResponseDto<?> getNews(Long id) {
-        //뉴스 유무 확인
+    public ResponseDto<?> getNews(Long id, HttpServletRequest request) {
+        // 1.토큰 유효성 확인
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer " 부분 제외하고 토큰만 추출
+        }
+        if (!tokenProvider.validateToken(token)) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
+        // 2.뉴스 유무 확인
         News news = isPresentNews(id);
         if (null == news) {
             throw new CustomException(ErrorCode.NOT_EXIST_NEWS);
@@ -103,10 +125,18 @@ public class NewsService {
     @Transactional
     public ResponseDto<?> updateNews(Long id, NewsRequestDto requestDto, HttpServletRequest request) {
         // 1. 토큰 유효성 확인
-//        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-                if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
-            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer " 부분 제외하고 토큰만 추출
         }
+        if (!tokenProvider.validateToken(token)) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
+//        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+//                if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
+//            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
+//        }
+
 //        // 2. 뉴스 유무 확인
         News news = isPresentNews(id);
         if (null == news) {
@@ -127,10 +157,17 @@ public class NewsService {
     @Transactional
     public ResponseDto<?> deleteNews(Long id, HttpServletRequest request) {
         // 1. 토큰 유효성 확인
-//        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-                if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
-            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer " 부분 제외하고 토큰만 추출
         }
+        if (!tokenProvider.validateToken(token)) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
+//        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+//        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
+//            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
+//        }
         // 2. 뉴스 유무 확인
         News news = isPresentNews(id);
         if (null == news) {
@@ -169,15 +206,22 @@ public class NewsService {
     @Transactional
     public ResponseDto<?> choiceNews(Long id, HttpServletRequest request) {
         // 1.토큰 유효성 확인
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer " 부분 제외하고 토큰만 추출
+        }
+        if (!tokenProvider.validateToken(token)) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
 //        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-        //        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
+//        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
 //            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
 //        }
         // 2.tokenProvider Class의 SecurityContextHolder에 저장된 Admin 정보 확인
-//        Admin admin = tokenProvider.getAdminFromAuthentication();
-//        if (null == admin) {
-//            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(), ErrorCode.ADMIN_NOT_FOUND.getMessage());
-//        }
+        Admin admin = tokenProvider.getAdminFromAuthentication();
+        if (null == admin) {
+            return ResponseDto.fail(ErrorCode.ADMIN_NOT_FOUND.name(), ErrorCode.ADMIN_NOT_FOUND.getMessage());
+        }
         // 3.뉴스 유무 확인
 //        News news = newsService.isPresentNews(newsId);
         News news = isPresentNews(id);
@@ -199,7 +243,15 @@ public class NewsService {
 
     // 선택한 뉴스 목록 조회
     @Transactional
-    public ChoiceNewsResponseDto<?> getChoiceAll() {
+    public ChoiceNewsResponseDto<?> getChoiceAll(HttpServletRequest request) {
+        // 1.토큰 유효성 확인
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer " 부분 제외하고 토큰만 추출
+        }
+        if (!tokenProvider.validateToken(token)) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
 
         List<News> choiceList = newsRepository.findAllByChoiceNews();
         List<ChoiceListResponseDto> NewsResponseDtoList = new ArrayList<>();

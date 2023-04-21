@@ -38,7 +38,15 @@ public class DepartmentService {
     // 하위부서 생성
     @Transactional
     public ResponseDto<?> createDepart(String divisionId, DepartmentRequestDto requestDto, HttpServletRequest request) {
-        // 1토큰 유효성 확인
+        // 1.토큰 유효성 확인
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer " 부분 제외하고 토큰만 추출
+        }
+        if (!tokenProvider.validateToken(token)) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
+
 //        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
 //        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
 //            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
@@ -64,7 +72,15 @@ public class DepartmentService {
 
     // 하위부서 전체 조회
     @Transactional
-    public ResponseDto<?> getDepartmentAll() {
+    public ResponseDto<?> getDepartmentAll(HttpServletRequest request) {
+        // 토큰 유효성 확인
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer " 부분 제외하고 토큰만 추출
+        }
+        if (!tokenProvider.validateToken(token)) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
 
         List<Department> departmentList = departmentRepository.findAllByOrderByCreatedAtDesc();
         List<DepartmentResponseDto> departmentResponseDtoList = new ArrayList<>();
@@ -81,9 +97,18 @@ public class DepartmentService {
 
     // 특정 하위부서 조회
     @Transactional
-    public ResponseDto<?> getDepartment(Long id) {
-        // 하위부서 유무 확인
-        Department department = isPresentDepartment(id);
+    public ResponseDto<?> getDepartment(Long departmentId, HttpServletRequest request) {
+        // 1.토큰 유효성 확인
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer " 부분 제외하고 토큰만 추출
+        }
+        if (!tokenProvider.validateToken(token)) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
+
+        // 2.하위부서 유무 확인
+        Department department = isPresentDepartment(departmentId);
         if (null == department) {
             return ResponseDto.fail(ErrorCode.NOT_EXIST_DEPARTMENT.name(), ErrorCode.NOT_EXIST_DEPARTMENT.getMessage());
         }
@@ -94,6 +119,14 @@ public class DepartmentService {
     @Transactional
     public ResponseDto<?> updateDepartment(Long id, DepartmentRequestDto requestDto, HttpServletRequest request) {
         // 1.토큰 유효성 확인
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer " 부분 제외하고 토큰만 추출
+        }
+        if (!tokenProvider.validateToken(token)) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
+
         //        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
 //        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
 //            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
@@ -117,7 +150,15 @@ public class DepartmentService {
     public ResponseDto<?> deleteDepart(Long departmentId, HttpServletRequest request) {
 
         // 1.토큰 유효성 확인
-        //        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer " 부분 제외하고 토큰만 추출
+        }
+        if (!tokenProvider.validateToken(token)) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
+
+//        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
 //        if (!tokenProvider.validateToken(request.getHeader("Authorization"))) {
 //            return ResponseDto.fail(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getMessage());
 //        }

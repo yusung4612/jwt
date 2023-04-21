@@ -1,16 +1,12 @@
 package com.example.temipj.controller;
 
-import com.example.temipj.domain.news.News;
 import com.example.temipj.dto.requestDto.NewsRequestDto;
 import com.example.temipj.dto.responseDto.ChoiceNewsResponseDto;
 import com.example.temipj.dto.responseDto.ResponseDto;
-import com.example.temipj.repository.NewsRepository;
 import com.example.temipj.service.NewsService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,8 +14,6 @@ import java.time.LocalDateTime;
 public class NewsController {
 
     private final NewsService newsService;
-
-    private final NewsRepository newsRepository;
 
     //뉴스 생성
     @PostMapping(value = "/create")
@@ -31,15 +25,15 @@ public class NewsController {
     //전체 뉴스 목록 조회
     @GetMapping(value = "/all")
     @ResponseBody
-    public ResponseDto<?> getNewsAll() {
-        return newsService.getNewsAll();
+    public ResponseDto<?> getNewsAll(HttpServletRequest request) {
+        return newsService.getNewsAll(request);
     }
 
     //특정 뉴스 조회
     @GetMapping(value = "/{id}")
     @ResponseBody
-    public ResponseDto<?> getNews(@PathVariable Long id) {
-        return newsService.getNews(id);
+    public ResponseDto<?> getNews(@PathVariable Long id, HttpServletRequest request) {
+        return newsService.getNews(id, request);
     }
 
     // 뉴스 수정
@@ -73,13 +67,8 @@ public class NewsController {
     // 선택한 뉴스 목록 조회
     @GetMapping("/choice/all")
     @ResponseBody
-    public ChoiceNewsResponseDto<?> getChoiceAll() {
-        return newsService.getChoiceAll();
+    public ChoiceNewsResponseDto<?> getChoiceAll(HttpServletRequest request) {
+        return newsService.getChoiceAll(request);
     }
 
-    // 선택한 뉴스 목록중에서 검색
-//    @GetMapping("/search")
-//    public ResponseDto<?> findNews(@RequestParam(value = "keyword") String keyword){
-//        return newsService.findChoiceNews(keyword);
-//    }
 }

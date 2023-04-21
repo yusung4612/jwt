@@ -21,16 +21,8 @@ public class EmployeeController {
 
     private final EmployeeService employeeService;
 
-    //직원 생성
-//    @PostMapping(value = "/create")
-//    private EmpResponseDto<EmployeeResponseDto> create(@RequestBody EmployeeRequestDto employeeRequestDto,
-//                                                       HttpServletRequest request) {
-//        return employeeService.createEmp(employeeRequestDto, request);
-//    }
-
-    //직원 생성
+    // 직원 생성
     @PostMapping(value = "/create/{departmentId}")
-//    private EmpResponseDto<EmployeeResponseDto> create(@PathVariable String departmentId,
     private EmpResponseDto<EmployeeResponseDto> create(@PathVariable Long departmentId,
                                                        @RequestBody EmployeeRequestDto employeeRequestDto,
                                                        HttpServletRequest request) {
@@ -39,20 +31,20 @@ public class EmployeeController {
 
     // 전체 직원 조회 화면용
     @GetMapping(value = "/all")
-    public EmpResponseDto<?> getAll(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        return employeeService.getEmployeeAll(userDetails);
+    public EmpResponseDto<?> getAll(@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletRequest request){
+        return employeeService.getEmployeeAll(userDetails, request);
     }
 
     // 전체 직원 조회 temi용
     @GetMapping(value = "/temi/list")
-    public EmpResponseDto<?> getListAll(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        return employeeService.getEmployeeAllList(userDetails);
+    public EmpResponseDto<?> getListAll(@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletRequest request){
+        return employeeService.getEmployeeAllList(userDetails, request);
     }
 
     // 특정 직원 조회
     @GetMapping(value = "/{id}")
-    public ResponseDto<?> get(@PathVariable Long id) {
-        return employeeService.getEmployee(id);
+    public ResponseDto<?> get(@PathVariable Long id, HttpServletRequest request) {
+        return employeeService.getEmployee(id, request);
     }
 
     // 직원 수정
@@ -75,11 +67,10 @@ public class EmployeeController {
         return employeeService.searchEmployee(keyword, userDetails);
     }
 
-    //==========================리더테스트==========================
     // 리더 선택
     @PostMapping("/choice/{id}")
-    public ResponseDto<?> selectLeader(@PathVariable Long id) {
-        return employeeService.leaderSelect(id);
+    public ResponseDto<?> selectLeader(@PathVariable Long id, HttpServletRequest request) {
+        return employeeService.leaderSelect(id, request);
     }
 
     // 선택한 리더 목록 조회
@@ -87,12 +78,5 @@ public class EmployeeController {
     public ResponseEntity<Map> getLeaderAll() {
         return ResponseEntity.ok().body(employeeService.getLeaderAll());
     }
-
-    //==============================================================
-
-//    @GetMapping("/test")
-//    public ResponseFirstDto test(){
-//        return employeeService.test("R&D");
-//    }
 
 }

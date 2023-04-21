@@ -25,15 +25,15 @@ public class DivisionController {
     // 상위부서 전체 조회
     @GetMapping(value = "/all")
     @ResponseBody
-    public ResponseDto<?> getAll(){
-        return divisionService.getDivisionAll();
+    public ResponseDto<?> getAll(HttpServletRequest request){
+        return divisionService.getDivisionAll(request);
     }
 
     // 특정 상위부서 조회
     @GetMapping(value = "/{id}")
     @ResponseBody
-    public ResponseDto<?> get(@PathVariable Long id) {
-        return divisionService.getDivision(id);
+    public ResponseDto<?> get(@PathVariable Long id, HttpServletRequest request) {
+        return divisionService.getDivision(id, request);
     }
 
     // 상위부서 수정
@@ -49,6 +49,5 @@ public class DivisionController {
     public ResponseDto<?>delete(@PathVariable Long id,HttpServletRequest request){
         return divisionService.deleteDivision(id,request);
     }
-
 
 }
