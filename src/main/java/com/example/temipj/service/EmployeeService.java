@@ -97,12 +97,9 @@ public class EmployeeService {
     // 직원별 enabled 체크
     @Transactional
     public String enabledCheck(UserDetailsImpl userDetails) {
-        if (userDetails == null) {
+        if (userDetails != null) {
             return "1";
         } else {
-//        boolean isCheckedLeader = leaderRepository.existsByAdminAndEmployee(userDetails.getAdmin(), employee);
-//        boolean isCheckedLeader = employeeRepository.existsByEmployee(employee);
-//        return isCheckedLeader ? "1" : "0"
             return "0";
         }
     }
