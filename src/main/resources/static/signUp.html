@@ -124,14 +124,14 @@
                 $.ajax({
                     type: "POST",
                     contentType: "application/json; charset=utf-8",
-                    url: "http://localhost:8080/api/admins/signup",
+                    url: "http://43.201.241.17:8080/api/admins/signup",
                     data: JSON.stringify(formData),
                     dataType: 'json',
                     success: function (response) {
                         if (response.success === true) {
                             alert('회원가입이 완료되었습니다.');
                             // localStorage.setItem('jwtToken', data.token);
-                            window.location.href = 'http://localhost:8080/login.html';
+                            window.location.href = 'http://43.201.241.17:8080/login.html';
                         } else {
                             // alert('Invalid email or password. Please try again.');
                             alert('이메일 또는 비밀번호가 일치하지 않습니다. 다시 시도해 주세요.');
