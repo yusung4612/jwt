@@ -34,7 +34,7 @@
             $.ajax({
                 type: "GET",
                 contentType: "application/json; charset=utf-8",
-                url: "http://localhost:8080/api/news/all",
+                url: "http://43.201.241.17:8080/api/news/all",
                 data: JSON.stringify,
                 dataType: 'json',
                 headers: {
@@ -117,7 +117,7 @@
                     $.ajax({
                         type: "POST",
                         contentType: "application/json; charset=utf-8",
-                        url: "http://localhost:8080/api/news/create",
+                        url: "http://43.201.241.17:8080/api/news/create",
                         data: JSON.stringify(data),
                         dataType: 'json',
                         headers: {
@@ -156,7 +156,7 @@
             $.ajax({
                 type: "POST",
                 contentType: "application/json; charset=utf-8",
-                url: "http://localhost:8080/api/news/choice/" + newsId,
+                url: "http://43.201.241.17:8080/api/news/choice/" + newsId,
                 dataType: 'json',
                 headers: {
                     "Authorization": localStorage.getItem("accessToken")
@@ -187,7 +187,7 @@
                 $.ajax({
                     type: "GET",
                     contentType: "application/json; charset=utf-8",
-                    url: "http://localhost:8080/api/news/" + newsId,
+                    url: "http://43.201.241.17:8080/api/news/" + newsId,
                     dataType: 'json',
                     headers: {
                         "Authorization": localStorage.getItem("accessToken")
@@ -226,7 +226,7 @@
                 $.ajax({
                     type: "PUT",
                     contentType: "application/json; charset=utf-8",
-                    url: "http://localhost:8080/api/news/update/" + newsId,
+                    url: "http://43.201.241.17:8080/api/news/update/" + newsId,
                     data: JSON.stringify(data),
                     dataType: 'json',
                     headers: {
@@ -264,7 +264,7 @@
                 $.ajax({
                     type: "DELETE",
                     contentType: "application/json; charset=utf-8",
-                    url: "http://localhost:8080/api/news/delete/" + newsId,
+                    url: "http://43.201.241.17:8080/api/news/delete/" + newsId,
                     dataType: 'json',
                     headers: {
                         "Authorization": localStorage.getItem("accessToken")
@@ -304,7 +304,7 @@
                 $.ajax({
                     type: "GET",
                     contentType: "application/json; charset=utf-8",
-                    url: "http://localhost:8080/api/news/search?keyword=" + keyword,
+                    url: "http://43.201.241.17:8080/api/news/search?keyword=" + keyword,
                     data: JSON.stringify,
                     // data: { keyword: keyword }, // 검색어를 URL parameter로 전달
                     dataType: 'json',

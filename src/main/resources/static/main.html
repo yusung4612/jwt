@@ -31,7 +31,7 @@
             $.ajax({
                 type: "GET",
                 contentType: "application/json; charset=utf-8",
-                url: "http://localhost:8080/api/divisions/all",
+                url: "http://43.201.241.17:8080/api/divisions/all",
                 data: JSON.stringify,
                 dataType: 'json',
                 headers: {
@@ -61,7 +61,7 @@
                 $.ajax({
                     type: "GET",
                     contentType: "application/json; charset=utf-8",
-                    url: "http://localhost:8080/api/divisions/" + divisionValue,
+                    url: "http://43.201.241.17:8080/api/divisions/" + divisionValue,
                     data: JSON.stringify,
                     dataType: 'json',
                     headers: {
@@ -101,7 +101,7 @@
                 $.ajax({
                     type: "GET",
                     contentType: "application/json; charset=utf-8",
-                    url: "http://localhost:8080/api/departments/" + departmentId,
+                    url: "http://43.201.241.17:8080/api/departments/" + departmentId,
                     dataType: 'json',
                     headers: {
                         "Authorization": localStorage.getItem("accessToken")
@@ -224,7 +224,7 @@
                     $.ajax({
                         type: "POST",
                         contentType: "application/json; charset=utf-8",
-                        url: "http://localhost:8080/api/employees/create/" + departmentId,
+                        url: "http://43.201.241.17:8080/api/employees/create/" + departmentId,
                         data: JSON.stringify(data),
                         dataType: 'json',
                         headers: {
@@ -262,7 +262,7 @@
                 $.ajax({
                     type: "POST",
                     contentType: "application/json; charset=utf-8",
-                    url: "http://localhost:8080/api/employees/choice/" + employeeId,
+                    url: "http://43.201.241.17:8080/api/employees/choice/" + employeeId,
                     dataType: 'json',
                     headers: {
                         "Authorization": localStorage.getItem("accessToken")
@@ -315,7 +315,7 @@
                     $.ajax({
                         type: "GET",
                         contentType: "application/json; charset=utf-8",
-                        url: "http://localhost:8080/api/employees/" + employeeId,
+                        url: "http://43.201.241.17:8080/api/employees/" + employeeId,
                         dataType: 'json',
                         headers: {
                             "Authorization": localStorage.getItem("accessToken")
@@ -362,7 +362,7 @@
                     $.ajax({
                         type: "PUT",
                         contentType: "application/json; charset=utf-8",
-                        url: "http://localhost:8080/api/employees/update/" + employeeId,
+                        url: "http://43.201.241.17:8080/api/employees/update/" + employeeId,
                         data: JSON.stringify(data),
                         dataType: 'json',
                         headers: {
@@ -402,7 +402,7 @@
                     $.ajax({
                         type: "DELETE",
                         contentType: "application/json; charset=utf-8",
-                        url: "http://localhost:8080/api/employees/delete/" + employeeId,
+                        url: "http://43.201.241.17:8080/api/employees/delete/" + employeeId,
                         dataType: 'json',
                         headers: {
                             "Authorization": localStorage.getItem("accessToken")
@@ -439,7 +439,7 @@
                     $.ajax({
                         type: "DELETE",
                         contentType: "application/json; charset=utf-8",
-                        url: "http://localhost:8080/api/admins/delete/" + adminId,
+                        url: "http://43.201.241.17:8080/api/admins/delete/" + adminId,
                         data: JSON.stringify,
                         dataType: 'json',
                         success: function (response) {
@@ -447,7 +447,7 @@
                                 alert("회원탈퇴가 완료되었습니다.");
                                 // 로컬스토리지에서 adminId 제거
                                 localStorage.clear(); // 로컬 스토리지에서 모든 데이터 삭제
-                                window.location.href = 'http://localhost:8080/login.html';
+                                window.location.href = 'http://43.201.241.17:8080/login.html';
                             } else {
                                 alert('다시 시도해주세요.')
                             }
@@ -465,7 +465,7 @@
                     event.preventDefault(); // 폼 전송 방지
                     // 관리자 ID 조회
                     localStorage.clear(); // 로컬 스토리지에서 모든 데이터 삭제
-                    window.location.href = 'http://localhost:8080/login.html';
+                    window.location.href = 'http://43.201.241.17:8080/login.html';
                 });
             });
         });
