@@ -32,7 +32,7 @@
             $.ajax({
                 type: "GET",
                 contentType: "application/json; charset=utf-8",
-                url: "http://localhost:8080/api/employees/all",
+                url: "http://43.201.241.17:8080/api/employees/all",
                 data: JSON.stringify,
                 dataType: 'json',
                 headers: {
@@ -105,7 +105,7 @@
                     $.ajax({
                         type: "GET",
                         contentType: "application/json; charset=utf-8",
-                        url: "http://localhost:8080/api/employees/search?keyword=" + keyword,
+                        url: "http://43.201.241.17:8080/api/employees/search?keyword=" + keyword,
                         data: JSON.stringify,
                         // data: { keyword: keyword }, // 검색어를 URL parameter로 전달
                         dataType: 'json',
