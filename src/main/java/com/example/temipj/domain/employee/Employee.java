@@ -26,7 +26,7 @@ public class Employee extends Timestamped {
     @Column(nullable = false)
     private String birth; // 생일
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String extension_number; // 유선전화번호
 
     @Column(nullable = false, unique = true)
